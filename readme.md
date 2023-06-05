@@ -1,4 +1,4 @@
-# 📝 Binar-FSW-3-Daily-Task-2-Chapter-6-BackEnd
+# 📝 Binar-FSW-3-Final-Projects
 
 - 👦 Muhammad Helmy Fadlail Albab
 - 👦 Muhammad Huda Nugroho
