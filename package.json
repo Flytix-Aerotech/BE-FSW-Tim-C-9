@@ -1,5 +1,5 @@
 {
-  "name": "jetpro_aerotech",
+  "name": "flytix_aerotech",
   "version": "1.0.0",
   "description": "Membuat aplikasi pemesanan tiket pesawat",
   "main": "index.js",
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Jetpro-Aerotech/BE-FSW-Tim-C-9.git"
+    "url": "git+https://github.com/Flytix-Aerotech/BE-FSW-Tim-C-9.git"
   },
   "author": "Tim C9",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Jetpro-Aerotech/BE-FSW-Tim-C-9/issues"
+    "url": "https://github.com/Flytix-Aerotech/BE-FSW-Tim-C-9/issues"
   },
-  "homepage": "https://github.com/Jetpro-Aerotech/BE-FSW-Tim-C-9#readme",
+  "homepage": "https://github.com/Flytix-Aerotech/BE-FSW-Tim-C-9#readme",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
