@@ -9,7 +9,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      fullname: {
+      first_name: {
+        type: Sequelize.STRING,
+      },
+      last_name: {
         type: Sequelize.STRING,
       },
       birth_date: {
@@ -22,7 +25,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       passenger_role: {
-        type: Sequelize.STRING,
+        type: Sequelize.ENUM(["Dewasa", "Bayi"]),
       },
       user_id: {
         type: Sequelize.INTEGER,

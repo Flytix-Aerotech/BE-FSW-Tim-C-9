@@ -9,10 +9,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      airport_name: {
+      name: {
         type: Sequelize.STRING,
       },
-      airport_location: {
+      location: {
+        type: Sequelize.STRING,
+      },
+      code: {
         type: Sequelize.STRING,
       },
       createdAt: {

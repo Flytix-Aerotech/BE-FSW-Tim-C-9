@@ -9,19 +9,24 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasMany(models.booking, { foreignKey: "user_id" });
+      this.hasMany(models.history, { foreignKey: "user_id" });
       this.hasMany(models.passenger, { foreignKey: "user_id" });
+      this.hasMany(models.transaction, { foreignKey: "user_id" });
     }
   }
   user.init(
     {
-      fullname: DataTypes.STRING,
+      first_name: DataTypes.STRING,
+      last_name: DataTypes.STRING,
       username: DataTypes.STRING,
       email: DataTypes.STRING,
       phone_number: DataTypes.STRING,
       password: DataTypes.STRING,
       photo: DataTypes.TEXT,
-      role: DataTypes.STRING,
+      role: {
+        type: DataTypes.ENUM(["admin", "user", "guest"]),
+        defaultValue: "user",
+      },
     },
     {
       sequelize,
