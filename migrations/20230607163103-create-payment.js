@@ -10,7 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       type_of_payment: {
-        type: Sequelize.ENUM,
+        type: Sequelize.ENUM(["Gopay", "Dana", "Akulaku"]),
       },
       image_brand: {
         type: Sequelize.TEXT,
