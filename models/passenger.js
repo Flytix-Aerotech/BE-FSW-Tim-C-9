@@ -16,11 +16,15 @@ module.exports = (sequelize, DataTypes) => {
   }
   passenger.init(
     {
-      fullname: DataTypes.STRING,
+      first_name: DataTypes.STRING,
+      last_name: DataTypes.STRING,
       birth_date: DataTypes.DATEONLY,
       nik_number: DataTypes.STRING,
       nationality: DataTypes.STRING,
-      passenger_role: DataTypes.STRING,
+      passenger_role: {
+        type: DataTypes.ENUM(["dewasa", "bayi"]),
+        defaultValue: "dewasa",
+      },
       user_id: DataTypes.INTEGER,
     },
     {
