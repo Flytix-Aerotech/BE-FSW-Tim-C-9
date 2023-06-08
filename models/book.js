@@ -14,12 +14,14 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.user, { foreignKey: "user_id" });
     }
   }
+  
   book.init(
     {
       ticket_id: DataTypes.INTEGER,
       passenger_id: DataTypes.INTEGER,
       user_id: DataTypes.INTEGER,
       total_booking: DataTypes.INTEGER,
+      payment_status: DataTypes.BOOLEAN
     },
     {
       sequelize,

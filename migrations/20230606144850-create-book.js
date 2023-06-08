@@ -21,6 +21,9 @@ module.exports = {
       total_booking: {
         type: Sequelize.INTEGER,
       },
+      payment_status: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -35,3 +38,4 @@ module.exports = {
     await queryInterface.dropTable("books");
   },
 };
+
