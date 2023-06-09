@@ -9,6 +9,7 @@ const getPassenger = async (res, req) => {
     });
   } catch (error) {
     res.status(error.statusCode || 500).json({
+      status: "failed",
       message: error.message,
     });
   }
@@ -23,6 +24,7 @@ const getPassengerById = async (req, res) => {
     });
   } catch (error) {
     res.status(error.statusCode || 500).json({
+      status: "failed",
       message: error.message,
     });
   }
@@ -37,6 +39,7 @@ const addPassenger = async (req, res) => {
     });
   } catch (error) {
     res.status(error.statusCode || 500).json({
+      status: "failed",
       message: error.message,
     });
   }
@@ -51,6 +54,7 @@ const updatePassenger = async (req, res) => {
     });
   } catch (error) {
     res.status(error.statusCode || 500).json({
+      status: "failed",
       message: error.message,
     });
   }
@@ -65,6 +69,7 @@ const deletePassenger = async (req, res) => {
     });
   } catch (error) {
     res.status(error.statusCode || 500).json({
+      status: "failed",
       message: error.message,
     });
   }

@@ -1,79 +1,146 @@
-const { passenger } = require("../models");
+const { booking, ticket, passenger, Users } = require("../models");
 
-const getPassenger = async (res, req) => {
+let getBooking = async (req, res) => {
   try {
-    const passengers = await passenger.findAll();
-    req.status(200).json({
-      message: "data seluruh penumpang Flytix",
-      passengers,
+    let bookings = await booking.findAll({
+      include: [
+        {
+          model: ticket,
+        },
+        {
+          model: passenger,
+        },
+        {
+          model: Users,
+        },
+      ],
+    });
+    res.status(200).json({
+      bookings,
     });
   } catch (error) {
     res.status(error.statusCode || 500).json({
+      status: "failed",
       message: error.message,
     });
   }
 };
 
-const getPassengerById = async (req, res) => {
+let bookingsUser = async (req, res) => {
+  try {
+    let bookings = await Users.findByPk(req.user.id, {
+      include: [
+        {
+          model: booking,
+          include: [
+            {
+              model: ticket,
+            },
+            {
+              model: passenger,
+            },
+          ],
+        },
+      ],
+    });
+    res.status(200).json({
+      bookings,
+    });
+  } catch (error) {
+    res.status(error.statusCode || 500).json({
+      status: "failed",
+      message: error.message,
+    });
+  }
+};
+
+const getBookingById = async (req, res) => {
   try {
     const { id } = req.params;
-    const onePassenger = await passenger.findOne({ where: { id } });
+    const data = await booking.findByPk(id, {
+      include: [
+        {
+          model: ticket,
+        },
+        {
+          model: passenger,
+        },
+        {
+          model: Users,
+        },
+      ],
+    });
     res.status(200).json({
-      passenger: onePassenger,
+      data,
     });
   } catch (error) {
     res.status(error.statusCode || 500).json({
+      status: "failed",
       message: error.message,
     });
   }
 };
 
-const addPassenger = async (req, res) => {
+const addBooking = async (req, res) => {
+  const { passenger_name, nik, id_ticket, total_booking } = req.body;
   try {
-    const newPassenger = await passenger.create(req.body);
+    const passengerData = await passenger.create({
+      passenger_name,
+      nik,
+    });
+    const newBooking = await booking.create({
+      id_passenger: passengerData.id,
+      id_ticket,
+      id_users: req.user.id,
+      total_booking,
+    });
     res.status(200).json({
-      message: "data penumpang berhasil ditambahkan",
-      newPassenger,
+      message: "Booking berhasil",
+      newBooking,
     });
   } catch (error) {
     res.status(error.statusCode || 500).json({
+      status: "failed",
       message: error.message,
     });
   }
 };
 
-const updatePassenger = async (req, res) => {
+const updateBooking = async (req, res) => {
   try {
     const { id } = req.params;
-    await passenger.update(req.body, { where: { id } });
+    await booking.update(req.body, { where: { id } });
     res.status(200).json({
-      message: "data penumpang berhasil diubah",
+      message: "Booking berhasil diubah",
     });
   } catch (error) {
     res.status(error.statusCode || 500).json({
+      status: "failed",
       message: error.message,
     });
   }
 };
 
-const deletePassenger = async (req, res) => {
+const deleteBooking = async (req, res) => {
   try {
     const { id } = req.params;
-    await passenger.destroy({ where: { id } });
+    await booking.destroy({ where: { id } });
     res.status(200).json({
-      message: "data penumpang berhasil dihapus",
+      message: "Booking berhasil dihapus",
     });
   } catch (error) {
     res.status(error.statusCode || 500).json({
+      status: "failed",
       message: error.message,
     });
   }
 };
 
 module.exports = {
-  getPassenger,
-  getPassengerById,
-  addPassenger,
-  updatePassenger,
-  deletePassenger,
+  getBooking,
+  bookingsUser,
+  getBookingById,
+  addBooking,
+  updateBooking,
+  deleteBooking,
 };
