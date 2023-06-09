@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken');
-const {User} = require("../models");
+const User = require("../models").user;
 
 module.exports = function (req, res, next) {
     try {
         console.log(req.headers.authorization)
-        const bearerToken = req.headers.authorization // Basic Authentication -> Bearer Authentication
+        const bearerToken = req.headers.authorization
         const bearer = bearerToken.split(' ');
         const token = bearer[1];
         // check if request header authorization sent or not

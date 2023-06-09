@@ -7,12 +7,12 @@ const login = async (req, res) => {
         const { email, password } = req.body;
         const user = await User.findOne({ where: { email } });
         if (!user)
-            return res.status(400).json({ message: "Email tidak terdaftar" });
+            return res.status(400).json({ message: "sorry, your email account doesn't exist." });
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword)
-            return res.status(400).json({ message: "Password salah" });
+            return res.status(400).json({ message: "Passwords don't match" });
         const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY);
-        res.status(200).json({ message: "Login berhasil", token, username:user.username, role:user.role, photo:user.photo });
+        res.status(200).json({ message: "login successful", token, username:user.username, role:user.role, photo:user.photo });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -44,7 +44,6 @@ const register = async (req, res) => {
             phone_number,
             role
         });
-        // const token = jwt.sign({ id: newUser.id }, process.env.SECRET_KEY);
         res.status(201).json({ message: "User created successfully", newUser});
 
     } catch (error) {
@@ -53,23 +52,7 @@ const register = async (req, res) => {
     
 };
 
-// const verify = async (req, res) => {
-//     const { token } = req.body;
-//     if (!token) return res.status(400).json({ message: "Token tidak ada" });
-//     try {
-//         const verified = jwt.verify(token, process.env.SECRET_KEY);
-//         const user = await User.findOne({ where: { id: verified.id } });
-//         if (!user) return res.status(400).json({ message: "User tidak ada" });
-//         user.verified = true;
-//         await user.save();
-//         res.status(200).json({ message: "User berhasil diverifikasi" });
-//     } catch (error) {
-//         res.status(400).json({ message: error.message});
-//     }
-// };
-
 module.exports = {
     login,
     register,
-    // verify,
 }
