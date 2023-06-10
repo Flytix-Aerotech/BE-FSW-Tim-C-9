@@ -8,8 +8,8 @@ module.exports = {
     password: DB_PASSWORD,
     database: `${DB_NAME}_development`,
     host: DB_HOST,
-    dialect: DB_DIALECT,
     port: DB_PORT,
+    dialect: DB_DIALECT,
   },
   test: {
     username: DB_USERNAME,
