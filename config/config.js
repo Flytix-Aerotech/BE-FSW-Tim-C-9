@@ -16,6 +16,7 @@ module.exports = {
     password: DB_PASSWORD,
     database: `${DB_NAME}_test`,
     host: DB_HOST,
+    port: DB_PORT,
     dialect: DB_DIALECT,
   },
   production: {
@@ -23,6 +24,7 @@ module.exports = {
     password: DB_PASSWORD,
     database: `${DB_NAME}_production`,
     host: DB_HOST,
+    port: DB_PORT,
     dialect: DB_DIALECT,
   },
 };
