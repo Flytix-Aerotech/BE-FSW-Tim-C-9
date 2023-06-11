@@ -16,18 +16,19 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 
 app.get("/", function (req, res) {
-    res.send("testing");
+  res.send("testing");
 });
 
 app.use(require("./routes"));
 
 // running app
 db.authenticate()
-    .then(() => {
-        app.listen(PORT, () => {
-        console.log(`Server started at http://localhost:${PORT} and successfully connected to database`);
-        });
-    })
-    .catch((err) => {
-        console.log(err);
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server started at http://localhost:${PORT} and successfully connected to database`);
     });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
