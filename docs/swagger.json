@@ -169,13 +169,9 @@
             "Users": {
             "type": "object",
             "properties": {
-                "first_name": {
+                "full_name": {
                 "type": "string",
                 "example": "habbin"
-                },
-                "last_name": {
-                "type": "string",
-                "example": "aja"
                 },
                 "email": {
                 "type": "string",
