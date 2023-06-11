@@ -5,7 +5,6 @@ const User = require("../models").user;
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-
   try {
     const user = await User.findOne({ where: { email } });
 
@@ -53,3 +52,4 @@ module.exports = {
   login,
   register,
 };
+

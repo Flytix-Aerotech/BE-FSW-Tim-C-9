@@ -9,3 +9,4 @@ router.post("/auth/login", login);
 router.post("/auth/register", upload, register);
 
 module.exports = router;
+

@@ -1,6 +1,16 @@
 const router = require("express").Router();
-const authRoutes = require("./authRoutes");
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('../docs/swagger.json');
+const authRoutes = require('./authRoutes');
 
-router.use("/api/v1", authRoutes);
+//Open API
+router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-module.exports = router;
+// API
+router.use('/api/v1', authRoutes)
+
+module.exports = router
+
+
+
+

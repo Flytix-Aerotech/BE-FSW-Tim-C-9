@@ -1,0 +1,215 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Flytix-api",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/",
+            "description": "local"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Auth API Collection"
+        }
+    ],
+    "paths": {
+        "/api/v1/auth/register": {
+            "post": {
+            "summary": "Register",
+            "tags": ["Auth"],
+            "description": "Create new user",
+            "requestBody": {
+                "required": true,
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "$ref": "#/components/schemas/Users"
+                    }
+                }
+                }
+            },
+            "responses": {
+                "201": {
+                "description": "Registration success",
+                "content": {
+                    "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                        "message": {
+                            "type": "string",
+                            "example": "User created successfully"
+                        },
+                        "user": {
+                            "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Users"
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                "id": {
+                                    "type": "integer"
+                                },
+                                "createdAt": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                },
+                                "updatedAt": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                }
+                                }
+                            }
+                            ]
+                        }
+                        }
+                    }
+                    }
+                }
+                },
+                "400": {
+                "description": "Email already registered",
+                "content": {
+                    "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                        "status": {
+                            "type": "string",
+                            "example": "failed"
+                        },
+                        "message": {
+                            "type": "string",
+                            "example": "User already exists."
+                        }
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+            "summary": "Login",
+            "tags": ["Auth"],
+            "description": "Retrieve access tokens",
+            "requestBody": {
+                "required": true,
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "properties": {
+                        "email": {
+                        "type": "string",
+                        "example": "habbin@gmail.com"
+                        },
+                        "password": {
+                        "type": "string",
+                        "example": "habbin123"
+                        }
+                    }
+                    }
+                }
+                }
+            },
+            "responses": {
+                "200": {
+                "description": "Login success",
+                "content": {
+                    "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                        "message": {
+                            "type": "string",
+                            "example": "Login successful"
+                        },
+                        "accessToken": {
+                            "type": "string",
+                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNjg2NDA3MTI1fQ.AAGnkjiWm0qQYKqFYyTWGPq3MtzBQ2ZNh7idomC-q0w"
+                        }
+                        }
+                    }
+                    }
+                }
+                },
+                "400": {
+                "description": "wrong password",
+                "content": {
+                    "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                        "status": {
+                            "type": "string",
+                            "example": "failed"
+                        },
+                        "message": {
+                            "type": "string",
+                            "example": "Passwords don't match"
+                        }
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Users": {
+            "type": "object",
+            "properties": {
+                "full_name": {
+                "type": "string",
+                "example": "habbin"
+                },
+                "email": {
+                "type": "string",
+                "format": "email",
+                "example": "habbin@gmail.com"
+                },
+                "password": {
+                "type": "string",
+                "format": "password",
+                "example": "habbin123"
+                },
+                "username": {
+                "type": "string",
+                "example": "habbin"
+                },
+                "phone_number": {
+                "type": "string",
+                "example": "08123456789"
+                },
+                "address": {
+                "type": "string",
+                "example": "Jl. fsw no.3"
+                },
+                "photo": {
+                "type": "string",
+                "format": "binary",
+                "example": "url photo"
+                }
+            }
+            }
+        },
+        "securitySchemes": {
+            "bearerToken": {
+            "description": "Insert Token, You can get it after login",
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT"
+            }
+        }
+    }
+}
