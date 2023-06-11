@@ -31,4 +31,3 @@ db.authenticate()
   .catch((err) => {
     console.log(err);
   });
-
