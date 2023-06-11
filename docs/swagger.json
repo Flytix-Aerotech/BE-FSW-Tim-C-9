@@ -107,11 +107,11 @@
                     "schema": {
                     "properties": {
                         "email": {
-                        "type": "email",
+                        "type": "string",
                         "example": "habbin@gmail.com"
                         },
                         "password": {
-                        "type": "password",
+                        "type": "string",
                         "example": "habbin123"
                         }
                     }
