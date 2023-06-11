@@ -19,6 +19,8 @@ app.get("/", function (req, res) {
   res.send("testing");
 });
 
+app.use(require("./routes"));
+
 // running app
 db.authenticate()
   .then(() => {
