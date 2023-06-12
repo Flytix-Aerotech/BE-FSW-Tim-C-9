@@ -48,8 +48,19 @@ const register = async (req, res) => {
   }
 };
 
+// test users
+const getUsers = async (req, res) => {
+  try {
+    await User.findAll().then((user) => {
+      res.status(201).json({ message: "User created successfully", user });
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 module.exports = {
   login,
   register,
+  getUsers,
 };
-
