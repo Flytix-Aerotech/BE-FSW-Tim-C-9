@@ -22,14 +22,18 @@ const login = async (req, res) => {
 
 const register = async (req, res) => {
   const { full_name, username, email, phone_number, password, role } = req.body;
-  if (req.file === undefined || full_name === "" || username === "" || email === "" || phone_number === "" || password === "") {
+
+  if (full_name === "" || username === "" || email === "" || phone_number === "" || password === "") {
     return res.status(400).json({ message: "Please input a relevant data" });
   } else {
     try {
       const user = await User.findOne({ where: { email } });
       if (user) return res.status(400).json({ message: "User already exists" });
 
-      const photo = await uploadToImagekit(req);
+      let photo = "";
+      if (req.file) photo = (await uploadToImagekit(req)).url;
+      else photo = null;
+
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const newUser = await User.create({
@@ -38,7 +42,7 @@ const register = async (req, res) => {
         password: hashedPassword,
         username,
         phone_number,
-        photo: photo.url,
+        photo: photo,
         role,
       });
       res.status(201).json({ message: "User created successfully", newUser });
