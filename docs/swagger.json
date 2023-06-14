@@ -48,7 +48,7 @@
                       "type": "string",
                       "example": "User created successfully"
                     },
-                    "newUser": {
+                    "user": {
                       "allOf": [
                         {
                           "$ref": "#/components/schemas/Users"
@@ -134,6 +134,29 @@
                     "token": {
                       "type": "string",
                       "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNjg2NDA3MTI1fQ.AAGnkjiWm0qQYKqFYyTWGPq3MtzBQ2ZNh7idomC-q0w"
+                    },
+                    "user": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Users"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        }
+                      ]
                     }
                   }
                 }
@@ -189,7 +212,7 @@
     "/auth/getusers": {
       "get": {
         "tags": ["Auth"],
-        "summary": "Get User",
+        "summary": "Get All User",
         "description": "Get All Users information",
         "security": [
           {
@@ -208,8 +231,28 @@
                       "type": "string",
                       "example": "success"
                     },
-                    "data": {
-                      "$ref": "#/components/schemas/Users"
+                    "user": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Users"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        }
+                      ]
                     }
                   }
                 }
@@ -242,7 +285,7 @@
     "/auth/profile": {
       "get": {
         "tags": ["Auth"],
-        "summary": "Get User",
+        "summary": "Get User By Token Id",
         "description": "Get user information",
         "security": [
           {
@@ -261,8 +304,28 @@
                       "type": "string",
                       "example": "success"
                     },
-                    "data": {
-                      "$ref": "#/components/schemas/Users"
+                    "user": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Users"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        }
+                      ]
                     }
                   }
                 }
@@ -347,9 +410,6 @@
                     "message": {
                       "type": "string",
                       "example": "profile updated successfully"
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/Users"
                     }
                   }
                 }

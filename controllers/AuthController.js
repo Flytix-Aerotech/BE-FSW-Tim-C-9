@@ -3,23 +3,25 @@ const bcrypt = require("bcrypt");
 const { uploadToImagekit } = require("../lib/imagekit");
 const User = require("../models").user;
 
+// user login
 const login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ where: { email } });
 
     if (!user) return res.status(400).json({ message: "sorry, your email account doesn't exist." });
+
     const validPassword = await bcrypt.compare(password, user.password);
-
     if (!validPassword) return res.status(400).json({ message: "Passwords don't match" });
-    const token = jwt.sign({ id: user.id, role: user.role, photo: user.photo }, process.env.SECRET_KEY);
 
-    res.status(200).json({ message: "login successful", token, user });
+    const token = jwt.sign({ id: user.id, role: user.role, photo: user.photo }, process.env.SECRET_KEY);
+    res.status(200).json({ message: "login successfully", token, user });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
+// user register
 const register = async (req, res) => {
   const { full_name, username, email, phone_number, password, role } = req.body;
 
@@ -45,9 +47,9 @@ const register = async (req, res) => {
         photo: photo,
         role,
       });
-      res.status(201).json({ message: "User created successfully", newUser });
+      res.status(201).json({ message: "User created successfully", user: newUser });
     } catch (error) {
-      res.status(400).json({ message: error.message });
+      res.status(error.statusCode || 500).json({ message: error.message });
     }
   }
 };
@@ -55,88 +57,81 @@ const register = async (req, res) => {
 // test users
 const getUsers = async (req, res) => {
   try {
-    await User.findAll().then((user) => {
-      res.status(200).json({ message: "success", user });
-    });
+    const user = await User.findAll();
+    res.status(200).json({ user });
   } catch (error) {
-    res.status(401).json({ message: error.message });
+    res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
 // Get Profile
 const getProfile = async (req, res) => {
-  console.log(req.user)
   try {
-    const profile = await User.findOne(
-      {
-        where: {
-          id: req.user.id
-        }
-      });
-    res.status(200).json({
-      profile,
+    const user = await User.findOne({
+      where: {
+        id: req.user.id,
+      },
     });
+    res.status(200).json({ user });
   } catch (error) {
-    res.status(error.statusCode || 500).json({
-      message: error.message,
-    });
+    res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
-
-// // Update Profile
+// Update Profile
 const updateProfile = async (req, res) => {
   const { id, photo } = req.user;
-  const {
-    full_name,
-    email,
-    username,
-    phone_number,
-  } = req.body;
+  const { full_name, email, username, phone_number } = req.body;
 
-  let updateImage = "";
-  if (req.file === undefined) {
-    updateImage = photo;
-  } else if (req.file) {
-    if (req.file.size > 3000000) {
-      response(res, 400, "failed", "Image should be no more than 3MB");
+  try {
+    let updateImage = "";
+    if (req.file === undefined) {
+      updateImage = photo;
+    } else if (req.file) {
+      if (req.file.size > 3000000) {
+        res.status(400).json({ message: "Image should be no more than 3MB" });
+      }
+      const img = await uploadToImagekit(req);
+      updateImage = img.url;
     }
-    const img = await uploadToImagekit(req);
-    updateImage = img.url;
-  }
 
-    const updatedUser = await User.update(
-      {
-        full_name,
-        email,
-        username,
-        phone_number,
-        photo: updateImage,
-      },
-      { where: { id }, returning: true }
-    );
-    res.status(200).json({ message: "Profile updated successfully", updatedUser });
+    await User.update({ full_name, email, username, phone_number, photo: updateImage }, { where: { id } });
+    res.status(201).json({ message: "Profile updated successfully" });
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
 };
 
-// // update Password
-// const resetPassword = async (req, res) => {
-//   const {
-//     password, confirmPassword
-//   } = req.body;
+const getUserByEmail = async (req, res) => {
+  const { email } = req.body;
 
-//   if(password === confirmPassword) {
-//     const newPassword = password
-//     const updatedPassword = await User.update(
-//       {
-//         password: newPassword
-//       },
-//       { where: { id }, returning: true }
-//     );
-//     res.status(200).json({ message: "Profile berhasil diupdate", updatedPassword });
-//   }
-// };
+  try {
+    const user = await User.findOne({ where: { email } });
+    if (!user) return res.status(400).json({ message: "sorry, your email account doesn't exist." });
 
+    res.status(200).json({ user });
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+};
 
+// reset password
+const resetPassword = async (req, res) => {
+  const { email } = req.params;
+  const { password, confirmPassword } = req.body;
+
+  try {
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Password and confirm password do not match" });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await User.update({ password: hashedPassword }, { where: { email } });
+    res.status(201).json({ message: "Password reset successful" });
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+};
 
 module.exports = {
   login,
@@ -144,5 +139,6 @@ module.exports = {
   getUsers,
   updateProfile,
   getProfile,
-  // resetPassword,
+  getUserByEmail,
+  resetPassword,
 };
