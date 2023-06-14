@@ -214,11 +214,6 @@
         "tags": ["Auth"],
         "summary": "Get All User",
         "description": "Get All Users information",
-        "security": [
-          {
-            "bearerToken": []
-          }
-        ],
         "responses": {
           "200": {
             "description": "A successful response.",
