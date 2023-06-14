@@ -52,10 +52,10 @@ const register = async (req, res) => {
 const getUsers = async (req, res) => {
   try {
     await User.findAll().then((user) => {
-      res.status(201).json({ message: "User created successfully", user });
+      res.status(200).json({ message: "success", user });
     });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(401).json({ message: error.message });
   }
 };
 
@@ -111,7 +111,7 @@ const updateProfile = async (req, res) => {
       },
       { where: { id }, returning: true }
     );
-    res.status(200).json({ message: "Profile berhasil diupdate", updatedUser });
+    res.status(200).json({ message: "Profile updated successfully", updatedUser });
 };
 
 // // update Password
