@@ -1,19 +1,18 @@
-const { ticket, airport } = require('../models');
-const { search } = require('./AuthController');
+const { tickets, airports } = require('../models');
 const { Op } = require('sequelize');
 const Sequelize = require('sequelize');
 
 const getTicket = async (req, res) => {
     try {
-        const tickets = await ticket.findAll({
+        const Tickets = await tickets.findAll({
             include: [
                 {
-                    model: airport
+                    model: airports
                 },
             ],
         });
         res.status(200).json({
-            tickets,
+            Tickets,
         });
     } catch (error) {
         res.status(error.statusCode || 500).json({
@@ -89,62 +88,81 @@ const getTicketById = async (req, res) => {
 //     }
 // };
 
-// pencarian + hasil tiket
 const searchTicket = async (req, res) => {
     try {
-        const {departure_date, arrival_date, departure_location,  arrival_location,  airport_name, airport_location, type_of_class, price} = req.query;
-        const tickets = await ticket.findAll({
-            where: {
-                [Op.or]: [
-                    {
-                        '$flight.departure_date$': { [Op.iLike]: `%${departure_date}%` },
-                    },
-                    {
-                        '$flight.arrival_date$': { [Op.iLike]: `%${arrival_date}%` },
-                    },
-                    {
-                        '$flight.departure_location$': { [Op.iLike]: `%${departure_location}%` },
-                    },
-                    {
-                        '$flight.arrival_location$': { [Op.iLike]: `%${arrival_location}%` },
-                    },
-                    {
-                        '$airport.name$': { [Op.iLike]: `%${airport_name}%` },
-                    },
-                    {
-                        '$airport.location$': { [Op.iLike]: `%${airport_location}%` },
-                    },
-                    {
-                        type_of_class : { [Op.iLike]: type_of_class },
-                    },
-                    {
-                        price: { [Op.gt]: price},
-                    }, 
-                ]
+      const {
+        departure_date,
+        arrival_date,
+        departure_location,
+        arrival_location,
+        airport_name,
+        airport_location,
+        type_of_class,
+        price,
+      } = req.body;
+  
+      const Tickets = await tickets.findAll({
+        where: {
+          // departure_date,
+          // arrival_date,
+          // departure_location,
+          // arrival_location,
+          // airport_name,
+          // airport_location,
+          // type_of_class,
+          // price,
+            departure_date: {
+              [Op.endsWith]: departure_date,
             },
-            include: [
-                {
-                    model: airport,
-                    as: 'airport',
-                    required: true
-                },
-                {
-                    model: flight,
-                    as: 'flight',
-                    required: true
-                }
-            ]
-        });
-        res.status(200).json({
-            tickets
-        });
-    } catch (error) {
-        res.status(error.statusCode || 500).json({
-            message: error.message,
-        });
+            arrival_date: {
+              [Op.endsWith]: arrival_date,
+            },
+            airport_name: {
+              [Op.endsWith]: '$airports.airport_name$',
+            },
+            airport_location: {
+              [Op.endsWith]: airport_location,
+            },
+        },
+        include: [
+          {
+            model: airports,
+            as: 'airport',
+            // where: {
+            //   airport_name,
+            //   airport_location,
+            // },
+          },
+          {
+            model: flights,
+            as: 'flight',
+            where: {
+              departure_date,
+              arrival_date,
+              departure_location,
+              arrival_location,
+            },
+          },
+          {
+            model: flights,
+            include: [airports],
+          },
+        ],
+      });
+  
+      res.status(200).json({
+        status: 'success',
+        data: Tickets,
+      });
+    } catch (err) {
+      res.status(404).json({
+        status: 'failed',
+        message: err.message,
+      });
     }
-};
-
+  };
+  
+  
 
 module.exports = {
     getTicket,

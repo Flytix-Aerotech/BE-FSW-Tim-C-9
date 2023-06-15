@@ -1,36 +1,43 @@
-const jwt = require('jsonwebtoken');
-// const User = require("../app/models").Users;
+const jwt = require("jsonwebtoken");
+const secret = process.env.SECRET_KEY;
 
-module.exports = function (req, res, next) {
-    // req is an object
+const verifyUser = async (req, res, next) => {
+  const token = req.headers.authorization;
+  if (!token || token === null) return res.status(403).json({ message: "Unauthorized request" });
+  try {
+    const splitToken = token.split(" ")[1];
+    let verifiedUser = jwt.verify(splitToken, secret);
+    if (!verifiedUser) return res.status(403).json({ message: "Access denied" });
+    req.user = verifiedUser;
+    next();
+  } catch (error) {
+    res.status(403).json({ message: error.message });
+  }
+};
 
-    // Client will headers called authorization which contains JWT
-    try {
-        console.log(req.headers.authorization)
-        const bearerToken = req.headers.authorization // Basic Authentication -> Bearer Authentication
-        const bearer = bearerToken.split(' ');
-        const token = bearer[1];
-        // check if request header authorization sent or not
-        if(!token) {
-            return res.status(401).json({
-                status: 'fail',
-                message: "required authorization"
-            })
-        }
+const isAdmin = async (req, res, next) => {
+  if (req.user.role === "admin") {
+    next();
+  } else {
+    return res.status(403).json({ message: "Access denied" });
+  }
+};
 
-        const payload = jwt.verify(token, process.env.JWT_SECRET);
-        console.log('Payload:', payload)
-        User.findByPk(payload.id)
-            .then(instance => {
-                req.user = instance;
-                next()
-            })
-    }
+const isUser = async (req, res, next) => {
+  if (req.user.role === "user") {
+    next();
+  } else {
+    return res.status(403).json({ message: "Access denied" });
+  }
+};
 
-    catch {
-        res.status(401).json({
-            status: 'fail',
-            message: "Invalid Token"
-        })
-    }
-}
+const isGuest = async (req, res, next) => {
+  if (req.user.role === "guest") {
+    next();
+  } else {
+    return res.status(403).json({ message: "Access denied" });
+  }
+};
+
+module.exports = { verifyUser, isAdmin, isUser, isGuest };
+

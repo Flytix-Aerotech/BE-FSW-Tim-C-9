@@ -9,11 +9,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.passenger, { foreignKey: "passenger_id" });
-      this.belongsTo(models.ticket, { foreignKey: "ticket_id" });
-      this.hasOne(models.seat, { foreignKey: "booking_id" });
-      this.hasOne(models.history, { foreignKey: "booking_id" });
-      this.hasMany(models.transaction, { foreignKey: "booking_id" });
+      this.belongsTo(models.passengers, { foreignKey: "passenger_id" });
+      this.belongsTo(models.tickets, { foreignKey: "ticket_id" });
+      this.hasOne(models.seats, { foreignKey: "booking_id" });
+      this.hasOne(models.historys, { foreignKey: "booking_id" });
+      this.hasMany(models.transactions, { foreignKey: "booking_id" });
     }
   }
   
@@ -22,10 +22,11 @@ module.exports = (sequelize, DataTypes) => {
       ticket_id: DataTypes.INTEGER,
       passenger_id: DataTypes.INTEGER,
       total_booking: DataTypes.INTEGER,
+      payment_status: DataTypes.BOOLEAN,
     },
     {
       sequelize,
-      modelName: "book",
+      modelName: "books",
     }
   );
   return book;
