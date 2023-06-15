@@ -4,9 +4,8 @@ const TicketController = require("../controllers/TicketController");
 
 router.get('', TicketController.getTicket);
 router.get('/:id', TicketController.getTicketById);
-router.get('/search', TicketController.searchTicket);
 router.post('', TicketController.addTicket);
 router.put('/:id', TicketController.updateTicket);
 router.delete('/:id', TicketController.deleteTicket);
-
+router.get('/search', TicketController.searchTicket);
 module.exports = router;

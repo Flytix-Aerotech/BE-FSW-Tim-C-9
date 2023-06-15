@@ -146,8 +146,8 @@ const searchTicket = async (req, res) => {
 
 module.exports = {
     getTicket,
-    addTicket,
     getTicketById,
+    addTicket,
     updateTicket,
     deleteTicket,
     searchTicket,
