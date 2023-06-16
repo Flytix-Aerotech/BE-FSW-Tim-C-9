@@ -18,6 +18,9 @@ module.exports = {
       price: {
         type: Sequelize.DOUBLE,
       },
+      payment_status: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

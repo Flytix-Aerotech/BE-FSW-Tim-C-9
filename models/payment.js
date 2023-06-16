@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       image_brand: DataTypes.TEXT,
       price: DataTypes.DOUBLE,
+      payment_status: DataTypes.BOOLEAN,
     },
     {
       sequelize,

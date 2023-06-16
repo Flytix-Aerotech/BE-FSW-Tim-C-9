@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "swagger-autogen": "node swagger.js",
     "test": "jest",
     "dev": "nodemon index.js",
     "db:create": "sequelize db:create",
@@ -24,6 +25,7 @@
   },
   "homepage": "https://github.com/Flytix-Aerotech/BE-FSW-Tim-C-9#readme",
   "dependencies": {
+    "and": "^0.0.3",
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -45,5 +47,8 @@
   "directories": {
     "lib": "lib",
     "test": "test"
+  },
+  "devDependencies": {
+    "swagger-autogen": "^2.23.2"
   }
 }

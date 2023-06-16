@@ -9,17 +9,32 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      full_name: {
+        type: Sequelize.STRING,
+      },
+      clan_name: {
+        type: Sequelize.STRING,
+      },
+      email: {
+        type: Sequelize.STRING,
+      },
+      phone_number: {
+        type: Sequelize.STRING,
+      },
       ticket_id: {
         type: Sequelize.INTEGER,
       },
       passenger_id: {
         type: Sequelize.INTEGER,
       },
-      total_booking: {
+      // booking_id: {
+      //   type: Sequelize.INTEGER,
+      // },
+      seat_id: {
         type: Sequelize.INTEGER,
       },
-      payment_status: {
-        type: Sequelize.BOOLEAN,
+      total_booking: {
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,

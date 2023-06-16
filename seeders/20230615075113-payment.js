@@ -4,21 +4,23 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert(
-      "histories",
+      "payments",
       [
         {
-          id: 21,
-          user_id: null,
-          booking_id: 31,
-          history_date: new Date(),
+          id: 31,
+          type_of_payment: "Gopay",
+          image_brand: null,
+          price: 4000000,
+          payment_status: true,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          id: 22,
-          user_id: null,
-          booking_id: 32,
-          history_date: new Date(),
+          id: 32,
+          type_of_payment: "Akulaku",
+          image_brand: null,
+          price: 6000000,
+          payment_status: false,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -28,6 +30,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete("histories", null, {});
+    await queryInterface.bulkDelete("payments", null, {});
   },
 };

@@ -9,12 +9,8 @@ const historyRoutes = require('./historyRoutes');
 router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // API
-router.use('/api/v1', authRoutes)
-router.use('/api/v1/book', bookRoutes)
-router.use('/api/v1/history', historyRoutes)
+// router.use('/api/v1', authRoutes)
+router.use('/api/v1/booking', bookRoutes)
+router.use('/api/v1/histories', historyRoutes)
 
 module.exports = router
-
-
-
-
