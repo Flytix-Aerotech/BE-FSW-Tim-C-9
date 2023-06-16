@@ -9,10 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.airport, { foreignKey: "airport_id" });
-      this.belongsTo(models.flight, { foreignKey: "flight_id" });
-      this.belongsTo(models.passenger, { foreignKey: "passenger_id" });
-      this.hasMany(models.book, { foreignKey: "ticket_id" });
+      this.belongsTo(models.airports, { foreignKey: "airport_id" });
+      this.belongsTo(models.flights, { foreignKey: "flight_id" });
+      this.belongsTo(models.passengers, { foreignKey: "passenger_id" });
+      this.hasMany(models.books, { foreignKey: "ticket_id" });
     }
   }
   ticket.init(
@@ -27,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "ticket",
+      modelName: "tickets",
+      freezeTableName: true,
     }
   );
   return ticket;
