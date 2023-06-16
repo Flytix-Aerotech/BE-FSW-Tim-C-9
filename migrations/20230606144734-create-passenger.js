@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      full_name: { // change from last_name: {
+      full_name: {
         type: Sequelize.STRING,
       },
       clan_name: {
@@ -23,12 +23,6 @@ module.exports = {
       },
       nationality: {
         type: Sequelize.STRING,
-      },
-      passenger_role: {
-        type: Sequelize.ENUM(["Dewasa", "Bayi"]),
-      },
-      user_id: {
-        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,
