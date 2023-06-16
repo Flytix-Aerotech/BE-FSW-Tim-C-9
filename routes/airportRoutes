@@ -1,0 +1,11 @@
+const router = require("express").Router();
+const auth = require("../middleware/Auth");
+const airportController = require("../controllers/airportController");
+
+router.get("/airport", airportController.getAirport);
+router.get("/airport/:id", airportController.getAirplaneById);
+router.post("/airport", airportController.addAirport);
+router.put("/airport/:id", auth.verifyUser, auth.isUser, airportController.updateAirport);
+router.delete("/airport/:id", auth.verifyUser, auth.isUser, airportController.deleteAirport);
+
+module.exports = router;
