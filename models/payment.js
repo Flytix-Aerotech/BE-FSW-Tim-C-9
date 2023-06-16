@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.hasOne(models.transactions, { foreignKey: "payment_id" });
+      this.hasOne(models.transaction, { foreignKey: "payment_id" });
     }
   }
   payment.init(
@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "payments",
+      modelName: "payment",
     }
   );
   return payment;

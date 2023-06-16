@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasMany(models.tickets, { foreignKey: "airport_id" });
+      this.hasMany(models.ticket, { foreignKey: "airport_id" });
     }
   }
   airport.init(
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "airports",
+      modelName: "airport",
     }
   );
   return airport;
