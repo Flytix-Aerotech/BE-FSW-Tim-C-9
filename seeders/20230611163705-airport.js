@@ -7,19 +7,19 @@ module.exports = {
       "airports",
       [
         {
-          id: 3,
+          id: 1,
           name:"Soekarno Hatta",
           location:"Jakarta",
           code:"JKT-SH",
           createdAt: new Date(),
           updatedAt: new Date(),
 
-          // id: 2,
-          // name:"Juanda",
-          // location:"Surabaya",
-          // code:"SBY-JD",
-          // createdAt: new Date(),
-          // updatedAt: new Date(),
+          id: 2,
+          name:"Juanda",
+          location:"Surabaya",
+          code:"SBY-JD",
+          createdAt: new Date(),
+          updatedAt: new Date(),
 
         },
       ],
