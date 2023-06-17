@@ -117,7 +117,7 @@ const getUserByEmail = async (req, res) => {
 
 // reset password
 const resetPassword = async (req, res) => {
-  const { email } = req.params;
+  const { username } = req.params;
   const { password, confirmPassword } = req.body;
 
   try {
@@ -126,8 +126,8 @@ const resetPassword = async (req, res) => {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await user.update({ password: hashedPassword }, { where: { email } });
-    res.status(201).json({ message: "Password reset successful" });
+    await user.update({ password: hashedPassword }, { where: { username } });
+    res.status(201).json({ message: "Password reset successfully" });
   } catch (error) {
     res.status(error.statusCode || 500).json({ message: error.message });
   }

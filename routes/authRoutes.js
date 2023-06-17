@@ -12,7 +12,7 @@ router.get("/users", getUsers);
 router.post("/login", login);
 router.post("/register", upload, register);
 router.post("/user", getUserByEmail);
-router.put("/reset-password/:email", resetPassword);
+router.put("/reset-password/:username", resetPassword);
 router.get("/profile", Auth.verifyUser, Auth.isUser, getProfile);
 router.put("/profile", Auth.verifyUser, Auth.isUser, upload, updateProfile);
 
