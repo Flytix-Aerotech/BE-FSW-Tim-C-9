@@ -7,31 +7,35 @@ const addBooking = async (req, res) => {
         birth_date,
         nik_number,
         nationality,
-        passenger_role,
         seat_number,
         email,
         phone_number,
+        total_booking
     } = req.body
     try {
-        const passengerData = await passenger.create({
-            full_name,
-            clan_name,
-            birth_date,
-            nik_number,
-            nationality,
-            passenger_role,
-            users_id: req.user.id,
-        });
-        const seatPick = await seat.create({
-            flight_id: req.flight.id,
-            seat_number,
-        });
+        const passengerData = [];
+        for (let i = 0; i < adult_passenger; i++) {
+            passengerData.push(await passenger.create({
+                full_name,
+                clan_name,
+                birth_date,
+                nik_number,
+                nationality,
+            }));
+        }
+        const seatPick = [];
+        for (let i = 0; i < adult_passenger; i++) {
+            seatPick.push(await seat.create({
+                flight_id: req.flight.id,
+                seat_number,
+            }));
+        }
         const newBooking = await book.create({
             email,
             phone_number,
             ticket_id,
-            passenger_id: passengerData.id,
-            seat_id: seatPick.id,
+            passenger_id: passengerData.map(passenger => passenger.id),
+            seat_id: seatPick.map(seat => seat.id),
             total_booking,
         });
         res.status(200).json({
