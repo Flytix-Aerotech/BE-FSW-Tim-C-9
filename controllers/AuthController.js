@@ -9,13 +9,13 @@ const login = async (req, res) => {
   try {
     const User = await user.findOne({ where: { email } });
 
-    if (!User) return res.status(400).json({ message: "sorry, your email account doesn't exist." });
+    if (!User) return res.status(400).json({ message: "Sorry, your email account doesn't exist." });
 
     const validPassword = await bcrypt.compare(password, User.password);
     if (!validPassword) return res.status(400).json({ message: "Passwords don't match" });
 
     const token = jwt.sign({ id: User.id, role: User.role, photo: User.photo }, process.env.SECRET_KEY);
-    res.status(200).json({ message: "login successfully", token, User });
+    res.status(200).json({ message: "Login successfully", token, user: User });
   } catch (error) {
     res.status(error.statusCode || 500).json({ message: error.message });
   }

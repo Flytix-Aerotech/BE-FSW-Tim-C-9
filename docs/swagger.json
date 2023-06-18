@@ -382,6 +382,110 @@
           }
         }
       }
+    },
+    "/tickets": {
+      "get": {
+        "tags": ["Ticket"],
+        "summary": "Returns a list of ticket",
+        "description": "This is API for get all ticket data",
+        "responses": {
+          "200": {
+            "description": "Success get all products data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "Tickets": {
+                      "type": "object",
+                      "properties": {
+                        "price": {
+                          "type": "number",
+                          "format": "double",
+                          "example": "2000000"
+                        },
+                        "type_of_class": {
+                          "type": "string",
+                          "enum": ["Economy Class", "Business Class", "First Class", "Quiet Class"],
+                          "example": "Economy Class"
+                        },
+                        "flight_id": {
+                          "$ref": "#/components/schemas/Flights"
+                        },
+                        "airport_id": {
+                          "$ref": "#/components/schemas/Airports"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tickets/{id}": {
+      "get": {
+        "tags": ["Ticket"],
+        "summary": "Returns a list of ticket by id",
+        "description": "This is API for get ticket data by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Input ID of the products to get",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get products data by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "Tickets": {
+                      "type": "object",
+                      "properties": {
+                        "price": {
+                          "type": "number",
+                          "format": "double",
+                          "example": "2000000"
+                        },
+                        "type_of_class": {
+                          "type": "string",
+                          "enum": ["Economy Class", "Business Class", "First Class", "Quiet Class"],
+                          "example": "Economy Class"
+                        },
+                        "flight_id": {
+                          "$ref": "#/components/schemas/Flights"
+                        },
+                        "airport_id": {
+                          "$ref": "#/components/schemas/Airports"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -415,6 +519,117 @@
             "type": "string",
             "format": "binary",
             "example": "url photo"
+          }
+        }
+      },
+      "Tickets": {
+        "type": "object",
+        "properties": {
+          "price": {
+            "type": "number",
+            "format": "double",
+            "example": "2000000"
+          },
+          "type_of_class": {
+            "type": "string",
+            "enum": ["Economy Class", "Business Class", "First Class", "Quiet Class"],
+            "example": "Economy Class"
+          },
+          "airport_id": {
+            "type": "integer",
+            "example": "3"
+          },
+          "flight_id": {
+            "type": "string",
+            "example": "1"
+          },
+          "passenger_id": {
+            "type": "integer",
+            "example": "1"
+          }
+        }
+      },
+      "Flights": {
+        "type": "object",
+        "properties": {
+          "flight_number": {
+            "type": "number",
+            "format": "integer",
+            "example": "3"
+          },
+          "departure_date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2000000"
+          },
+          "arrival_date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2000000"
+          },
+          "departure_location": {
+            "type": "string",
+            "example": "Jakarta"
+          },
+          "arrival_location": {
+            "type": "string",
+            "example": "Surabaya"
+          },
+          "from_id": {
+            "type": "string",
+            "format": "char",
+            "example": "JKT"
+          },
+          "to_id": {
+            "type": "string",
+            "format": "char",
+            "example": "SBY"
+          },
+          "airline": {
+            "type": "string",
+            "example": "LION AIR"
+          },
+          "capacity": {
+            "type": "number",
+            "format": "integer",
+            "example": "200"
+          },
+          "economy_class_price": {
+            "type": "number",
+            "format": "double",
+            "example": "2000000"
+          },
+          "business_class_price": {
+            "type": "number",
+            "format": "double",
+            "example": "2000000"
+          },
+          "first_class_price": {
+            "type": "number",
+            "format": "double",
+            "example": "2000000"
+          },
+          "quiet_class_price": {
+            "type": "number",
+            "format": "double",
+            "example": "2000000"
+          }
+        }
+      },
+      "Airports": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Abdulrachman Saleh"
+          },
+          "location": {
+            "type": "string",
+            "example": "Malang"
+          },
+          "code": {
+            "type": "string",
+            "example": "ABS"
           }
         }
       }
