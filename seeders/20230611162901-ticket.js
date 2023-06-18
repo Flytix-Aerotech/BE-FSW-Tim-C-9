@@ -14,7 +14,9 @@ module.exports = {
           flight_id: 5,
           createdAt: new Date(),
           updatedAt: new Date(),
+        },
 
+        {
           id: 2,
           price: 1500000,
           type_off_class:"Economy Class",
@@ -22,7 +24,9 @@ module.exports = {
           flight_id: 4,
           createdAt: new Date(),
           updatedAt: new Date(),
+        },
 
+        {
           id: 3,
           price: 20000000,
           type_off_class:"First Class",

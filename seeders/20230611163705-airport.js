@@ -13,7 +13,9 @@ module.exports = {
           code:"JKT-SH",
           createdAt: new Date(),
           updatedAt: new Date(),
-
+        },
+        
+        {
           id: 2,
           name:"Juanda",
           location:"Surabaya",

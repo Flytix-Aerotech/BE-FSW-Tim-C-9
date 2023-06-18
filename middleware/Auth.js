@@ -40,4 +40,3 @@ const isGuest = async (req, res, next) => {
 };
 
 module.exports = { verifyUser, isAdmin, isUser, isGuest };
-

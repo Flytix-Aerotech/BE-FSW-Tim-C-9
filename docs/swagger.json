@@ -1,412 +1,431 @@
 {
   "openapi": "3.0.0",
   "info": {
-      "title": "OpenAPI Ticket Flytix",
-      "description": "API description in Markdown.",
-      "version": "1.0.0"
+    "title": "Flytix-api",
+    "version": "1.0.0"
   },
-  "tags": [
-      {
-          "name": "Ticket",
-          "description": "This is API for managing CRUD PRODUCTS"
-      }
-  ],
   "servers": [
-      {
-        "url": "https://flytix-aerotech.up.railway.app/api/v1",
-        "description": "public"
-      },
-      {
-        "url": "http://localhost:8000/api/v1",
-        "description": "local"
-      }
+    {
+      "url": "https://flytix-aerotech.up.railway.app/api/v1",
+      "description": "public"
+    },
+    {
+      "url": "http://localhost:8000/api/v1",
+      "description": "local"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Auth API Collection"
+    },
+    {
+      "name": "Ticket",
+      "description": "This is API for managing CRUD PRODUCTS"
+    }
   ],
   "paths": {
-      "/tickets": {
-          "get": {
-              "tags": [
-                  "Ticket"
-              ],
-              "summary": "Returns a list of ticket",
-              "description": "This is API for get all ticket data",
-              "responses": {
-                  "200": {
-                      "description": "Success get all products data"
-                  }
+    "/auth/register": {
+      "post": {
+        "summary": "Register",
+        "tags": ["Auth"],
+        "description": "Create new user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Users"
               }
-          },
-
-
-          "post": {
-              "tags": [
-                  "Ticket"
-              ],
-              "summary": "Success create ticket",
-              "description": "This is API for create new ticket data",
-              "requestBody": {
-                  "description": "Success create ticket",
-                  "required": true,
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "type": "object",
-                              "properties": {
-                                  "price": {
-                                      "type": "number",
-                                      "format": "double",
-                                      "example": "2000000"
-                                  },
-                                  "type_of_class": {
-                                    "type": "string",
-                                    "enum":["Economy Class", "Business Class", "First Class", "Quiet Class"],
-                                      "example": "Economy Class"
-                                  },
-                                  "airport_id": {
-                                      "type": "integer",
-                                      "example": "3"
-                                  },
-                                  "flight_id": {
-                                      "type": "string",
-                                      "example": "1"
-                                  }
-                                }
-                            }
-                        }
-                    }
-                },
-              "responses": {
-                  "200": {
-                      "description": "Success create new Ticket",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "type": "object",
-                                  "properties": {
-                                      "status": {
-                                          "type": "string",
-                                          "example": "Success"
-                                      },
-                                      "data": {
-                                          "type": "object",
-                                          "properties": {
-                                            "price": {
-                                                "type": "number",
-                                                "format": "double",
-                                                "example": "2000000"
-                                            },
-                                            "type_of_class": {
-                                              "type": "string",
-                                              "enum":["Economy Class", "Business Class", "First Class", "Quiet Class"],
-                                                "example": "Economy Class"
-                                            },
-                                            "airport_id": {
-                                                "type": "integer",
-                                                "example": "3"
-                                            },
-                                            "flight_id": {
-                                                "type": "string",
-                                                "example": "1"
-                                            }
-                                          }
-                                      }
-                                  }
-                              }
-                          }
-                      }
-                  },
-                  "400": {
-                      "description": "Failed because ticket is empty",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "type": "object",
-                                  "properties": {
-                                      "status": {
-                                          "type": "string",
-                                          "example": "failed"
-                                      },
-                                      "message": {
-                                          "type": "string",
-                                          "example": "Failed because ticket is empty"
-                                      }
-                                  }
-                              }
-                          }
-                      }
-                  }
-              }
+            }
           }
-      },
-
-      "/tickets/search": {
-          "get": {
-              "tags": [
-                  "Ticket"
-              ],
-              "summary": "Success search ticket",
-              "description": "This is API for search ticket data",
-              "parameters": [
-                  {
-                      "name": "name",
-                      "in": "query",
-                      "description": "ticket",
-                      "required": true,
-                      "schema": {
-                          "type": "string"
-                      }
-                  }
-              ],
-              "responses": {
-                  "201": {
-                      "description": "Success search product",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "type": "object",
-                                  "properties": {
-                                      "status": {
-                                          "type": "string",
-                                          "example": "Success"
-                                      },
-                                      "data": {
-                                          "type": "object",
-                                          "properties": {
-                                            "price": {
-                                                "type": "number",
-                                                "format": "double",
-                                                "example": "2000000"
-                                            },
-                                            "type_of_class": {
-                                              "type": "string",
-                                              "enum":["Economy Class", "Business Class", "First Class", "Quiet Class"],
-                                                "example": "Economy Class"
-                                            },
-                                            "airport_id": {
-                                                "type": "integer",
-                                                "example": "3"
-                                            },
-                                            "flight_id": {
-                                                "type": "string",
-                                                "example": "1"
-                                            }
-                                          }
-                                      }
-                                  }
-                              }
-                          }
-                      }
-                  },
-                  "400": {
-                      "description": "Failed because products is empty",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "type": "object",
-                                  "properties": {
-                                      "status": {
-                                          "type": "string",
-                                          "example": "failed"
-                                      },
-                                      "message": {
-                                          "type": "string",
-                                          "example": "Failed because products is empty"
-                                      }
-                                  }
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-  },
-   
-
-  "/tickets/{id}": {
-      "get": {
-          "tags": [
-              "Ticket"
-          ],
-          "summary": "Returns a list of ticket by id",
-          "description": "This is API for get ticket data by id",
-          "parameters": [
-              {
-                  "name": "id",
-                  "in": "path",
-                  "description": "Input ID of the products to get",
-                  "schema": {
-                      "type": "integer",
-                      "example": 1
-                  },
-                  "required": true
-              }
-          ], 
-          "responses": {
-              "200": {
-                  "description": "Success get products data by id"
-              }
-          }
-      },
-
-
-      "delete": {
-          "tags": [
-              "Ticket"
-          ],
-          "summary": "Delete ticket by id",
-          "description": "This is API for delete ticket data",
-          "parameters": [
-              {
-                  "name": "id",
-                  "in": "path",
-                  "description": "input ID of the ticket to delete",
-                  "schema": {
-                      "type": "integer",
-                      "example": 1
-                  },
-                  "required": true
-              }
-          ],
-          "responses": {
-              "200": {
-                  "description": "Success delete this id"
-              },
-              "404":{
-                  "description": "This id is not found"
-              }
-          }
-      },
-
-      "put": {
-          "tags": [
-              "Ticket"
-          ],
-          "summary": "Update ticket by id",
-          "description": "This is API for update ticket data by id",
-          "parameters": [
-              {
-                  "name": "id",
-                  "in": "path",
-                  "description": "Input ID of the ticket to update",
-                  "schema": {
-                      "type": "integer",
-                      "example": 1
-                  },
-                  "required": true
-              }
-          ],
-          "requestBody": {
-              "description": "Success edit ticket",
-              "required": true,
-              "content": {
-                  "application/json": {
-                      "schema": {
+        },
+        "responses": {
+          "201": {
+            "description": "Registration success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User created successfully"
+                    },
+                    "newUser": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Users"
+                        },
+                        {
                           "type": "object",
                           "properties": {
-                            "price": {
-                                "type": "number",
-                                "format": "double",
-                                "example": "5000000"
+                            "id": {
+                              "type": "integer"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "format": "date-time"
                             }
                           }
-                      }
-                  }
-              }
-          },
-          "responses": {
-              "200": {
-                  "description": "Success update ticket by id",
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "type": "object",
-                              "properties": {
-                                  "status": {
-                                      "type": "string",
-                                      "example": "Success"
-                                  },
-                                  "data": {
-                                      "type": "object",
-                                      "properties": {
-                                        "price": {
-                                            "type": "number",
-                                            "format": "double",
-                                            "example": "5000000"
-                                        },
-                                        "type_of_class": {
-                                          "type": "string",
-                                          "enum":["Economy Class", "Business Class", "First Class", "Quiet Class"],
-                                            "example": "Economy Class"
-                                        },
-                                        "airport_id": {
-                                            "type": "integer",
-                                            "example": "3"
-                                        },
-                                        "flight_id": {
-                                            "type": "string",
-                                            "example": "1"
-                                        }
-                                      }
-                                  }
-                              }
-                          }
-                      }
-                  }
-              },
-              "400": {
-                  "description": "Failed because name product is empty",
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "type": "object",
-                              "properties": {
-                                  "status": {
-                                      "type": "string",
-                                      "example": "failed"
-                                    },
-                                  "message": {
-                                      "type": "string",
-                                      "example": "Failed because name product is empty"
-                                    }
-                                }
-                            }
                         }
+                      ]
                     }
+                  }
                 }
-            }                
-        }
-    }
-},
-   
-  "components": {
-    "schemas": {
-
-        "tickets": {
-            "type": "object",
-            "properties": {
-                "price": {
-                    "type": "number",
-                    "format": "double",
-                    "example": "2000000"
-                },
-                "type_of_class": {
-                  "type": "string",
-                  "enum":["Economy Class", "Business Class", "First Class", "Quiet Class"],
-                    "example": "Economy Class"
-                },
-                "airport_id": {
-                    "type": "integer",
-                    "example": "3"
-                },
-                "flight_id": {
-                    "type": "string",
-                    "example": "1"
-                },
-                "passenger_id": {
-                    "type": "integer",
-                    "example": "null"
+              }
+            }
+          },
+          "400": {
+            "description": "Email already registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User already exists."
+                    }
+                  }
                 }
+              }
+            }
           }
         }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login",
+        "tags": ["Auth"],
+        "description": "Retrieve access tokens",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "habbin@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "habbin123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Login successful"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNjg2NDA3MTI1fQ.AAGnkjiWm0qQYKqFYyTWGPq3MtzBQ2ZNh7idomC-q0w"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "wrong password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Passwords don't match"
+                    },
+                    "user": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Users"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/getusers": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Get User",
+        "description": "Get All Users information",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Users"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/profile": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Get User",
+        "description": "Get user information",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Users"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Auth"],
+        "summary": "Update User",
+        "description": "Change user information",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "full_Name": {
+                    "type": "string",
+                    "example": "Dza"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "emailbaru@gmail.com"
+                  },
+                  "username": {
+                    "type": "string",
+                    "example": "dzaaa"
+                  },
+                  "phone_number": {
+                    "type": "string",
+                    "example": "081384753928"
+                  },
+                  "photo": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "profile updated successfully"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Users"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Users": {
+        "type": "object",
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "example": "habbin"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "habbin@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "habbin123"
+          },
+          "username": {
+            "type": "string",
+            "example": "habbin"
+          },
+          "phone_number": {
+            "type": "string",
+            "example": "08123456789"
+          },
+          "photo": {
+            "type": "string",
+            "format": "binary",
+            "example": "url photo"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerToken": {
+        "description": "Insert Token, You can get it after login",
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
     }
   }
 }

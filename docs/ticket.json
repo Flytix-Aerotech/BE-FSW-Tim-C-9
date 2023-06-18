@@ -1,0 +1,413 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "OpenAPI Ticket Flytix",
+        "description": "API description in Markdown.",
+        "version": "1.0.0"
+    },
+    "tags": [
+        {
+            "name": "Ticket",
+            "description": "This is API for managing CRUD PRODUCTS"
+        }
+    ],
+    "servers": [
+        {
+          "url": "https://flytix-aerotech.up.railway.app/api/v1",
+          "description": "public"
+        },
+        {
+          "url": "http://localhost:8000/api/v1",
+          "description": "local"
+        }
+    ],
+    "paths": {
+        "/tickets": {
+            "get": {
+                "tags": [
+                    "Ticket"
+                ],
+                "summary": "Returns a list of ticket",
+                "description": "This is API for get all ticket data",
+                "responses": {
+                    "200": {
+                        "description": "Success get all products data"
+                    }
+                }
+            },
+  
+  
+            "post": {
+                "tags": [
+                    "Ticket"
+                ],
+                "summary": "Success create ticket",
+                "description": "This is API for create new ticket data",
+                "requestBody": {
+                    "description": "Success create ticket",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "price": {
+                                        "type": "number",
+                                        "format": "double",
+                                        "example": "2000000"
+                                    },
+                                    "type_of_class": {
+                                      "type": "string",
+                                      "enum":["Economy Class", "Business Class", "First Class", "Quiet Class"],
+                                        "example": "Economy Class"
+                                    },
+                                    "airport_id": {
+                                        "type": "integer",
+                                        "example": "3"
+                                    },
+                                    "flight_id": {
+                                        "type": "string",
+                                        "example": "1"
+                                    }
+                                  }
+                              }
+                          }
+                      }
+                  },
+                "responses": {
+                    "200": {
+                        "description": "Success create new Ticket",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                              "price": {
+                                                  "type": "number",
+                                                  "format": "double",
+                                                  "example": "2000000"
+                                              },
+                                              "type_of_class": {
+                                                "type": "string",
+                                                "enum":["Economy Class", "Business Class", "First Class", "Quiet Class"],
+                                                  "example": "Economy Class"
+                                              },
+                                              "airport_id": {
+                                                  "type": "integer",
+                                                  "example": "3"
+                                              },
+                                              "flight_id": {
+                                                  "type": "string",
+                                                  "example": "1"
+                                              }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Failed because ticket is empty",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed because ticket is empty"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+  
+        "/tickets/search": {
+            "get": {
+                "tags": [
+                    "Ticket"
+                ],
+                "summary": "Success search ticket",
+                "description": "This is API for search ticket data",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "ticket",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success search product",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                              "price": {
+                                                  "type": "number",
+                                                  "format": "double",
+                                                  "example": "2000000"
+                                              },
+                                              "type_of_class": {
+                                                "type": "string",
+                                                "enum":["Economy Class", "Business Class", "First Class", "Quiet Class"],
+                                                  "example": "Economy Class"
+                                              },
+                                              "airport_id": {
+                                                  "type": "integer",
+                                                  "example": "3"
+                                              },
+                                              "flight_id": {
+                                                  "type": "string",
+                                                  "example": "1"
+                                              }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Failed because products is empty",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed because products is empty"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+    },
+     
+  
+    "/tickets/{id}": {
+        "get": {
+            "tags": [
+                "Ticket"
+            ],
+            "summary": "Returns a list of ticket by id",
+            "description": "This is API for get ticket data by id",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "Input ID of the products to get",
+                    "schema": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "required": true
+                }
+            ], 
+            "responses": {
+                "200": {
+                    "description": "Success get products data by id"
+                }
+            }
+        },
+  
+  
+        "delete": {
+            "tags": [
+                "Ticket"
+            ],
+            "summary": "Delete ticket by id",
+            "description": "This is API for delete ticket data",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "input ID of the ticket to delete",
+                    "schema": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "required": true
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "Success delete this id"
+                },
+                "404":{
+                    "description": "This id is not found"
+                }
+            }
+        },
+  
+        "put": {
+            "tags": [
+                "Ticket"
+            ],
+            "summary": "Update ticket by id",
+            "description": "This is API for update ticket data by id",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "Input ID of the ticket to update",
+                    "schema": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "required": true
+                }
+            ],
+            "requestBody": {
+                "description": "Success edit ticket",
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                              "price": {
+                                  "type": "number",
+                                  "format": "double",
+                                  "example": "5000000"
+                              }
+                            }
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "Success update ticket by id",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "status": {
+                                        "type": "string",
+                                        "example": "Success"
+                                    },
+                                    "data": {
+                                        "type": "object",
+                                        "properties": {
+                                          "price": {
+                                              "type": "number",
+                                              "format": "double",
+                                              "example": "5000000"
+                                          },
+                                          "type_of_class": {
+                                            "type": "string",
+                                            "enum":["Economy Class", "Business Class", "First Class", "Quiet Class"],
+                                              "example": "Economy Class"
+                                          },
+                                          "airport_id": {
+                                              "type": "integer",
+                                              "example": "3"
+                                          },
+                                          "flight_id": {
+                                              "type": "string",
+                                              "example": "1"
+                                          }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Failed because name product is empty",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "status": {
+                                        "type": "string",
+                                        "example": "failed"
+                                      },
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Failed because name product is empty"
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }                
+          }
+      }
+  },
+     
+    "components": {
+      "schemas": {
+  
+          "tickets": {
+              "type": "object",
+              "properties": {
+                  "price": {
+                      "type": "number",
+                      "format": "double",
+                      "example": "2000000"
+                  },
+                  "type_of_class": {
+                    "type": "string",
+                    "enum":["Economy Class", "Business Class", "First Class", "Quiet Class"],
+                      "example": "Economy Class"
+                  },
+                  "airport_id": {
+                      "type": "integer",
+                      "example": "3"
+                  },
+                  "flight_id": {
+                      "type": "string",
+                      "example": "1"
+                  },
+                  "passenger_id": {
+                      "type": "integer",
+                      "example": "null"
+                  }
+            }
+          }
+      }
+    }
+  }
+  
