@@ -33,6 +33,12 @@ module.exports = {
       total_booking: {
         type: Sequelize.INTEGER,
       },
+      total_price: {
+        type: Sequelize.DOUBLE,
+      },
+      booking_code: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

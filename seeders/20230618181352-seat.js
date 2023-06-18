@@ -4,19 +4,19 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert(
-      "payments",
+      "seats",
       [
         {
-          id: 31,
-          type_of_payment: "Gopay",
-          price: 4000000,
+          id: 999,
+          flight_id: 3,
+          seat_number: 33,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          id: 32,
-          type_of_payment: "Akulaku",
-          price: 6000000,
+          id: 888,
+          flight_id: 3,
+          seat_number: 23,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -26,6 +26,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete("payments", null, {});
+    await queryInterface.bulkDelete("seats", null, {});
   },
 };

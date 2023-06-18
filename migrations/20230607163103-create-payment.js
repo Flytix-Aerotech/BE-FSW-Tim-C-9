@@ -12,14 +12,8 @@ module.exports = {
       type_of_payment: {
         type: Sequelize.ENUM(["Gopay", "Dana", "Akulaku"]),
       },
-      image_brand: {
-        type: Sequelize.TEXT,
-      },
       price: {
         type: Sequelize.DOUBLE,
-      },
-      payment_status: {
-        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,

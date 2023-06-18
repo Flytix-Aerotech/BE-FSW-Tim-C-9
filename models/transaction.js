@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       user_id: DataTypes.INTEGER,
       total_price: DataTypes.DOUBLE,
       trans_date: DataTypes.DATE,
+      payment_status: DataTypes.BOOLEAN,
     },
     {
       sequelize,

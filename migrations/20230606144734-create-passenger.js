@@ -24,6 +24,9 @@ module.exports = {
       nationality: {
         type: Sequelize.STRING,
       },
+      passenger_role: {
+        type: Sequelize.ENUM(["Dewasa", "Bayi"]),
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

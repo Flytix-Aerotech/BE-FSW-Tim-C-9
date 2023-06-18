@@ -20,6 +20,9 @@ module.exports = (sequelize, DataTypes) => {
       birth_date: DataTypes.DATEONLY,
       nik_number: DataTypes.STRING,
       nationality: DataTypes.STRING,
+      passenger_role: {
+        type: DataTypes.ENUM(["Gopay", "Dana", "Akulaku"]),
+      },
     },
     {
       sequelize,

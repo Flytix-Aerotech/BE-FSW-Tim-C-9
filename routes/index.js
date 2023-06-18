@@ -4,6 +4,8 @@ const swaggerDocument = require('../docs/swagger.json');
 const authRoutes = require('./authRoutes');
 const bookRoutes = require('./bookRoutes');
 const historyRoutes = require('./historyRoutes');
+const transactionRoutes = require('./transactionRoutes');
+const paymentRoutes = require('./paymentRoutes');
 
 //Open API
 router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -12,5 +14,7 @@ router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // router.use('/api/v1', authRoutes)
 router.use('/api/v1/booking', bookRoutes)
 router.use('/api/v1/histories', historyRoutes)
+router.use('/api/v1/transaction', transactionRoutes)
+router.use('/api/v1/payment', paymentRoutes)
 
 module.exports = router

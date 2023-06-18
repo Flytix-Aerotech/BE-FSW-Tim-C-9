@@ -16,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       user_id: DataTypes.INTEGER,
       booking_id: DataTypes.INTEGER,
-      history_date: DataTypes.DATE,
     },
     {
       sequelize,

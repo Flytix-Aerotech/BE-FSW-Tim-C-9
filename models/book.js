@@ -26,6 +26,8 @@ module.exports = (sequelize, DataTypes) => {
       passenger_id: DataTypes.INTEGER,
       seat_id: DataTypes.INTEGER,
       total_booking: DataTypes.INTEGER,
+      total_price: DataTypes.DOUBLE,
+      booking_code: DataTypes.STRING,
     },
     {
       sequelize,

@@ -1,5 +1,5 @@
 const { book, ticket, passenger } = require('../models/');
-const { Op } = require("sequelize");
+const { Op } = require('sequelize');
 const moment = require('moment');
 
 let getBooking = async (req, res) => {
@@ -17,9 +17,15 @@ let getBooking = async (req, res) => {
             }
         );
 
-        res.status(200).json({
-            booking,
-        });
+        if (booking.length > 0) {
+            res.status(200).json({
+                booking,
+            });
+        } else {
+            res.status(200).json({
+                message: 'Anda belum melakukan pemesanan penerbangan',
+            });
+        }
     } catch (error) {
         res.status(error.statusCode || 500).json({
             message: error.message,
@@ -59,7 +65,7 @@ const filterBooking = async (req, res) => {
         const data = await book.findAll({
             where: {
                 createdAt: {
-                    [Op.between]: [ // ?start=year-month-day&end=year-month-day
+                    [Op.between]: [ // ?start=YYYY-MM-DD&end=YYYY-MM-DD
                         moment(date).startOf('day').toISOString(),
                         moment(date).endOf('day').toISOString()
                     ]
@@ -79,7 +85,7 @@ const filterBooking = async (req, res) => {
             data,
         });
     } catch (error) {
-        res.status(error.statusCode || 500).json({
+        res.status(error.statusCode || 404).json({
             message: error.message,
         });
     }

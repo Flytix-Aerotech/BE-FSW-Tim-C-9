@@ -24,6 +24,9 @@ module.exports = {
       trans_date: {
         type: Sequelize.DATE,
       },
+      payment_status: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

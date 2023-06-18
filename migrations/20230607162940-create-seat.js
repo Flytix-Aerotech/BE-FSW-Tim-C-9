@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       seat_number: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,
