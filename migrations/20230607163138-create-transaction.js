@@ -13,6 +13,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       payment_id: {
+        autoIncrement: true,
         type: Sequelize.INTEGER,
       },
       user_id: {
@@ -26,6 +27,7 @@ module.exports = {
       },
       payment_status: {
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,

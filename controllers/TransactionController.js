@@ -3,14 +3,12 @@ const { transaction, book } = require('../models/');
 const addTransaction = async (req, res) => {
     try {
         const createTransaction = await transaction.create({
-            booking_id,
-            clan_name,
-            email,
-            phone_number,
-            ticket_id,
-            passenger_id: passengerData.map(p=>p.id),
-            seat_id: seatPick.map(s=>s.id),
-            total_booking,
+            booking_id: req.book.id,
+            payment_id,
+            user_id: req.user.id,
+            total_price: req.book.total_price,
+            trans_date,
+            payment_status,
         });
         res.status(200).json({
             message: 'Data Anda berhasil disimpan!',

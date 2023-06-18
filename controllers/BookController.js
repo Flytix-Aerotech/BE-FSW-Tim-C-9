@@ -35,10 +35,12 @@ const addBooking = async (req, res) => {
             clan_name,
             email,
             phone_number,
-            ticket_id,
+            ticket_id: req.ticket.id,
             passenger_id: passengerData.map(p => p.id),
             seat_id: seatPick.map(s => s.id),
             total_booking,
+            total_price,
+            booking_code,
         });
         res.status(200).json({
             message: 'Data Anda berhasil disimpan!',

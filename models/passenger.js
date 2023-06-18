@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       nik_number: DataTypes.STRING,
       nationality: DataTypes.STRING,
       passenger_role: {
-        type: DataTypes.ENUM(["Gopay", "Dana", "Akulaku"]),
+        type: DataTypes.ENUM(["Dewasa", "Bayi"]),
       },
     },
     {
