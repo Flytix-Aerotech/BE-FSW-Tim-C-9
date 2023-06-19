@@ -2,16 +2,26 @@ const { passenger } = require("../models");
 const catchAsync = require("../utils/catchAsync");
 
 const getPassenger = catchAsync(async (req, res) => {
-  await passenger.findAll().then((data) => {
-    res.status(200).json({ data });
-  });
+  await passenger
+    .findAll()
+    .then((data) => {
+      res.status(200).json({ data });
+    })
+    .catch((err) => {
+      res.status(500).json({ msg: err.message });
+    });
 });
 
 const getPassengerById = catchAsync(async (req, res) => {
   const { id } = req.params;
-  await passenger.findOne({ where: { id } }).then((data) => {
-    res.status(200).json({ data });
-  });
+  await passenger
+    .findOne({ where: { id } })
+    .then((data) => {
+      res.status(200).json({ data });
+    })
+    .catch((err) => {
+      res.status(500).json({ msg: err.message });
+    });
 });
 
 const addPassenger = async (req, res) => {
