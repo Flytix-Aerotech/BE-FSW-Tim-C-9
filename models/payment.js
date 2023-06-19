@@ -14,9 +14,8 @@ module.exports = (sequelize, DataTypes) => {
   payment.init(
     {
       type_of_payment: {
-        type: DataTypes.ENUM(["Gopay", "Dana", "Akulaku"]),
+        type: DataTypes.ENUM("Gopay", "Dana", "Akulaku"),
       },
-      image_brand: DataTypes.TEXT,
       price: DataTypes.DOUBLE,
     },
     {

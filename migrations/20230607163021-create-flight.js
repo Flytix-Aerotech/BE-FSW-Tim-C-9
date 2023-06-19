@@ -12,11 +12,17 @@ module.exports = {
       flight_number: {
         type: Sequelize.INTEGER,
       },
+      departure_time: {
+        type: Sequelize.TIME,
+      },
+      arrival_time: {
+        type: Sequelize.TIME,
+      },
       departure_date: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
       },
       arrival_date: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
       },
       departure_location: {
         type: Sequelize.STRING,
@@ -49,14 +55,14 @@ module.exports = {
         type: Sequelize.DOUBLE,
       },
       type_of_flight: {
-        type: Sequelize.ENUM(["OneWay", "RoundTrip"]),
+        type: Sequelize.ENUM("OneWay", "RoundTrip"),
       },
       createdAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
       },
       updatedAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
       },
     });

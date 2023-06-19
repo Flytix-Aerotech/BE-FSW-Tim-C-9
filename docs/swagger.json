@@ -52,7 +52,7 @@
                       "type": "string",
                       "example": "User created successfully"
                     },
-                    "newUser": {
+                    "user": {
                       "allOf": [
                         {
                           "$ref": "#/components/schemas/Users"
@@ -190,16 +190,11 @@
         }
       }
     },
-    "/auth/getusers": {
+    "/auth/users": {
       "get": {
         "tags": ["Auth"],
         "summary": "Get User",
         "description": "Get All Users information",
-        "security": [
-          {
-            "bearerToken": []
-          }
-        ],
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -265,7 +260,7 @@
                       "type": "string",
                       "example": "success"
                     },
-                    "data": {
+                    "user": {
                       "$ref": "#/components/schemas/Users"
                     }
                   }
@@ -352,7 +347,7 @@
                       "type": "string",
                       "example": "profile updated successfully"
                     },
-                    "data": {
+                    "user": {
                       "$ref": "#/components/schemas/Users"
                     }
                   }
@@ -400,7 +395,7 @@
                       "type": "string",
                       "example": "success"
                     },
-                    "Tickets": {
+                    "data": {
                       "type": "object",
                       "properties": {
                         "price": {
@@ -458,7 +453,7 @@
                       "type": "string",
                       "example": "success"
                     },
-                    "Tickets": {
+                    "data": {
                       "type": "object",
                       "properties": {
                         "price": {
@@ -478,6 +473,361 @@
                           "$ref": "#/components/schemas/Airports"
                         }
                       }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/passengers": {
+      "post": {
+        "summary": "Create Passenger",
+        "tags": ["Passenger"],
+        "description": "Add new passenger on the database",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Passenger"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Passenger created successfully"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Passenger"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token. Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access denied"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Passengers",
+        "tags": ["Passenger"],
+        "description": "Retrieve list of passenger",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Passenger"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token. Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access denied"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/passengers/{id}": {
+      "get": {
+        "tags": ["Passenger"],
+        "summary": "Get An Passenger",
+        "description": "Retrieve passenger detail",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Passenger"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The passenger id is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "ID passenger not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Passenger"],
+        "summary": "Update Passenger",
+        "description": "Change passenger information",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Passenger"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Passenger update successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token. Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access denied"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The airport id is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "ID passenger not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Passenger"],
+        "summary": "Delete Passenger",
+        "description": "Remove existing passenger by id.",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Passenger has been deleted successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token. Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access denied"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The Passenger id is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "ID Passenger not found"
                     }
                   }
                 }
@@ -630,6 +980,36 @@
           "code": {
             "type": "string",
             "example": "ABS"
+          }
+        }
+      },
+      "Passenger": {
+        "type": "object",
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "example": "habbin"
+          },
+          "clan_name": {
+            "type": "string",
+            "example": "Nofaylah"
+          },
+          "birth_date": {
+            "type": "string",
+            "format": "YYYY-MM-DD",
+            "example": "2003-05-22"
+          },
+          "nik_number": {
+            "type": "string",
+            "example": "8080808080808081"
+          },
+          "nationality": {
+            "type": "string",
+            "example": "Indonesia"
+          },
+          "passenger_role": {
+            "type": "string",
+            "example": "dewasa"
           }
         }
       }

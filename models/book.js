@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.belongsTo(models.passenger, { foreignKey: "passenger_id" });
       this.belongsTo(models.ticket, { foreignKey: "ticket_id" });
-      this.hasOne(models.seat, { foreignKey: "booking_id" });
+      this.belongsTo(models.seat, { foreignKey: "seat_id" });
       this.hasOne(models.history, { foreignKey: "booking_id" });
       this.hasMany(models.transaction, { foreignKey: "booking_id" });
     }
@@ -21,8 +21,13 @@ module.exports = (sequelize, DataTypes) => {
     {
       ticket_id: DataTypes.INTEGER,
       passenger_id: DataTypes.INTEGER,
+      seat_id: DataTypes.INTEGER,
+      full_name: DataTypes.STRING,
+      clan_name: DataTypes.STRING,
+      email: DataTypes.STRING,
+      phone_number: DataTypes.STRING,
       total_booking: DataTypes.INTEGER,
-      payment_status: DataTypes.BOOLEAN,
+      total_price: DataTypes.DOUBLE,
     },
     {
       sequelize,

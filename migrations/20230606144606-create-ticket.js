@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.DOUBLE,
       },
       type_of_class: {
-        type: Sequelize.ENUM(["Economy Class", "Business Class", "First Class", "Quiet Class"]),
+        type: Sequelize.ENUM("Economy Class", "Business Class", "First Class", "Quiet Class"),
       },
       airport_id: {
         type: Sequelize.INTEGER,
@@ -25,11 +25,11 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       createdAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
       },
       updatedAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
       },
     });
