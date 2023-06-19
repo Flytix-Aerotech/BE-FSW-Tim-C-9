@@ -1,413 +1,474 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "OpenAPI Ticket Flytix",
-        "description": "API description in Markdown.",
-        "version": "1.0.0"
+      "title": "Flytix-api",
+      "version": "1.0.0"
     },
-    "tags": [
-        {
-            "name": "Ticket",
-            "description": "This is API for managing CRUD PRODUCTS"
-        }
-    ],
     "servers": [
-        {
-          "url": "https://flytix-aerotech.up.railway.app/api/v1",
-          "description": "public"
-        },
-        {
-          "url": "http://localhost:8000/api/v1",
-          "description": "local"
-        }
+      {
+        "url": "https://flytix-aerotech.up.railway.app/api/v1",
+        "description": "public"
+      },
+      {
+        "url": "http://localhost:8000/api/v1",
+        "description": "local"
+      }
+    ],
+    "tags": [
+      {
+        "name": "Auth",
+        "description": "Auth API Collection"
+      }
     ],
     "paths": {
-        "/tickets": {
-            "get": {
-                "tags": [
-                    "Ticket"
-                ],
-                "summary": "Returns a list of ticket",
-                "description": "This is API for get all ticket data",
-                "responses": {
-                    "200": {
-                        "description": "Success get all products data"
-                    }
+      "/tickets": {
+        "post": {
+          "summary": "Create Tickets",
+          "tags": ["Ticket"],
+          "description": "Add new ticket on the database",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tickets"
                 }
-            },
-  
-  
-            "post": {
-                "tags": [
-                    "Ticket"
-                ],
-                "summary": "Success create ticket",
-                "description": "This is API for create new ticket data",
-                "requestBody": {
-                    "description": "Success create ticket",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "price": {
-                                        "type": "number",
-                                        "format": "double",
-                                        "example": "2000000"
-                                    },
-                                    "type_of_class": {
-                                      "type": "string",
-                                      "enum":["Economy Class", "Business Class", "First Class", "Quiet Class"],
-                                        "example": "Economy Class"
-                                    },
-                                    "airport_id": {
-                                        "type": "integer",
-                                        "example": "3"
-                                    },
-                                    "flight_id": {
-                                        "type": "string",
-                                        "example": "1"
-                                    }
-                                  }
-                              }
-                          }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "A successful response.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Berhasil menambahkan data ticket"
+                      },
+                      "data": {
+                        "$ref": "#/components/schemas/Tickets"
                       }
-                  },
-                "responses": {
-                    "200": {
-                        "description": "Success create new Ticket",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "Success"
-                                        },
-                                        "data": {
-                                            "type": "object",
-                                            "properties": {
-                                              "price": {
-                                                  "type": "number",
-                                                  "format": "double",
-                                                  "example": "2000000"
-                                              },
-                                              "type_of_class": {
-                                                "type": "string",
-                                                "enum":["Economy Class", "Business Class", "First Class", "Quiet Class"],
-                                                  "example": "Economy Class"
-                                              },
-                                              "airport_id": {
-                                                  "type": "integer",
-                                                  "example": "3"
-                                              },
-                                              "flight_id": {
-                                                  "type": "string",
-                                                  "example": "1"
-                                              }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Failed because ticket is empty",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "failed"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Failed because ticket is empty"
-                                        }
-                                    }
-                                }
-                            }
-                        }
                     }
-                }
-            }
-        },
-  
-        "/tickets/search": {
-            "get": {
-                "tags": [
-                    "Ticket"
-                ],
-                "summary": "Success search ticket",
-                "description": "This is API for search ticket data",
-                "parameters": [
-                    {
-                        "name": "name",
-                        "in": "query",
-                        "description": "ticket",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Success search product",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "Success"
-                                        },
-                                        "data": {
-                                            "type": "object",
-                                            "properties": {
-                                              "price": {
-                                                  "type": "number",
-                                                  "format": "double",
-                                                  "example": "2000000"
-                                              },
-                                              "type_of_class": {
-                                                "type": "string",
-                                                "enum":["Economy Class", "Business Class", "First Class", "Quiet Class"],
-                                                  "example": "Economy Class"
-                                              },
-                                              "airport_id": {
-                                                  "type": "integer",
-                                                  "example": "3"
-                                              },
-                                              "flight_id": {
-                                                  "type": "string",
-                                                  "example": "1"
-                                              }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Failed because products is empty",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "failed"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Failed because products is empty"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-    },
-     
-  
-    "/tickets/{id}": {
-        "get": {
-            "tags": [
-                "Ticket"
-            ],
-            "summary": "Returns a list of ticket by id",
-            "description": "This is API for get ticket data by id",
-            "parameters": [
-                {
-                    "name": "id",
-                    "in": "path",
-                    "description": "Input ID of the products to get",
-                    "schema": {
-                        "type": "integer",
-                        "example": 1
-                    },
-                    "required": true
-                }
-            ], 
-            "responses": {
-                "200": {
-                    "description": "Success get products data by id"
-                }
-            }
-        },
-  
-  
-        "delete": {
-            "tags": [
-                "Ticket"
-            ],
-            "summary": "Delete ticket by id",
-            "description": "This is API for delete ticket data",
-            "parameters": [
-                {
-                    "name": "id",
-                    "in": "path",
-                    "description": "input ID of the ticket to delete",
-                    "schema": {
-                        "type": "integer",
-                        "example": 1
-                    },
-                    "required": true
-                }
-            ],
-            "responses": {
-                "200": {
-                    "description": "Success delete this id"
-                },
-                "404":{
-                    "description": "This id is not found"
-                }
-            }
-        },
-  
-        "put": {
-            "tags": [
-                "Ticket"
-            ],
-            "summary": "Update ticket by id",
-            "description": "This is API for update ticket data by id",
-            "parameters": [
-                {
-                    "name": "id",
-                    "in": "path",
-                    "description": "Input ID of the ticket to update",
-                    "schema": {
-                        "type": "integer",
-                        "example": 1
-                    },
-                    "required": true
-                }
-            ],
-            "requestBody": {
-                "description": "Success edit ticket",
-                "required": true,
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                              "price": {
-                                  "type": "number",
-                                  "format": "double",
-                                  "example": "5000000"
-                              }
-                            }
-                        }
-                    }
-                }
-            },
-            "responses": {
-                "200": {
-                    "description": "Success update ticket by id",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "status": {
-                                        "type": "string",
-                                        "example": "Success"
-                                    },
-                                    "data": {
-                                        "type": "object",
-                                        "properties": {
-                                          "price": {
-                                              "type": "number",
-                                              "format": "double",
-                                              "example": "5000000"
-                                          },
-                                          "type_of_class": {
-                                            "type": "string",
-                                            "enum":["Economy Class", "Business Class", "First Class", "Quiet Class"],
-                                              "example": "Economy Class"
-                                          },
-                                          "airport_id": {
-                                              "type": "integer",
-                                              "example": "3"
-                                          },
-                                          "flight_id": {
-                                              "type": "string",
-                                              "example": "1"
-                                          }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "400": {
-                    "description": "Failed because name product is empty",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "status": {
-                                        "type": "string",
-                                        "example": "failed"
-                                      },
-                                    "message": {
-                                        "type": "string",
-                                        "example": "Failed because name product is empty"
-                                      }
-                                  }
-                              }
-                          }
-                      }
                   }
-              }                
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid token. Unauthorized.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "failed"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Hanya bisa diakses oleh admin."
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
+        },
+        "get": {
+          "summary": "List Tickets",
+          "tags": ["Ticket"],
+          "description": "Retrieve list of ticket",
+          "responses": {
+            "200": {
+              "description": "A successful response.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/Tickets"
+                      },
+                      "count": {
+                        "type": "integer",
+                        "example": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/tickets/{id}": {
+        "get": {
+          "tags": ["Ticket"],
+          "summary": "Get An ticket",
+          "description": "Retrieve ticket detail",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "A successful response.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Tickets"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "The ticket id is not found.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "failed"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "ID ticket tidak ditemukan."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": ["Ticket"],
+          "summary": "Update Ticket",
+          "description": "Change ticket information",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tickets"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "A successful response.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Data ticket berhasil diperbarui."
+                      },
+                      "data": {
+                        "$ref": "#/components/schemas/Tickets"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid token. Unauthorized.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "failed"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Hanya bisa diakses oleh admin."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "The ticket id is not found.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "failed"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "ID ticket tidak ditemukan."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": ["Ticket"],
+          "summary": "Delete Ticket",
+          "description": "Remove existing ticket by id.",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "A successful response.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Data Ticket berhasil dihapus."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid token. Unauthorized.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "failed"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Hanya bisa diakses oleh admin."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "The ticket id is not found.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "failed"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "ID Ticket tidak ditemukan."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
-  },
-     
+    },
     "components": {
       "schemas": {
-  
-          "tickets": {
-              "type": "object",
-              "properties": {
-                  "price": {
-                      "type": "number",
-                      "format": "double",
-                      "example": "2000000"
-                  },
-                  "type_of_class": {
-                    "type": "string",
-                    "enum":["Economy Class", "Business Class", "First Class", "Quiet Class"],
-                      "example": "Economy Class"
-                  },
-                  "airport_id": {
-                      "type": "integer",
-                      "example": "3"
-                  },
-                  "flight_id": {
-                      "type": "string",
-                      "example": "1"
-                  },
-                  "passenger_id": {
-                      "type": "integer",
-                      "example": "null"
-                  }
+        "Tickets": {
+          "type": "object",
+          "properties": {
+            "price": {
+              "type": "number",
+              "format": "double",
+              "example": "2000000"
+            },
+            "type_of_class": {
+              "type": "string",
+              "enum": ["Economy Class", "Business Class", "First Class", "Quiet Class"],
+              "example": "Economy"
+            },
+            "airport_id": {
+              "type": "integer",
+              "example": "3"
+            },
+            "flight_id": {
+              "type": "string",
+              "example": "1"
+            },
+            "passenger_id": {
+              "type": "integer",
+              "example": "1"
             }
           }
+        },
+        "Flights": {
+          "type": "object",
+          "properties": {
+            "flight_number": {
+              "type": "number",
+              "format": "integer",
+              "example": "3"
+            },
+            "departure_date": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2000000"
+            },
+            "arrival_date": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2000000"
+            },
+            "departure_location": {
+              "type": "string",
+              "example": "Jakarta"
+            },
+            "arrival_location": {
+              "type": "string",
+              "example": "Surabaya"
+            },
+            "from_id": {
+              "type": "string",
+              "format": "char",
+              "example": "JKT"
+            },
+            "to_id": {
+              "type": "string",
+              "format": "char",
+              "example": "SBY"
+            },
+            "airline": {
+              "type": "string",
+              "example": "LION AIR"
+            },
+            "capacity": {
+              "type": "number",
+              "format": "integer",
+              "example": "200"
+            },
+            "economy_class_price": {
+              "type": "number",
+              "format": "double",
+              "example": "2000000"
+            },
+            "business_class_price": {
+              "type": "number",
+              "format": "double",
+              "example": "2000000"
+            },
+            "first_class_price": {
+              "type": "number",
+              "format": "double",
+              "example": "2000000"
+            },
+            "quiet_class_price": {
+              "type": "number",
+              "format": "double",
+              "example": "2000000"
+            }
+          }
+        },
+        "Airports": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "example": "Abdulrachman Saleh"
+            },
+            "location": {
+              "type": "string",
+              "example": "Malang"
+            },
+            "code": {
+              "type": "string",
+              "example": "ABS"
+            }
+          }
+        },
+        "Passenger": {
+          "type": "object",
+          "properties": {
+            "first_name": {
+              "type": "string",
+              "example": "habbin"
+            },
+            "last_name": {
+              "type": "string",
+              "example": "Nofaylah"
+            },
+            "birth_date": {
+              "type": "string",
+              "format": "YY-MM-DD",
+              "example": "2003-05-22"
+            },
+            "nik_number": {
+              "type": "string",
+              "example": "8080808080808081"
+            },
+            " nationality": {
+              "type": "string",
+              "example": "indonesia"
+            },
+            "passenger_role": {
+              "type": "string",
+              "example": "Dewasa"
+            }
+          }
+        }
       }
     }
   }
-  
