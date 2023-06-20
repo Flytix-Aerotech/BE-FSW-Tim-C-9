@@ -1,35 +1,36 @@
 const { book, passenger, seat } = require('../models/');
 
 const addBooking = async (req, res) => {
+    function generateCode(length) {
+        var code = '';
+        while (code.length < length) {
+            var char = Math.random().toString(36).substr(2, 1);
+            if (Math.random() < 0.5) {
+                char = char.toUpperCase();
+            }
+            code += char;
+        }
+        return code;
+    };
     const {
         full_name,
         clan_name,
         birth_date,
         nik_number,
         nationality,
-        passenger_role,
         seat_number,
         email,
         phone_number,
         total_booking
-    } = req.body
+    } = req.body;
     try {
-        const passengerData = [];
-        const seatPick = [];
-        for (let i = 0; i < 1; i++) {
-            passengerData[i] = await passenger.create({
-                full_name: full_name[i],
-                clan_name: clan_name[i],
-                birth_date: birth_date[i],
-                nik_number: nik_number[i],
-                nationality: nationality[i],
-                passenger_role: passenger_role[i],
-            });
-            seatPick[i] = await seat.create({
-                flight_id: req.flight.id,
-                seat_number: seat_number[i],
-            });
-        }
+        const passengerData = await passenger.bulkCreate([
+            { full_name, clan_name, birth_date, nik_number, nationality, passenger_role: 'Dewasa' },
+        ], { fields: ['full_name', 'clan_name', 'birth_date', 'nik_number', 'nationality', 'passenger_role'] });
+        const seatPick = await seat.bulkCreate([
+            { flight_id: req.flight.id },
+            { seat_number },
+        ], { fields: ['flight_id', 'seat_number'] });
         const newBooking = await book.create({
             full_name,
             clan_name,
@@ -39,11 +40,14 @@ const addBooking = async (req, res) => {
             passenger_id: passengerData.map(p => p.id),
             seat_id: seatPick.map(s => s.id),
             total_booking,
-            total_price,
-            booking_code,
+            total_price: (total_booking * req.ticket.price) + (0.1 * total_booking * req.ticket.price),
+            booking_code: generateCode(8),
         });
+        
         res.status(200).json({
             message: 'Data Anda berhasil disimpan!',
+            passengerData,
+            seatPick,
             newBooking,
         });
     } catch (error) {
@@ -52,14 +56,6 @@ const addBooking = async (req, res) => {
         });
     }
 };
-
-// tambah [1] TransactionController put null transaction.payment_id jika status_payment false melebihi waktu 24 jam
-// tambah [2] BookController get all data seat id dan hit api deleteBooking lalu put kembali book.seat_id dan seat.*
-// jika dalam 24 tidak dibayar maka akan hit api [1] dan deleteBooking
-// Jika status_payment true maka tidak bisa hit api payTransaction dan akan hit api [2]
-/** FE : Jika status_payment true maka tampilan booking issued, jika currentDate dikurangi trans_date hasilnya bilangan bulat maka tampilan booking cancelled
- jika bukan keduanya, maka tampilan booking unpaid
-*/
 
 const deleteBooking = async (req, res) => {
     try {

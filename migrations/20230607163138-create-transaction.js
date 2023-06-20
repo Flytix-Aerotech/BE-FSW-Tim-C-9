@@ -22,10 +22,8 @@ module.exports = {
       total_price: {
         type: Sequelize.DOUBLE,
       },
-      trans_date: {
-        type: Sequelize.DATE,
-      },
       payment_status: {
+        allowNull: false,
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
