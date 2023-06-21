@@ -7,22 +7,10 @@ module.exports = {
       "airports",
       [
         {
-          id: 1,
-          name: "Soekarno Hatta",
-          location: "Jakarta",
-          code: "JKT-SH",
-        },
-        {
-          id: 2,
-          name: "Juanda",
-          location: "Surabaya",
-          code: "SBY-JD",
-        },
-        {
-          id: 3,
-          name: "Adi Sucipto",
-          location: "Yogyakarta",
-          code: "DIY-JD",
+          departure_name: "Juanda",
+          arrival_name: "Adi Sucipto",
+          departure_terminal: "Terminal 1A Domestik",
+          arrival_terminal: "Terminal 3B Domestik",
         },
       ],
       {}

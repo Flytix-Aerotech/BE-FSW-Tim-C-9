@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.DOUBLE,
       },
       type_of_class: {
-        type: Sequelize.ENUM("Economy", "Business", "First", "Quiet"),
+        type: Sequelize.ENUM("Economy", "Business", "First", "Premium"),
       },
       airport_id: {
         type: Sequelize.INTEGER,

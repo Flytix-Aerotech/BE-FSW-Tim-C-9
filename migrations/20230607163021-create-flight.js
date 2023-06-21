@@ -10,7 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       flight_number: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       departure_time: {
         type: Sequelize.TIME,
@@ -38,21 +38,6 @@ module.exports = {
       },
       airline: {
         type: Sequelize.STRING,
-      },
-      capacity: {
-        type: Sequelize.INTEGER,
-      },
-      economy_class_price: {
-        type: Sequelize.DOUBLE,
-      },
-      business_class_price: {
-        type: Sequelize.DOUBLE,
-      },
-      first_class_price: {
-        type: Sequelize.DOUBLE,
-      },
-      quiet_class_price: {
-        type: Sequelize.DOUBLE,
       },
       type_of_flight: {
         type: Sequelize.ENUM("OneWay", "RoundTrip"),

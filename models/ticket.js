@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       price: DataTypes.STRING,
       type_of_class: {
-        type: DataTypes.ENUM("Economy", "Business", "First", "Quiet"),
+        type: DataTypes.ENUM("Economy", "Business", "First", "Premium"),
       },
       airport_id: DataTypes.INTEGER,
       flight_id: DataTypes.INTEGER,
