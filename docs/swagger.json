@@ -48,7 +48,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "User created successfully"
                     },
@@ -87,7 +87,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "User already exists."
                     }
@@ -131,7 +131,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "Login successful"
                     },
@@ -155,7 +155,7 @@
                       "type": "string",
                       "example": "failed"
                     },
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "Passwords don't match"
                     },
@@ -226,7 +226,7 @@
                       "type": "string",
                       "example": "failed"
                     },
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "Access is denied"
                     }
@@ -279,7 +279,7 @@
                       "type": "string",
                       "example": "failed"
                     },
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "Access is denied"
                     }
@@ -343,7 +343,7 @@
                       "type": "string",
                       "example": "success"
                     },
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "profile updated successfully"
                     },
@@ -366,7 +366,7 @@
                       "type": "string",
                       "example": "failed"
                     },
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "Access is denied"
                     }
@@ -514,7 +514,7 @@
                       "type": "string",
                       "example": "success"
                     },
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "Passenger created successfully"
                     },
@@ -537,7 +537,7 @@
                       "type": "string",
                       "example": "failed"
                     },
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "Access denied"
                     }
@@ -588,7 +588,7 @@
                       "type": "string",
                       "example": "failed"
                     },
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "Access denied"
                     }
@@ -651,7 +651,7 @@
                       "type": "string",
                       "example": "failed"
                     },
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "ID passenger not found"
                     }
@@ -703,7 +703,7 @@
                       "type": "string",
                       "example": "success"
                     },
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "Passenger update successfully"
                     }
@@ -723,7 +723,7 @@
                       "type": "string",
                       "example": "failed"
                     },
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "Access denied"
                     }
@@ -743,7 +743,7 @@
                       "type": "string",
                       "example": "failed"
                     },
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "ID passenger not found"
                     }
@@ -785,7 +785,7 @@
                       "type": "string",
                       "example": "success"
                     },
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "Passenger has been deleted successfully"
                     }
@@ -805,7 +805,7 @@
                       "type": "string",
                       "example": "failed"
                     },
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "Access denied"
                     }
@@ -825,7 +825,7 @@
                       "type": "string",
                       "example": "failed"
                     },
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "ID Passenger not found"
                     }

@@ -6,24 +6,16 @@ const catchAsync = require("../utils/catchAsync");
 const getTicket = catchAsync(async (req, res) => {
   await ticket
     .findAll({ include: [{ model: airport }, { model: flight }] })
-    .then((tickets) => {
-      res.status(200).json({ tickets });
-    })
-    .catch((err) => {
-      res.status(500).json({ msg: err.message });
-    });
+    .then((data) => res.status(200).json({ data }))
+    .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
 });
 
 const getTicketById = catchAsync(async (req, res) => {
   const { id } = req.params;
   await ticket
     .findOne({ where: { id } }, { include: [{ model: airport }, { model: flight }] })
-    .then((tickets) => {
-      res.status(200).json({ tickets });
-    })
-    .catch((err) => {
-      res.status(500).json({ msg: err.message });
-    });
+    .then((data) => res.status(200).json({ data }))
+    .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
 });
 
 const addTicket = catchAsync(async (req, res) => {
@@ -31,19 +23,15 @@ const addTicket = catchAsync(async (req, res) => {
 
   await ticket
     .create({ price, type_of_class, airport_id, flight_id, passenger_id })
-    .then((data) => {
-      res.status(201).json({ data });
-    })
-    .catch((err) => {
-      res.status(500).json({ msg: err.message });
-    });
+    .then((data) => res.status(201).json({ data }))
+    .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
 });
 
 const filterTicket = catchAsync(async (req, res) => {
   const { departure_date, arrival_date, departure_location, arrival_location, type_of_class } = req.body;
 
   if (departure_date === "" || arrival_date === "" || departure_location === "" || arrival_location === "" || type_of_class === "") {
-    return res.status(404).json({ message: "Please input a relevant data" });
+    return res.status(404).json({ msg: "Please input a relevant data" });
   }
   await ticket
     .findAll({
@@ -59,12 +47,8 @@ const filterTicket = catchAsync(async (req, res) => {
         },
       },
     })
-    .then((data) => {
-      res.status(200).json({ data });
-    })
-    .catch((err) => {
-      res.status(500).json({ msg: err.message });
-    });
+    .then((data) => res.status(200).json({ data }))
+    .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
 });
 
 const searchTicket = catchAsync(async (req, res) => {
@@ -83,12 +67,8 @@ const searchTicket = catchAsync(async (req, res) => {
         },
       },
     })
-    .then((data) => {
-      res.status(200).json({ data });
-    })
-    .catch((err) => {
-      res.status(500).json({ msg: err.message });
-    });
+    .then((data) => res.status(200).json({ data }))
+    .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
 });
 
 module.exports = {
