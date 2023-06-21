@@ -61,16 +61,22 @@ const searchTicket = catchAsync(async (req, res) => {
   await ticket
     .findAll({
       where: { type_of_class: toc },
-      include: {
-        model: flight,
-        as: "flight",
-        where: {
-          departure_date: dd,
-          arrival_date: ad,
-          departure_location: { [Op.iLike]: `${dl}` },
-          arrival_location: { [Op.iLike]: `${al}` },
+      include: [
+        {
+          model: flight,
+          as: "flight",
+          where: {
+            departure_date: dd,
+            arrival_date: ad,
+            departure_location: { [Op.iLike]: `${dl}` },
+            arrival_location: { [Op.iLike]: `${al}` },
+          },
         },
-      },
+        {
+          model: airport,
+          as: "airport",
+        },
+      ],
     })
     .then((data) => res.status(200).json({ data }))
     .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
