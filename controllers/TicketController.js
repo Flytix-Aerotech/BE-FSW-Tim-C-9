@@ -1,4 +1,3 @@
-const moment = require("moment/moment");
 const { ticket, airport, flight } = require("../models");
 const { Op } = require("sequelize");
 const catchAsync = require("../utils/catchAsync");
@@ -36,16 +35,22 @@ const filterTicket = catchAsync(async (req, res) => {
   await ticket
     .findAll({
       where: { type_of_class: type_of_class },
-      include: {
-        model: flight,
-        as: "flight",
-        where: {
-          departure_date: departure_date,
-          arrival_date: arrival_date,
-          departure_location: { [Op.substring]: `${departure_location}` },
-          arrival_location: { [Op.substring]: `${arrival_location}` },
+      include: [
+        {
+          model: flight,
+          as: "flight",
+          where: {
+            departure_date: departure_date,
+            arrival_date: arrival_date,
+            departure_location: { [Op.substring]: `${departure_location}` },
+            arrival_location: { [Op.substring]: `${arrival_location}` },
+          },
         },
-      },
+        {
+          model: airport,
+          as: "airport",
+        },
+      ],
     })
     .then((data) => res.status(200).json({ data }))
     .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
