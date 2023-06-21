@@ -1,4 +1,4 @@
-const { book, passenger, seat } = require('../models/');
+const { book, passenger, ticket, seat } = require('../models/');
 
 const addBooking = async (req, res) => {
     function generateCode(length) {
@@ -12,38 +12,44 @@ const addBooking = async (req, res) => {
         }
         return code;
     };
-    const {
-        full_name,
-        clan_name,
-        birth_date,
-        nik_number,
-        nationality,
-        seat_number,
-        email,
-        phone_number,
-        total_booking
-    } = req.body;
+
     try {
-        const passengerData = await passenger.bulkCreate([
-            { full_name, clan_name, birth_date, nik_number, nationality, passenger_role: 'Dewasa' },
-        ], { fields: ['full_name', 'clan_name', 'birth_date', 'nik_number', 'nationality', 'passenger_role'] });
-        const seatPick = await seat.bulkCreate([
-            { flight_id: req.flight.id },
-            { seat_number },
-        ], { fields: ['flight_id', 'seat_number'] });
+        const { books, passengers, seats } = req.body;
+
+        const passengerData = await passenger.bulkCreate(
+            passengers.map(passenger => ({
+                full_name: passenger.full_name,
+                clan_name: passenger.clan_name,
+                birth_date: passenger.birth_date,
+                nik_number: passenger.nik_number,
+                nationality: passenger.nationality,
+                passenger_role: 'Dewasa'
+            })),
+            { fields: ['full_name', 'clan_name', 'birth_date', 'nik_number', 'nationality', 'passenger_role'] }
+        );
+
+        const seatPick = await seat.bulkCreate(
+            seats.map(seat => ({
+                // flight_id: seat.flight_id,
+                seat_number: seat.seat_number
+            })),
+            { fields: ['flight_id', 'seat_number'] }
+        );
+
         const newBooking = await book.create({
-            full_name,
-            clan_name,
-            email,
-            phone_number,
-            ticket_id: req.ticket.id,
+            full_name: books.full_name,
+            clan_name: books.clan_name,
+            email: books.email,
+            phone_number: books.phone_number,
+            // ticket_id: req.ticket.id,
             passenger_id: passengerData.map(p => p.id),
             seat_id: seatPick.map(s => s.id),
-            total_booking,
-            total_price: (total_booking * req.ticket.price) + (0.1 * total_booking * req.ticket.price),
+            // total_booking: req.query.adult_passenger,
+            // total_price: (total_booking * req.ticket.price) + (0.1 * total_booking * req.ticket.price),
             booking_code: generateCode(8),
+            payment_status: false,
         });
-        
+
         res.status(200).json({
             message: 'Data Anda berhasil disimpan!',
             passengerData,
@@ -83,7 +89,30 @@ const deleteBooking = async (req, res) => {
     }
 };
 
+const payBooking = async (req, res) => {
+    try {
+        const { code } = req.params;
+        const data = await book.findOne({
+            where: {
+                booking_code: code
+            },
+            include: [
+                { model: ticket },
+                { model: passenger },
+            ],
+        });
+        res.status(200).json({
+            data,
+        });
+    } catch (error) {
+        res.status(error.statusCode || 404).json({
+            message: error.message,
+        });
+    }
+};
+
 module.exports = {
     addBooking,
     deleteBooking,
+    payBooking,
 };

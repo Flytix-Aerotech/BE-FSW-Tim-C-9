@@ -39,6 +39,11 @@ module.exports = {
       booking_code: {
         type: Sequelize.STRING,
       },
+      payment_status: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

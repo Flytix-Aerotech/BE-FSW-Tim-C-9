@@ -7,16 +7,8 @@ module.exports = {
       "payments",
       [
         {
-          id: 31,
+          booking_id: 12,
           type_of_payment: "Gopay",
-          price: 4000000,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          id: 32,
-          type_of_payment: "Akulaku",
-          price: 6000000,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
