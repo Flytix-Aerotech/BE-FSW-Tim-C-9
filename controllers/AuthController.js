@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { uploadToImagekit } = require("../lib/imagekit");
+const catchAsync = require("../utils/catchAsync");
 const User = require("../models").user;
 const otpGenerator = require('otp-generator');
 const nodemailer = require('nodemailer');
