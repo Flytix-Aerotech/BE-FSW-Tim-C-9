@@ -15,9 +15,6 @@ module.exports = {
       booking_id: {
         type: Sequelize.INTEGER,
       },
-      history_date: {
-        type: Sequelize.DATE,
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -9,21 +9,24 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      name: {
+      departure_name: {
         type: Sequelize.STRING,
       },
-      location: {
+      arrival_name: {
         type: Sequelize.STRING,
       },
-      code: {
+      departure_terminal: {
+        type: Sequelize.STRING,
+      },
+      arrival_terminal: {
         type: Sequelize.STRING,
       },
       createdAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
       },
       updatedAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
       },
     });

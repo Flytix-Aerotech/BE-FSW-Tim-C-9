@@ -9,11 +9,20 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      price: {
+      premium_price: {
+        type: Sequelize.DOUBLE,
+      },
+      first_price: {
+        type: Sequelize.DOUBLE,
+      },
+      economy_price: {
+        type: Sequelize.DOUBLE,
+      },
+      bussines_price: {
         type: Sequelize.DOUBLE,
       },
       type_of_class: {
-        type: Sequelize.ENUM(["Economy Class", "Business Class", "First Class", "Quiet Class"]),
+        type: Sequelize.ENUM("Economy", "Business", "First", "Premium"),
       },
       airport_id: {
         type: Sequelize.INTEGER,
@@ -21,15 +30,12 @@ module.exports = {
       flight_id: {
         type: Sequelize.INTEGER,
       },
-      passenger_id: {
-        type: Sequelize.INTEGER,
-      },
       createdAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
       },
       updatedAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
       },
     });

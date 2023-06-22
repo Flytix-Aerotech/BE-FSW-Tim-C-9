@@ -1,0 +1,143 @@
+"use strict";
+
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.bulkInsert(
+      "tickets",
+      [
+        {
+          premium_price: 2900000,
+          first_price: 8350000,
+          economy_price: 1200000,
+          bussines_price: 7520000,
+          type_of_class: "Premium",
+          airport_id: 14,
+          flight_id: 1,
+        },
+        {
+          premium_price: 2940000,
+          first_price: 8155000,
+          economy_price: 1700000,
+          bussines_price: 7120000,
+          type_of_class: "Premium",
+          airport_id: 13,
+          flight_id: 2,
+        },
+        {
+          premium_price: 2110000,
+          first_price: 8953000,
+          economy_price: 1840000,
+          bussines_price: 7160000,
+          type_of_class: "Economy",
+          airport_id: 12,
+          flight_id: 3,
+        },
+        {
+          premium_price: 2543000,
+          first_price: 8134000,
+          economy_price: 1600000,
+          bussines_price: 7190000,
+          type_of_class: "First",
+          airport_id: 11,
+          flight_id: 4,
+        },
+        {
+          premium_price: 2123000,
+          first_price: 8432000,
+          economy_price: 1324000,
+          bussines_price: 7432000,
+          type_of_class: "Business",
+          airport_id: 10,
+          flight_id: 5,
+        },
+        {
+          premium_price: 2154000,
+          first_price: 8132000,
+          economy_price: 1985000,
+          bussines_price: 7566000,
+          type_of_class: "Premium",
+          airport_id: 9,
+          flight_id: 6,
+        },
+        {
+          premium_price: 2354000,
+          first_price: 8765000,
+          economy_price: 1245000,
+          bussines_price: 7765000,
+          type_of_class: "First",
+          airport_id: 8,
+          flight_id: 7,
+        },
+        {
+          premium_price: 2567000,
+          first_price: 8657000,
+          economy_price: 1567000,
+          bussines_price: 7567000,
+          type_of_class: "Business",
+          airport_id: 7,
+          flight_id: 8,
+        },
+        {
+          premium_price: 2783000,
+          first_price: 8238000,
+          economy_price: 1236000,
+          bussines_price: 7231000,
+          type_of_class: "Premium",
+          airport_id: 6,
+          flight_id: 9,
+        },
+        {
+          premium_price: 2231000,
+          first_price: 8123000,
+          economy_price: 1123000,
+          bussines_price: 7123000,
+          type_of_class: "Economy",
+          airport_id: 5,
+          flight_id: 10,
+        },
+        {
+          premium_price: 2321000,
+          first_price: 8321000,
+          economy_price: 1321000,
+          bussines_price: 7123000,
+          type_of_class: "Business",
+          airport_id: 4,
+          flight_id: 11,
+        },
+        {
+          premium_price: 2123000,
+          first_price: 8123000,
+          economy_price: 1533000,
+          bussines_price: 7344000,
+          type_of_class: "First",
+          airport_id: 3,
+          flight_id: 12,
+        },
+        {
+          premium_price: 2345000,
+          first_price: 8345000,
+          economy_price: 1765000,
+          bussines_price: 7644000,
+          type_of_class: "Premium",
+          airport_id: 2,
+          flight_id: 13,
+        },
+        {
+          premium_price: 2345000,
+          first_price: 8345000,
+          economy_price: 1765000,
+          bussines_price: 7644000,
+          type_of_class: "Premium",
+          airport_id: 1,
+          flight_id: 14,
+        },
+      ],
+      {}
+    );
+  },
+
+  async down(queryInterface, Sequelize) {
+    await queryInterface.bulkDelete("tickets", null, {});
+  },
+};

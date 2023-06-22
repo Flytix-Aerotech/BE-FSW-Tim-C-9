@@ -18,6 +18,10 @@
     {
       "name": "Auth",
       "description": "Auth API Collection"
+    },
+    {
+      "name": "Ticket",
+      "description": "This is API for managing CRUD PRODUCTS"
     }
   ],
   "paths": {
@@ -44,11 +48,11 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "User created successfully"
                     },
-                    "newUser": {
+                    "user": {
                       "allOf": [
                         {
                           "$ref": "#/components/schemas/Users"
@@ -61,11 +65,11 @@
                             },
                             "createdAt": {
                               "type": "string",
-                              "format": "date-time"
+                              "format": "date"
                             },
                             "updatedAt": {
                               "type": "string",
-                              "format": "date-time"
+                              "format": "date"
                             }
                           }
                         }
@@ -83,7 +87,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "User already exists."
                     }
@@ -127,7 +131,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "Login successful"
                     },
@@ -151,7 +155,7 @@
                       "type": "string",
                       "example": "failed"
                     },
-                    "message": {
+                    "msg": {
                       "type": "string",
                       "example": "Passwords don't match"
                     },
@@ -168,11 +172,11 @@
                             },
                             "createdAt": {
                               "type": "string",
-                              "format": "date-time"
+                              "format": "date"
                             },
                             "updatedAt": {
                               "type": "string",
-                              "format": "date-time"
+                              "format": "date"
                             }
                           }
                         }

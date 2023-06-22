@@ -9,10 +9,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      first_name: {
+      full_name: {
         type: Sequelize.STRING,
       },
-      last_name: {
+      clan_name: {
         type: Sequelize.STRING,
       },
       birth_date: {
@@ -26,9 +26,7 @@ module.exports = {
       },
       passenger_role: {
         type: Sequelize.ENUM(["Dewasa", "Bayi"]),
-      },
-      user_id: {
-        type: Sequelize.INTEGER,
+        defaultValue: "Dewasa",
       },
       createdAt: {
         allowNull: false,
