@@ -1,18 +1,15 @@
 const router = require("express").Router();
-const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require("../docs/swagger.json");
-const authRoutes = require("./authRoutes");
 const ticketRoutes = require("./ticketRoutes");
 const passengerRoutes = require("./passengerRoutes");
 const airportRoutes = require("./airportRoutes");
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('../docs/swagger.json');
 const authRoutes = require('./authRoutes');
 const bookRoutes = require('./bookRoutes');
 const historyRoutes = require('./historyRoutes');
 const paymentRoutes = require('./paymentRoutes');
 
 //Open API
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('../docs/swagger.json');
 router.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // API
