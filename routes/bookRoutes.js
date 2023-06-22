@@ -1,10 +1,10 @@
 const router = require('express').Router();
 const auth = require('../middleware/Auth');
-const { continuePayment, paymentDeadline } = require('../middleware/continuePayment');
-const BookController = require('../controllers/BookController');
+const { continuePayment } = require('../middleware/continuePayment');
+const { payBooking, addBooking, deleteBooking} = require('../controllers/BookController');
 
-router.post('', BookController.addBooking);
-router.delete('/:id', BookController.deleteBooking);
-router.get('/pay/:code', BookController.payBooking);
+router.post('', addBooking);
+router.delete('/:id', deleteBooking);
+router.get('/pay/:code', continuePayment, payBooking);
 
 module.exports = router;

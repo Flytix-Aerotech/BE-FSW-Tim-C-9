@@ -15,22 +15,47 @@ const addBooking = async (req, res) => {
 
     try {
         const { books, passengers, seats } = req.body;
+        const { adult, baby } = req.query;
+
+        // const passengerData = await passenger.bulkCreate(
+        //     passengers.map((passenger, index) => ({
+        //         full_name: passenger.full_name,
+        //         clan_name: passenger.clan_name,
+        //         birth_date: passenger.birth_date,
+        //         nik_number: passenger.nik_number,
+        //         nationality: passenger.nationality,
+        //         passenger_role: index < adult ? 'Dewasa' : 'Bayi'
+        //     })),
+        //     {
+        //         fields: ['full_name', 'clan_name', 'birth_date', 'nik_number', 'nationality', 'passenger_role']
+        //     }
+        // )
+
+        const totalAdults = parseInt(adult);
+        const totalBabies = parseInt(baby);
+        const totalPassengers = totalAdults + totalBabies;
 
         const passengerData = await passenger.bulkCreate(
-            passengers.map(passenger => ({
-                full_name: passenger.full_name,
-                clan_name: passenger.clan_name,
-                birth_date: passenger.birth_date,
-                nik_number: passenger.nik_number,
-                nationality: passenger.nationality,
-                passenger_role: 'Dewasa'
-            })),
+            Array(totalPassengers).fill().map((_, index) => {
+                const isAdult = index < totalAdults;
+                const passengerRole = isAdult ? 'Dewasa' : 'Bayi';
+                const passenger = passengers[index] || {}; // Retrieve passenger data if available
+
+                return {
+                    full_name: passenger.full_name || null,
+                    clan_name: passenger.clan_name || null,
+                    birth_date: passenger.birth_date || null,
+                    nik_number: passenger.nik_number || null,
+                    nationality: passenger.nationality || null,
+                    passenger_role: passengerRole,
+                };
+            }),
             { fields: ['full_name', 'clan_name', 'birth_date', 'nik_number', 'nationality', 'passenger_role'] }
         );
 
         const seatPick = await seat.bulkCreate(
             seats.map(seat => ({
-                // flight_id: seat.flight_id,
+                flight_id: req.flight.id,
                 seat_number: seat.seat_number
             })),
             { fields: ['flight_id', 'seat_number'] }
@@ -41,11 +66,11 @@ const addBooking = async (req, res) => {
             clan_name: books.clan_name,
             email: books.email,
             phone_number: books.phone_number,
-            // ticket_id: req.ticket.id,
+            ticket_id: req.ticket.id,
             passenger_id: passengerData.map(p => p.id),
             seat_id: seatPick.map(s => s.id),
-            // total_booking: req.query.adult_passenger,
-            // total_price: (total_booking * req.ticket.price) + (0.1 * total_booking * req.ticket.price),
+            total_booking: adult,
+            total_price: (total_booking * req.ticket.price) + (0.1 * total_booking * req.ticket.price),
             booking_code: generateCode(8),
             payment_status: false,
         });
