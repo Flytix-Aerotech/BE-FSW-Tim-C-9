@@ -10,6 +10,10 @@
       "description": "public"
     },
     {
+      "url": "https://flytix-c9.up.railway.app/",
+      "description": "public production"
+    },
+    {
       "url": "http://localhost:8000/api/v1",
       "description": "local"
     }
