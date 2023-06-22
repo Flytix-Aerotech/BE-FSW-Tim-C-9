@@ -12,22 +12,24 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.passenger, { foreignKey: "passenger_id" });
       this.belongsTo(models.ticket, { foreignKey: "ticket_id" });
       this.belongsTo(models.seat, { foreignKey: "seat_id" });
-      this.hasOne(models.history, { foreignKey: "booking_id" });
-      this.hasMany(models.transaction, { foreignKey: "booking_id" });
+      this.hasMany(models.history, { foreignKey: "booking_id" });
+      this.hasOne(models.payment, { foreignKey: "booking_id" });
     }
   }
 
   book.init(
     {
-      ticket_id: DataTypes.INTEGER,
-      passenger_id: DataTypes.INTEGER,
-      seat_id: DataTypes.INTEGER,
       full_name: DataTypes.STRING,
       clan_name: DataTypes.STRING,
       email: DataTypes.STRING,
       phone_number: DataTypes.STRING,
+      ticket_id: DataTypes.INTEGER,
+      passenger_id: DataTypes.INTEGER,
+      seat_id: DataTypes.INTEGER,
       total_booking: DataTypes.INTEGER,
       total_price: DataTypes.DOUBLE,
+      booking_code: DataTypes.STRING,
+      payment_status: DataTypes.BOOLEAN,
     },
     {
       sequelize,

@@ -9,11 +9,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      type_of_payment: {
-        type: Sequelize.ENUM("Gopay", "Dana", "Akulaku"),
+      booking_id: {
+        type: Sequelize.INTEGER,
       },
-      price: {
-        type: Sequelize.DOUBLE,
+      type_of_payment: {
+        type: Sequelize.ENUM(["Gopay", "Dana", "Akulaku"]),
       },
       createdAt: {
         allowNull: false,

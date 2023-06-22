@@ -8,7 +8,6 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
       this.belongsTo(models.airport, { foreignKey: "airport_id" });
       this.belongsTo(models.flight, { foreignKey: "flight_id" });
       this.hasMany(models.book, { foreignKey: "ticket_id" });
@@ -16,12 +15,9 @@ module.exports = (sequelize, DataTypes) => {
   }
   ticket.init(
     {
-      premium_price: DataTypes.DOUBLE,
-      first_price: DataTypes.DOUBLE,
-      economy_price: DataTypes.DOUBLE,
-      bussines_price: DataTypes.DOUBLE,
+      price: DataTypes.DOUBLE,
       type_of_class: {
-        type: DataTypes.ENUM("Economy", "Business", "First", "Premium"),
+        type: DataTypes.ENUM(["Economy_Class", "Business_Class", "First_Class", "Quiet Class"]),
       },
       airport_id: DataTypes.INTEGER,
       flight_id: DataTypes.INTEGER,

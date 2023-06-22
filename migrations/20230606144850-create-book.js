@@ -9,15 +9,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      ticket_id: {
-        type: Sequelize.INTEGER,
-      },
-      seat_id: {
-        type: Sequelize.INTEGER,
-      },
-      passenger_id: {
-        type: Sequelize.INTEGER,
-      },
       full_name: {
         type: Sequelize.STRING,
       },
@@ -30,11 +21,31 @@ module.exports = {
       phone_number: {
         type: Sequelize.STRING,
       },
+      ticket_id: {
+        type: Sequelize.INTEGER,
+      },
+      seat_id: {
+        type: Sequelize.INTEGER,
+      },
+      passenger_id: {
+        type: Sequelize.INTEGER,
+      },
+      seat_id: {
+        type: Sequelize.INTEGER,
+      },
       total_booking: {
         type: Sequelize.INTEGER,
       },
       total_price: {
         type: Sequelize.DOUBLE,
+      },
+      booking_code: {
+        type: Sequelize.STRING,
+      },
+      payment_status: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,
