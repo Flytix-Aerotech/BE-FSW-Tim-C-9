@@ -12,14 +12,29 @@ module.exports = {
       ticket_id: {
         type: Sequelize.INTEGER,
       },
+      seat_id: {
+        type: Sequelize.INTEGER,
+      },
       passenger_id: {
         type: Sequelize.INTEGER,
+      },
+      full_name: {
+        type: Sequelize.STRING,
+      },
+      clan_name: {
+        type: Sequelize.STRING,
+      },
+      email: {
+        type: Sequelize.STRING,
+      },
+      phone_number: {
+        type: Sequelize.STRING,
       },
       total_booking: {
         type: Sequelize.INTEGER,
       },
-      payment_status: {
-        type: Sequelize.BOOLEAN,
+      total_price: {
+        type: Sequelize.DOUBLE,
       },
       createdAt: {
         allowNull: false,
@@ -35,4 +50,3 @@ module.exports = {
     await queryInterface.dropTable("books");
   },
 };
-

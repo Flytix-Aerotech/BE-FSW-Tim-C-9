@@ -1,5 +1,6 @@
 const { ticket, airport, flight } = require("../models");
 const { Op } = require("sequelize");
+const catchAsync = require("../utils/catchAsync");
 
 const getTicket = async (req, res) => {
   try {
@@ -78,33 +79,32 @@ const updateTicket = async (req, res) => {
   }
 };
 
-const filterTicket = async (req, res) => {
+const filterTicket = catchAsync(async (req, res) => {
   const { departure_date, arrival_date, departure_location, arrival_location, type_of_class } = req.body;
-  try {
-    const tickets = await ticket.findAll({
-      where: {
-        type_of_class: type_of_class,
-      },
-      include: {
-        model: flight,
-        as: "flight",
-        where: {
-          departure_date: departure_date,
-          arrival_date: arrival_date,
-          departure_location: { [Op.substring]: `${departure_location}` },
-          arrival_location: { [Op.substring]: `${arrival_location}` },
+
+  await ticket
+    .findAll({
+      where: { type_of_class: type_of_class },
+      include: [
+        {
+          model: flight,
+          as: "flight",
+          where: {
+            departure_date: departure_date,
+            arrival_date: arrival_date === undefined ? departure_date : arrival_date,
+            departure_location: { [Op.substring]: `${departure_location}` },
+            arrival_location: { [Op.substring]: `${arrival_location}` },
+          },
         },
-      },
-    });
-    res.status(200).json({
-      tickets,
-    });
-  } catch (error) {
-    res.status(error.statusCode || 500).json({
-      message: error.message,
-    });
-  }
-};
+        {
+          model: airport,
+          as: "airport",
+        },
+      ],
+    })
+    .then((data) => res.status(200).json({ data }))
+    .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
+});
 
 const searchTicket = async (req, res) => {
   try {
@@ -133,7 +133,12 @@ const searchTicket = async (req, res) => {
               model: flight,
               as: 'flight',
               required: true
-          }]
+          },
+          {
+            model: airport,
+            as: 'airport',
+            required: true
+        }]
       });
       res.status(200).json({
           Tickets
@@ -144,6 +149,33 @@ const searchTicket = async (req, res) => {
       });
   }
 };
+
+// const searchTicket = catchAsync(async (req, res) => {
+//   const { dd, ad, dl, al, toc } = req.query;
+//   await ticket
+//     .findAll({
+//       where: { type_of_class: toc },
+//       include: [
+//         {
+//           model: flight,
+//           as: "flight",
+//           where: {
+//             departure_date: dd,
+//             arrival_date: ad === undefined ? dd : ad,
+//             departure_location: { [Op.iLike]: `${dl}` },
+//             arrival_location: { [Op.iLike]: `${al}` },
+//           },
+//         },
+//         {
+//           model: airport,
+//           as: "airport",
+//         },
+//       ],
+//     })
+//     .then((data) => res.status(200).json({ data }))
+//     .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
+// });
+
 
 const deleteTicket = async (req, res) => {
   try {

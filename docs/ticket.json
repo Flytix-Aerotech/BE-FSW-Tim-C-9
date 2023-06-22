@@ -81,71 +81,7 @@
             }
           }
         }
-      }
-    },
-
-      "/tickets/filter": {
-        "post": {
-          "summary": "Create Tickets",
-          "tags": ["Ticket"],
-          "description": "Add new ticket on the database",
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Tickets"
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "A successful response.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "status": {
-                        "type": "string",
-                        "example": "success"
-                      },
-                      "message": {
-                        "type": "string",
-                        "example": "Berhasil menambahkan data ticket"
-                      },
-                      "data": {
-                        "$ref": "#/components/schemas/Tickets"
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "401": {
-              "description": "Invalid token. Unauthorized.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "status": {
-                        "type": "string",
-                        "example": "failed"
-                      },
-                      "message": {
-                        "type": "string",
-                        "example": "Hanya bisa diakses oleh admin."
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-      
+      },
       "get": {
         "summary": "List Tickets",
         "tags": ["Ticket"],

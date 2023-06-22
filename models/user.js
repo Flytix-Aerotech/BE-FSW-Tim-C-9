@@ -10,7 +10,6 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.hasMany(models.history, { foreignKey: "user_id" });
-      this.hasMany(models.passenger, { foreignKey: "user_id" });
       this.hasMany(models.transaction, { foreignKey: "user_id" });
     }
   }
@@ -23,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       password: DataTypes.STRING,
       photo: DataTypes.TEXT,
       role: {
-        type: DataTypes.ENUM(["admin", "user", "guest"]),
+        type: DataTypes.ENUM("admin", "user", "guest"),
         defaultValue: "user",
       },
     },

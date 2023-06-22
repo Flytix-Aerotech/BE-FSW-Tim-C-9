@@ -10,22 +10,19 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.hasOne(models.book, { foreignKey: "passenger_id" });
-      this.hasOne(models.ticket, { foreignKey: "passenger_id" });
-      this.belongsTo(models.user, { foreignKey: "user_id" });
     }
   }
   passenger.init(
     {
-      first_name: DataTypes.STRING,
-      last_name: DataTypes.STRING,
+      full_name: DataTypes.STRING,
+      clan_name: DataTypes.STRING,
       birth_date: DataTypes.DATEONLY,
       nik_number: DataTypes.STRING,
       nationality: DataTypes.STRING,
       passenger_role: {
-        type: DataTypes.ENUM(["dewasa", "bayi"]),
+        type: DataTypes.ENUM("dewasa", "bayi"),
         defaultValue: "dewasa",
       },
-      user_id: DataTypes.INTEGER,
     },
     {
       sequelize,

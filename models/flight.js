@@ -14,21 +14,18 @@ module.exports = (sequelize, DataTypes) => {
   }
   flight.init(
     {
-      flight_number: DataTypes.INTEGER,
-      departure_date: DataTypes.DATE,
-      arrival_date: DataTypes.DATE,
+      flight_number: DataTypes.STRING,
+      departure_time: DataTypes.TIME,
+      arrival_time: DataTypes.TIME,
+      departure_date: DataTypes.DATEONLY,
+      arrival_date: DataTypes.DATEONLY,
       departure_location: DataTypes.STRING,
       arrival_location: DataTypes.STRING,
       from_id: DataTypes.CHAR,
       to_id: DataTypes.CHAR,
       airline: DataTypes.STRING,
-      capacity: DataTypes.INTEGER,
-      economy_class_price: DataTypes.DOUBLE,
-      business_class_price: DataTypes.DOUBLE,
-      first_class_price: DataTypes.DOUBLE,
-      quiet_class_price: DataTypes.DOUBLE,
       type_of_flight: {
-        type: DataTypes.ENUM(["OneWay", "RoundTrip"]),
+        type: DataTypes.ENUM("OneWay", "RoundTrip"),
       },
     },
     {
