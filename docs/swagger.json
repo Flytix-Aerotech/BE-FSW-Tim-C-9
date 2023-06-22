@@ -538,7 +538,7 @@
                         },
                         "type_of_class": {
                           "type": "string",
-                          "enum": ["Economy", "Business", "First", "Quiet"],
+                          "enum": ["Economy", "Business", "First", "Premium"],
                           "example": "Economy"
                         },
                         "flight_id": {
@@ -652,7 +652,7 @@
                         },
                         "type_of_class": {
                           "type": "string",
-                          "enum": ["Economy", "Business", "First", "Quiet"],
+                          "enum": ["Economy", "Business", "First", "Premium"],
                           "example": "Economy"
                         },
                         "flight_id": {
@@ -733,7 +733,7 @@
                         },
                         "type_of_class": {
                           "type": "string",
-                          "enum": ["Economy", "Business", "First", "Quiet"],
+                          "enum": ["Economy", "Business", "First", "Premium"],
                           "example": "Economy"
                         },
                         "flight_id": {
@@ -848,7 +848,7 @@
                         },
                         "type_of_class": {
                           "type": "string",
-                          "enum": ["Economy", "Business", "First", "Quiet"],
+                          "enum": ["Economy", "Business", "First", "Premium"],
                           "example": "Economy"
                         },
                         "flight_id": {
@@ -887,7 +887,7 @@
                     },
                     "type_of_class": {
                       "type": "string",
-                      "enum": ["Economy", "Business", "First", "Quiet"]
+                      "enum": ["Economy", "Business", "First", "Premium"]
                     }
                   }
                 }
@@ -1290,25 +1290,10 @@
       "Tickets": {
         "type": "object",
         "properties": {
-          "premium_price": {
+          "price": {
             "type": "integer",
             "format": "double",
             "example": "3500000"
-          },
-          "first_price": {
-            "type": "integer",
-            "format": "double",
-            "example": "9500000"
-          },
-          "economy_price": {
-            "type": "integer",
-            "format": "double",
-            "example": "1500000"
-          },
-          "bussines_price": {
-            "type": "integer",
-            "format": "double",
-            "example": "5100000"
           },
           "type_of_class": {
             "type": "string",
@@ -1425,7 +1410,7 @@
           },
           "passenger_role": {
             "type": "string",
-            "example": "dewasa"
+            "example": "Dewasa"
           }
         }
       }

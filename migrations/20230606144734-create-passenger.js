@@ -25,7 +25,8 @@ module.exports = {
         type: Sequelize.STRING,
       },
       passenger_role: {
-        type: Sequelize.ENUM("dewasa", "bayi"),
+        type: Sequelize.ENUM(["Dewasa", "Bayi"]),
+        defaultValue: "Dewasa",
       },
       createdAt: {
         allowNull: false,

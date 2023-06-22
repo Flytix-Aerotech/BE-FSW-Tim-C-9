@@ -8,7 +8,6 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
       this.hasOne(models.book, { foreignKey: "passenger_id" });
     }
   }
@@ -20,8 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       nik_number: DataTypes.STRING,
       nationality: DataTypes.STRING,
       passenger_role: {
-        type: DataTypes.ENUM("dewasa", "bayi"),
-        defaultValue: "dewasa",
+        type: DataTypes.ENUM(["Dewasa", "Bayi"]),
       },
     },
     {
