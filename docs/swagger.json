@@ -673,9 +673,9 @@
     },
     "/tickets/filter": {
       "post": {
-        "summary": "Filter Tickets",
+        "summary": "Create Tickets",
         "tags": ["Ticket"],
-        "description": "Filter Ticket",
+        "description": "Add new ticket on the database",
         "requestBody": {
           "required": true,
           "content": {
