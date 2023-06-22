@@ -11,19 +11,20 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.belongsTo(models.airport, { foreignKey: "airport_id" });
       this.belongsTo(models.flight, { foreignKey: "flight_id" });
-      this.belongsTo(models.passenger, { foreignKey: "passenger_id" });
       this.hasMany(models.book, { foreignKey: "ticket_id" });
     }
   }
   ticket.init(
     {
-      price: DataTypes.STRING,
+      premium_price: DataTypes.DOUBLE,
+      first_price: DataTypes.DOUBLE,
+      economy_price: DataTypes.DOUBLE,
+      bussines_price: DataTypes.DOUBLE,
       type_of_class: {
         type: DataTypes.ENUM("Economy", "Business", "First", "Premium"),
       },
       airport_id: DataTypes.INTEGER,
       flight_id: DataTypes.INTEGER,
-      passenger_id: DataTypes.INTEGER,
     },
     {
       sequelize,

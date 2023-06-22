@@ -87,7 +87,7 @@ const updateProfile = catchAsync(async (req, res) => {
 
   await user
     .update({ full_name, email, username, phone_number, photo: updateImage }, { where: { id } })
-    .then(() => res.status(201).json({ msg: "Profile updated successfully" }))
+    .then((user) => res.status(201).json({ msg: "Profile updated successfully", user }))
     .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
 });
 

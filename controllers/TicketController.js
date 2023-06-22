@@ -29,9 +29,6 @@ const addTicket = catchAsync(async (req, res) => {
 const filterTicket = catchAsync(async (req, res) => {
   const { departure_date, arrival_date, departure_location, arrival_location, type_of_class } = req.body;
 
-  if (departure_date === "" || arrival_date === "" || departure_location === "" || arrival_location === "" || type_of_class === "") {
-    return res.status(404).json({ msg: "Please input a relevant data" });
-  }
   await ticket
     .findAll({
       where: { type_of_class: type_of_class },
@@ -41,7 +38,7 @@ const filterTicket = catchAsync(async (req, res) => {
           as: "flight",
           where: {
             departure_date: departure_date,
-            arrival_date: arrival_date,
+            arrival_date: arrival_date === undefined ? departure_date : arrival_date,
             departure_location: { [Op.substring]: `${departure_location}` },
             arrival_location: { [Op.substring]: `${arrival_location}` },
           },
@@ -67,7 +64,7 @@ const searchTicket = catchAsync(async (req, res) => {
           as: "flight",
           where: {
             departure_date: dd,
-            arrival_date: ad,
+            arrival_date: ad === undefined ? dd : ad,
             departure_location: { [Op.iLike]: `${dl}` },
             arrival_location: { [Op.iLike]: `${al}` },
           },
@@ -80,6 +77,7 @@ const searchTicket = catchAsync(async (req, res) => {
     })
     .then((data) => res.status(200).json({ data }))
     .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
+  // }
 });
 
 module.exports = {

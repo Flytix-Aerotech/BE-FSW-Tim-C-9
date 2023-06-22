@@ -9,7 +9,16 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      price: {
+      premium_price: {
+        type: Sequelize.DOUBLE,
+      },
+      first_price: {
+        type: Sequelize.DOUBLE,
+      },
+      economy_price: {
+        type: Sequelize.DOUBLE,
+      },
+      bussines_price: {
         type: Sequelize.DOUBLE,
       },
       type_of_class: {
@@ -19,9 +28,6 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       flight_id: {
-        type: Sequelize.INTEGER,
-      },
-      passenger_id: {
         type: Sequelize.INTEGER,
       },
       createdAt: {
