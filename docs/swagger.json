@@ -65,11 +65,11 @@
                             },
                             "createdAt": {
                               "type": "string",
-                              "format": "date-time"
+                              "format": "date"
                             },
                             "updatedAt": {
                               "type": "string",
-                              "format": "date-time"
+                              "format": "date"
                             }
                           }
                         }
@@ -172,11 +172,11 @@
                             },
                             "createdAt": {
                               "type": "string",
-                              "format": "date-time"
+                              "format": "date"
                             },
                             "updatedAt": {
                               "type": "string",
-                              "format": "date-time"
+                              "format": "date"
                             }
                           }
                         }
@@ -229,6 +229,139 @@
                     "msg": {
                       "type": "string",
                       "example": "Access is denied"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/user": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Search Email",
+        "description": "Get information email user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "emailbaru@gmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "user": {
+                      "$ref": "#/components/schemas/Users"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "Email not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/reset-password/{username}": {
+      "put": {
+        "tags": ["Auth"],
+        "summary": "Reset Password",
+        "description": "Reset password using email by query",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string",
+                    "example": "rahasia"
+                  },
+                  "consfirmPassword": {
+                    "type": "string",
+                    "example": "rahasia"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "Password reset successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "Email not found"
                     }
                   }
                 }
@@ -405,8 +538,8 @@
                         },
                         "type_of_class": {
                           "type": "string",
-                          "enum": ["Economy Class", "Business Class", "First Class", "Quiet Class"],
-                          "example": "Economy Class"
+                          "enum": ["Economy", "Business", "First", "Quiet"],
+                          "example": "Economy"
                         },
                         "flight_id": {
                           "$ref": "#/components/schemas/Flights"
@@ -415,6 +548,62 @@
                           "$ref": "#/components/schemas/Airports"
                         }
                       }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Tickets",
+        "tags": ["Ticket"],
+        "description": "Add new ticket on the database",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tickets"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Tickets"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token. Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Hanya bisa diakses oleh admin."
                     }
                   }
                 }
@@ -463,8 +652,8 @@
                         },
                         "type_of_class": {
                           "type": "string",
-                          "enum": ["Economy Class", "Business Class", "First Class", "Quiet Class"],
-                          "example": "Economy Class"
+                          "enum": ["Economy", "Business", "First", "Quiet"],
+                          "example": "Economy"
                         },
                         "flight_id": {
                           "$ref": "#/components/schemas/Flights"
@@ -473,6 +662,232 @@
                           "$ref": "#/components/schemas/Airports"
                         }
                       }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tickets/filter": {
+      "post": {
+        "summary": "Create Tickets",
+        "tags": ["Ticket"],
+        "description": "Add new ticket on the database",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type_of_class": {
+                    "type": "string",
+                    "enum": ["Economy", "Business", "First", "Premium"],
+                    "example": "Economy"
+                  },
+                  "departure_date": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2023-06-22"
+                  },
+                  "arrival_date": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2023-06-22"
+                  },
+                  "departure_location": {
+                    "type": "string",
+                    "example": "Jakarta"
+                  },
+                  "arrival_location": {
+                    "type": "string",
+                    "example": "Surabaya"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "price": {
+                          "type": "number",
+                          "format": "double",
+                          "example": "2000000"
+                        },
+                        "type_of_class": {
+                          "type": "string",
+                          "enum": ["Economy", "Business", "First", "Quiet"],
+                          "example": "Economy"
+                        },
+                        "flight_id": {
+                          "$ref": "#/components/schemas/Flights"
+                        },
+                        "airport_id": {
+                          "$ref": "#/components/schemas/Airports"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token. Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Hanya bisa diakses oleh admin."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tickets/search": {
+      "get": {
+        "tags": ["Ticket"],
+        "summary": "Search ticket",
+        "description": "Retrieve ticket detail",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "dl",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bali"
+            }
+          },
+          {
+            "in": "query",
+            "name": "al",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Surabaya"
+            }
+          },
+          {
+            "in": "query",
+            "name": "dd",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2022-12-26"
+            }
+          },
+          {
+            "in": "query",
+            "name": "ad",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2022-12-26"
+            }
+          },
+          {
+            "in": "query",
+            "name": "toc",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Economy"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "price": {
+                          "type": "number",
+                          "format": "double",
+                          "example": "2000000"
+                        },
+                        "type_of_class": {
+                          "type": "string",
+                          "enum": ["Economy", "Business", "First", "Quiet"],
+                          "example": "Economy"
+                        },
+                        "flight_id": {
+                          "$ref": "#/components/schemas/Flights"
+                        },
+                        "airport_id": {
+                          "$ref": "#/components/schemas/Airports"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The ticket id is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "departure_date": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "arrival_date": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "departure_location": {
+                      "type": "string"
+                    },
+                    "arrival_location": {
+                      "type": "string"
+                    },
+                    "type_of_class": {
+                      "type": "string",
+                      "enum": ["Economy", "Business", "First", "Quiet"]
                     }
                   }
                 }
@@ -875,25 +1290,36 @@
       "Tickets": {
         "type": "object",
         "properties": {
-          "price": {
-            "type": "number",
+          "premium_price": {
+            "type": "integer",
             "format": "double",
-            "example": "2000000"
+            "example": "3500000"
+          },
+          "first_price": {
+            "type": "integer",
+            "format": "double",
+            "example": "9500000"
+          },
+          "economy_price": {
+            "type": "integer",
+            "format": "double",
+            "example": "1500000"
+          },
+          "bussines_price": {
+            "type": "integer",
+            "format": "double",
+            "example": "5100000"
           },
           "type_of_class": {
             "type": "string",
-            "enum": ["Economy Class", "Business Class", "First Class", "Quiet Class"],
-            "example": "Economy Class"
+            "enum": ["Economy", "Business", "First", "Premium"],
+            "example": "Economy"
           },
           "airport_id": {
             "type": "integer",
             "example": "3"
           },
           "flight_id": {
-            "type": "string",
-            "example": "1"
-          },
-          "passenger_id": {
             "type": "integer",
             "example": "1"
           }
@@ -907,15 +1333,25 @@
             "format": "integer",
             "example": "3"
           },
+          "departure_time": {
+            "type": "string",
+            "format": "date",
+            "example": "09:00"
+          },
+          "arrival_time": {
+            "type": "string",
+            "format": "date",
+            "example": "10:00"
+          },
           "departure_date": {
             "type": "string",
-            "format": "date-time",
-            "example": "2000000"
+            "format": "date",
+            "example": "2023-06-22"
           },
           "arrival_date": {
             "type": "string",
-            "format": "date-time",
-            "example": "2000000"
+            "format": "date",
+            "example": "2023-06-22"
           },
           "departure_location": {
             "type": "string",
@@ -939,30 +1375,10 @@
             "type": "string",
             "example": "LION AIR"
           },
-          "capacity": {
-            "type": "number",
-            "format": "integer",
-            "example": "200"
-          },
-          "economy_class_price": {
-            "type": "number",
-            "format": "double",
-            "example": "2000000"
-          },
-          "business_class_price": {
-            "type": "number",
-            "format": "double",
-            "example": "2000000"
-          },
-          "first_class_price": {
-            "type": "number",
-            "format": "double",
-            "example": "2000000"
-          },
-          "quiet_class_price": {
-            "type": "number",
-            "format": "double",
-            "example": "2000000"
+          "type_of_flight": {
+            "type": "string",
+            "enum": ["OneWay", "RoundTrip"],
+            "example": "OneWay"
           }
         }
       },
