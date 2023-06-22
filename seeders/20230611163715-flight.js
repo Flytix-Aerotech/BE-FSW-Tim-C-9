@@ -215,6 +215,36 @@ module.exports = {
           airline: "Super Air jet",
           type_of_flight: "OneWay",
         },
+
+        {
+          id: 15,
+          flight_number: "UPG-1202",
+          departure_time: "11:00",
+          arrival_time: "14:00",
+          departure_date: "2023-06-24",
+          arrival_date: "2023-06-24",
+          departure_location: "Ambon",
+          arrival_location: "Makassar",
+          from_id: "AMQ",
+          to_id: "UPG",
+          airline: "Garuda Indonesia",
+          type_of_flight: "OneWay",
+        },
+
+        {
+          id: 16,
+          flight_number: "UPG-1202",
+          departure_time: "11:00",
+          arrival_time: "14:00",
+          departure_date: "2023-06-24",
+          arrival_date: "2023-06-24",
+          departure_location: "Ambon",
+          arrival_location: "Makassar",
+          from_id: "AMQ",
+          to_id: "UPG",
+          airline: "Super Air jet",
+          type_of_flight: "OneWay",
+        },
       ],
       {}
     );

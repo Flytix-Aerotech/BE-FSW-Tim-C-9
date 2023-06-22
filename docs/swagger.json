@@ -10,7 +10,7 @@
       "description": "public"
     },
     {
-      "url": "https://flytix-c9.up.railway.app/",
+      "url": "https://flytix-c9.up.railway.app/api/v1",
       "description": "public production"
     },
     {

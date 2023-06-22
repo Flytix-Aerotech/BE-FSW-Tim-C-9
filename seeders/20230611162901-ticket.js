@@ -112,13 +112,13 @@ module.exports = {
           price: 9345000,
           type_of_class: "First",
           airport_id: 3,
-          flight_id: 12,
+          flight_id: 15,
         },
         {
           price: 15345000,
           type_of_class: "First",
           airport_id: 3,
-          flight_id: 12,
+          flight_id: 16,
         },
       ],
       {}
