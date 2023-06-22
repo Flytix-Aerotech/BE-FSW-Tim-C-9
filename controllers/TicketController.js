@@ -134,11 +134,12 @@ const searchTicket = async (req, res) => {
               as: 'flight',
               required: true
           },
-          {
-            model: airport,
-            as: 'airport',
-            required: true
-        }]
+        //   {
+        //     model: airport,
+        //     as: 'airport',
+        //     required: true
+        // }
+      ]
       });
       res.status(200).json({
           Tickets
