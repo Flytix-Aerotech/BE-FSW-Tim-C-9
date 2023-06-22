@@ -9,16 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      premium_price: {
-        type: Sequelize.DOUBLE,
-      },
-      first_price: {
-        type: Sequelize.DOUBLE,
-      },
-      economy_price: {
-        type: Sequelize.DOUBLE,
-      },
-      bussines_price: {
+      price: {
         type: Sequelize.DOUBLE,
       },
       type_of_class: {
