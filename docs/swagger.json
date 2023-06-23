@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "https://flytix-aerotech.up.railway.app/api/v1",
+      "url": "https://flytix-c9.up.railway.app/",
       "description": "public"
     },
     {
@@ -16,132 +16,280 @@
   ],
   "tags": [
     {
-      "name": "Auth",
-      "description": "Auth API Collection"
+      "name": "Airport",
+      "description": "Airport API Collection"
     }
   ],
   "paths": {
-    "/auth/register": {
+    "/airports": {
       "post": {
-        "summary": "Register",
-        "tags": ["Auth"],
-        "description": "Create new user",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/Users"
-              }
+          "summary": "Create Airport",
+          "tags": ["Airport"],
+          "description": "Add new airport on the database",
+          "security": [
+            {
+              "bearerToken": []
             }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Registration success",
+          ],
+          "requestBody": {
+            "required": true,
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "User created successfully"
-                    },
-                    "newUser": {
-                      "allOf": [
-                        {
-                          "$ref": "#/components/schemas/Users"
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "type": "integer"
-                            },
-                            "createdAt": {
-                              "type": "string",
-                              "format": "date-time"
-                            },
-                            "updatedAt": {
-                              "type": "string",
-                              "format": "date-time"
-                            }
-                          }
-                        }
-                      ]
-                    }
-                  }
+                  "$ref": "#/components/schemas/Airport"
                 }
               }
             }
           },
-          "400": {
-            "description": "Email already registered",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "User already exists."
+          "responses": {
+            "200": {
+              "description": "A successful response.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Berhasil menambahkan data bandara."
+                      },
+                      "data": {
+                        "$ref": "#/components/schemas/airportResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid token. Unauthorized.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "failed"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Unauthorized"
+                      }
                     }
                   }
                 }
               }
             }
           }
-        }
+      },
+      "get": {
+          "summary": "List Airports",
+          "tags": ["Airport"],
+          "description": "Retrieve list of airport",
+          "responses": {
+            "200": {
+              "description": "A successful response.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/Airport"
+                      },
+                      "count": {
+                        "type": "integer",
+                        "example": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
       }
     },
-    "/auth/login": {
-      "post": {
-        "summary": "Login",
-        "tags": ["Auth"],
-        "description": "Retrieve access tokens",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "example": "habbin@gmail.com"
-                  },
-                  "password": {
-                    "type": "string",
-                    "example": "habbin123"
+    "/airports/{id}": {
+      "get": {
+          "tags": ["Airport"],
+          "summary": "Get An Airport",
+          "description": "Retrieve airport detail",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "A successful response.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Airport"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "The airport id is not found.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "failed"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "The airport id is not found"
+                      }
+                    }
                   }
                 }
               }
             }
           }
-        },
+      },
+      "put": {
+          "tags": ["Airport"],
+          "summary": "Update Airport",
+          "description": "Change airport information",
+          "security": [
+            {
+              "bearerToken": []
+            }
+          ],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Airports"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "A successful response.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Data bandara berhasil diubah."
+                      },
+                      "data": {
+                        "$ref": "#/components/schemas/Airport"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid token. Unauthorized.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "failed"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Unauthorized."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "The airport id is not found.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "failed"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "The airport id is not found."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+      },
+      "delete": {
+        "tags": ["Airport"],
+        "summary": "Delete Airport",
+        "description": "Remove existing airport by id.",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Login success",
+            "description": "A successful response.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
                     "message": {
                       "type": "string",
-                      "example": "Login successful"
-                    },
-                    "token": {
-                      "type": "string",
-                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNjg2NDA3MTI1fQ.AAGnkjiWm0qQYKqFYyTWGPq3MtzBQ2ZNh7idomC-q0w"
+                      "example": "Data bandara berhasil dihapus."
                     }
                   }
                 }
               }
             }
           },
-          "400": {
-            "description": "wrong password",
+          "401": {
+            "description": "Invalid token. Unauthorized.",
             "content": {
               "application/json": {
                 "schema": {
@@ -153,30 +301,27 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Passwords don't match"
+                      "example": "Unauthorized."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The airport id is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
                     },
-                    "user": {
-                      "allOf": [
-                        {
-                          "$ref": "#/components/schemas/Users"
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "type": "integer"
-                            },
-                            "createdAt": {
-                              "type": "string",
-                              "format": "date-time"
-                            },
-                            "updatedAt": {
-                              "type": "string",
-                              "format": "date-time"
-                            }
-                          }
-                        }
-                      ]
+                    "message": {
+                      "type": "string",
+                      "example": "The airport id is not found."
                     }
                   }
                 }
@@ -187,51 +332,32 @@
       }
     }
   },
-  "components": {
+"components": {
     "schemas": {
-      "Users": {
-        "type": "object",
-        "properties": {
-          "full_name": {
-            "type": "string",
-            "example": "habbin"
-          },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "example": "habbin@gmail.com"
-          },
-          "password": {
-            "type": "string",
-            "format": "password",
-            "example": "habbin123"
-          },
-          "username": {
-            "type": "string",
-            "example": "habbin"
-          },
-          "phone_number": {
-            "type": "string",
-            "example": "08123456789"
-          },
-          "address": {
-            "type": "string",
-            "example": "Jl. fsw no.3"
-          },
-          "photo": {
-            "type": "string",
-            "format": "binary",
-            "example": "url photo"
+      "Airport": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "example": "Juanda"
+            },
+            "location": {
+              "type": "string",
+              "example": "Surabaya"
+            },
+            "code" :{
+              "type": "string",
+              "example" : "123"
+            }
           }
-        }
       }
     },
     "securitySchemes": {
       "bearerToken": {
-        "description": "Insert Token, You can get it after login",
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
+          "description": "Insert Token, You can get it after login",
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
       }
     }
   }

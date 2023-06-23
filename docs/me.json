@@ -1,0 +1,1018 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Flytix-api",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://flytix-aerotech.up.railway.app/api/v1",
+            "description": "public"
+        },
+        {
+            "url": "http://localhost:8000/api/v1",
+            "description": "local"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Booking",
+            "description": "Booking API Collection"
+        }
+    ],
+    "paths": {
+        "/booking": {
+            "post": {
+                "summary": "Create Booking",
+                "tags": [
+                    "Booking"
+                ],
+                "description": "Add new Booking on the database",
+                "security": [
+                    {
+                        "bearerToken": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "adult",
+                        "schema": {
+                            "type": "string",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "baby",
+                        "schema": {
+                            "type": "string",
+                            "example": ""
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "passengers": [{
+                                        "full_name": {
+                                            "type": "string",
+                                            "example": "M Huda"
+                                        },
+                                        "clan_name": {
+                                            "type": "string",
+                                            "example": "Huda"
+                                        },
+                                        "birth_date": {
+                                            "type": "date",
+                                            "example": "2001-12-30"
+                                        },
+                                        "nik_number": {
+                                            "type": "string",
+                                            "example": "00123"
+                                        },
+                                        "nationality": {
+                                            "type": "string",
+                                            "example": "Indonesia"
+                                        },
+                                        "passenger_role": {
+                                            "type": "enum",
+                                            "example": "Dewasa"
+                                        }
+                                    }],
+                                    "seats": [{
+                                        "flight_id": {
+                                            "type": "integer",
+                                            "example": 9
+                                        },
+                                        "seat_number": {
+                                            "type": "integer",
+                                            "example": 32
+                                        }
+                                    }],
+                                    "full_name": {
+                                        "type": "string",
+                                        "example": "saya Huda"
+                                    },
+                                    "clan_name": {
+                                        "type": "string",
+                                        "example": "Huda"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "Huda@gmail.com"
+                                    },
+                                    "phone_number": {
+                                        "type": "string",
+                                        "example": "08123456789"
+                                    },
+                                    "ticket_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "total_booking": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "total_price": {
+                                        "type": "number",
+                                        "example": 999999
+                                    },
+                                    "booking_code": {
+                                        "type": "string",
+                                        "example": "123code"
+                                    },
+                                    "payment_status": {
+                                        "type": "boolean",
+                                        "example": false
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data Anda berhasil disimpan!"
+                                        },
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    "$ref": "#/components/schemas/newBooking"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "createdAt": {
+                                                            "type": "string",
+                                                            "format": "date-time"
+                                                        },
+                                                        "updatedAt": {
+                                                            "type": "string",
+                                                            "format": "date-time"
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid token. Unauthorized.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/booking/{id}": {
+            "delete": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Delete Booking",
+                "description": "Remove existing booking by id.",
+                "security": [
+                    {
+                        "bearerToken": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Booking deleted successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "The booking is not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Booking not found."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/booking/pay/{code}": {
+            "get": {
+                "summary": "Pay Booking by code",
+                "tags": [
+                    "Booking"
+                ],
+                "description": "Retrieve the paid booking by code ",
+                "security": [
+                    {
+                        "bearerToken": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "code",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Booking"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid token. Unauthorized.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid data"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/histories": {
+            "get": {
+                "tags": [
+                    "Histories"
+                ],
+                "summary": "Get Histories",
+                "description": "Get All Booking Histories",
+                "security": [
+                    {
+                        "bearerToken": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Booking"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Token tidak valid."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/histories/search": {
+            "get": {
+                "tags": [
+                    "Histories"
+                ],
+                "summary": "Search history booking",
+                "description": "Search history booking by code",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "code",
+                        "schema": {
+                            "type": "string",
+                            "example": "123jad"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "booking hasil pencarian"
+                                        },
+                                        "booking": {
+                                            "$ref": "#/components/schemas/Booking"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Token tidak valid."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Booking is not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Anda belum melakukan pemesanan penerbangan"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/histories/filter": {
+            "get": {
+                "tags": [
+                    "Histories"
+                ],
+                "summary": "Filter history booking",
+                "description": "Filter history booking by date",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "start",
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2000-12-22"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "end",
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2000-12-22"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "hasil filter booking"
+                                        },
+                                        "booking": {
+                                            "$ref": "#/components/schemas/Booking"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Token tidak valid."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/payment": {
+            "get": {
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Make Payment",
+                "description": "Make payment with Midtrans",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "code",
+                        "schema": {
+                            "type": "string",
+                            "example": "000jad"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "type",
+                        "schema": {
+                            "type": "string",
+                            "example": "Gopay"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "payment": {
+                                            "$ref": "#/components/schemas/Payment"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Token tidak valid."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid data"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/send/email-otp": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Send OTP",
+                "description": "Send OTP to email",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "xhudan@google.com"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "SendOTP": {
+                                            "$ref": "#/components/schemas/SendOTP"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Email not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Email not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/verify-otp": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Verify OTP",
+                "description": "Verifying email OTP",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "xhudan@google.com"
+                                    },
+                                    "otp": {
+                                        "type": "string",
+                                        "example": "123abc"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "Verify": {
+                                            "$ref": "#/components/schemas/Verify"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid or expired OTP",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid OTP"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Booking": {
+                "type": "object",
+                "properties": {
+                    "full_name": {
+                        "type": "string",
+                        "example": "saya Huda"
+                    },
+                    "clan_name": {
+                        "type": "string",
+                        "example": "Huda"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "Huda@gmail.com"
+                    },
+                    "phone_number": {
+                        "type": "string",
+                        "example": "08123456789"
+                    },
+                    "seat_id": {
+                        "type": "integer",
+                        "example": 14
+                    },
+                    "total_booking": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "total_price": {
+                        "type": "number",
+                        "example": 999999
+                    },
+                    "booking_code": {
+                        "type": "string",
+                        "example": "123code"
+                    },
+                    "payment_status": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "ticket": {
+                        "$ref": "#/components/schemas/Ticket"
+                    },
+                    "passenger": {
+                        "$ref": "#/components/schemas/Passenger"
+                    }
+                }
+            },
+            "Passenger": {
+                "type": "object",
+                "properties": {
+                    "full_name": {
+                        "type": "string",
+                        "example": "M Huda"
+                    },
+                    "clan_name": {
+                        "type": "string",
+                        "example": "Huda"
+                    },
+                    "birth_date": {
+                        "type": "date",
+                        "example": "2001-12-30"
+                    },
+                    "nik_number": {
+                        "type": "string",
+                        "example": "00123"
+                    },
+                    "nationality": {
+                        "type": "string",
+                        "example": "Indonesia"
+                    },
+                    "passenger_role": {
+                        "type": "enum",
+                        "example": "Dewasa"
+                    }
+                }
+            },
+            "Ticket": {
+                "type": "object",
+                "properties": {
+                    "price": {
+                        "type": "double",
+                        "example": "90500"
+                    },
+                    "type_of_class": {
+                        "type": "enum",
+                        "example": "Economy"
+                    },
+                    "airport_id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "flight_id": {
+                        "type": "integer",
+                        "example": 1
+                    }
+                }
+            },
+            "Histories": {
+                "type": "object",
+                "properties": {
+                    "user_id": {
+                        "type": "integer",
+                        "example": null
+                    },
+                    "booking_id": {
+                        "type": "integer",
+                        "example": 33
+                    },
+                    "history_date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "200623"
+                    }
+                }
+            },
+            "Payment": {
+                "type": "object",
+                "properties": {
+                    "booking_id": {
+                        "type": "integer",
+                        "example": 33
+                    },
+                    "type_of_payment": {
+                        "type": "enum",
+                        "example": "Gopay"
+                    }
+                }
+            },
+            "SendOTP": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "example": "xhudan@google.com"
+                    }
+                }
+            },
+            "Verify": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "example": "xhudan@google.com"
+                    },
+                    "otp": {
+                        "type": "string",
+                        "example": "123abc"
+                    }
+                }
+            },
+            "newBooking": {
+                "type": "object",
+                "properties": {
+                    "full_name": {
+                        "type": "string",
+                        "example": "saya Huda"
+                    },
+                    "clan_name": {
+                        "type": "string",
+                        "example": "Huda"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "Huda@gmail.com"
+                    },
+                    "phone_number": {
+                        "type": "string",
+                        "example": "08123456789"
+                    },
+                    "total_booking": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "total_price": {
+                        "type": "number",
+                        "example": 999999
+                    },
+                    "booking_code": {
+                        "type": "string",
+                        "example": "123code"
+                    },
+                    "payment_status": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "ticket": {
+                        "type": "integer",
+                        "example": 14
+                    },
+                    "passenger": {
+                        "$ref": "#/components/schemas/newPassenger"
+                    },
+                    "seat_id": {
+                        "$ref": "#/components/schemas/newSeat"
+                    }
+                }
+            },
+            "newPassenger": {
+                "type": "object",
+                "properties": {
+                    "full_name": {
+                        "type": "string",
+                        "example": "M Huda"
+                    },
+                    "clan_name": {
+                        "type": "string",
+                        "example": "Huda"
+                    },
+                    "birth_date": {
+                        "type": "date",
+                        "example": "2001-12-30"
+                    },
+                    "nik_number": {
+                        "type": "string",
+                        "example": "00123"
+                    },
+                    "nationality": {
+                        "type": "string",
+                        "example": "Indonesia"
+                    },
+                    "passenger_role": {
+                        "type": "enum",
+                        "example": "Dewasa"
+                    }
+                }
+            },
+            "newSeat": {
+                "type": "object",
+                "properties": {
+                    "flight_id": {
+                        "type": "integer",
+                        "example": 9
+                    },
+                    "seat_number": {
+                        "type": "integer",
+                        "example": 32
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerToken": {
+                "description": "Insert Token, You can get it after login",
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}

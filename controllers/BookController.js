@@ -32,7 +32,7 @@ const addBooking = async (req, res) => {
         // )
 
         const totalAdults = parseInt(adult);
-        const totalBabies = parseInt(baby);
+        const totalBabies = parseInt(baby) || 0;
         const totalPassengers = totalAdults + totalBabies;
 
         const passengerData = await passenger.bulkCreate(
@@ -55,7 +55,7 @@ const addBooking = async (req, res) => {
 
         const seatPick = await seat.bulkCreate(
             seats.map(seat => ({
-                flight_id: req.flight.id,
+                // flight_id: req.flight.id,
                 seat_number: seat.seat_number
             })),
             { fields: ['flight_id', 'seat_number'] }
@@ -66,14 +66,19 @@ const addBooking = async (req, res) => {
             clan_name: books.clan_name,
             email: books.email,
             phone_number: books.phone_number,
-            ticket_id: req.ticket.id,
+            // ticket_id: req.ticket.id,
             passenger_id: passengerData.map(p => p.id),
             seat_id: seatPick.map(s => s.id),
             total_booking: adult,
-            total_price: (total_booking * req.ticket.price) + (0.1 * total_booking * req.ticket.price),
+            // total_price: (total_booking * req.ticket.price) + (0.1 * total_booking * req.ticket.price),
             booking_code: generateCode(8),
             payment_status: false,
         });
+
+        // await Promise.all([
+        //     passengerData.map(passenger => passenger.setBook(newBooking)),
+        //     seatPick.map(seat => seat.setBook(newBooking))
+        //   ]);
 
         res.status(200).json({
             message: 'Data Anda berhasil disimpan!',
