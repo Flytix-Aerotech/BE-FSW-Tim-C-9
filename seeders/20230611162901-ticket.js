@@ -103,12 +103,6 @@ module.exports = {
           flight_id: 14,
         },
         {
-          price: 12345000,
-          type_of_class: "First",
-          airport_id: 3,
-          flight_id: 12,
-        },
-        {
           price: 9345000,
           type_of_class: "First",
           airport_id: 3,
@@ -121,25 +115,25 @@ module.exports = {
           flight_id: 16,
         },
         {
-          price: 15345000,
+          price: 5923000,
           type_of_class: "Business",
           airport_id: 1,
           flight_id: 14,
         },
         {
-          price: 15345000,
+          price: 6345000,
           type_of_class: "Business",
           airport_id: 1,
           flight_id: 17,
         },
         {
-          price: 15345000,
+          price: 5145000,
           type_of_class: "Business",
           airport_id: 1,
           flight_id: 18,
         },
         {
-          price: 15345000,
+          price: 5325000,
           type_of_class: "Business",
           airport_id: 1,
           flight_id: 19,

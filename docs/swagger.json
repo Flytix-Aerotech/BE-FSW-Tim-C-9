@@ -1266,6 +1266,24 @@
             "bearerToken": []
           }
         ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "adult",
+            "schema": {
+              "type": "string",
+              "example": "1"
+            }
+          },
+          {
+            "in": "query",
+            "name": "baby",
+            "schema": {
+              "type": "string",
+              "example": ""
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -1388,29 +1406,6 @@
                     "message": {
                       "type": "string",
                       "example": "Booking deleted successfully"
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/Books"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Invalid token. Unauthorized.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "failed"
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "only an admin can access."
                     }
                   }
                 }
@@ -1469,7 +1464,7 @@
                   "type": "object",
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/Books"
+                      "$ref": "#/components/schemas/Booking"
                     }
                   }
                 }
@@ -1496,8 +1491,8 @@
               }
             }
           },
-          "404": {
-            "description": "The booking is not found.",
+          "400": {
+            "description": "Invalid data",
             "content": {
               "application/json": {
                 "schema": {
@@ -1509,7 +1504,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Booking not found."
+                      "example": "Invalid data"
                     }
                   }
                 }
@@ -1521,7 +1516,7 @@
     },
     "/histories": {
       "get": {
-        "tags": ["History"],
+        "tags": ["Histories"],
         "summary": "Get Histories",
         "description": "Get All Booking Histories",
         "security": [
@@ -1542,7 +1537,7 @@
                       "example": "success"
                     },
                     "data": {
-                      "$ref": "#/components/schemas/Histories"
+                      "$ref": "#/components/schemas/Booking"
                     }
                   }
                 }
@@ -1574,29 +1569,16 @@
     },
     "/histories/search": {
       "get": {
-        "tags": ["History"],
+        "tags": ["Histories"],
         "summary": "Search history booking",
         "description": "Search history booking by code",
-        "security": [
-          {
-            "bearerToken": []
-          }
-        ],
         "parameters": [
           {
             "in": "query",
-            "name": "user_id",
+            "name": "code",
             "schema": {
-              "type": "integer",
-              "example": null
-            }
-          },
-          {
-            "in": "query",
-            "name": "booking_id",
-            "schema": {
-              "type": "integer",
-              "example": 23
+              "type": "string",
+              "example": "123jad"
             }
           }
         ],
@@ -1612,8 +1594,8 @@
                       "type": "string",
                       "example": "booking hasil pencarian"
                     },
-                    "data": {
-                      "$ref": "#/components/schemas/Histories"
+                    "booking": {
+                      "$ref": "#/components/schemas/Booking"
                     }
                   }
                 }
@@ -1665,22 +1647,26 @@
     },
     "/histories/filter": {
       "get": {
-        "tags": ["History"],
+        "tags": ["Histories"],
         "summary": "Filter history booking",
         "description": "Filter history booking by date",
-        "security": [
-          {
-            "bearerToken": []
-          }
-        ],
         "parameters": [
           {
             "in": "query",
-            "name": "createdAt",
+            "name": "start",
             "schema": {
               "type": "string",
-              "format": "date-time",
-              "example": "200222"
+              "format": "date",
+              "example": "2000-12-22"
+            }
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2000-12-22"
             }
           }
         ],
@@ -1696,8 +1682,70 @@
                       "type": "string",
                       "example": "hasil filter booking"
                     },
-                    "data": {
-                      "$ref": "#/components/schemas/Histories"
+                    "booking": {
+                      "$ref": "#/components/schemas/Booking"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Token tidak valid."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payment": {
+      "get": {
+        "tags": ["Payment"],
+        "summary": "Make Payment",
+        "description": "Make payment with Midtrans",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "code",
+            "schema": {
+              "type": "string",
+              "example": "000jad"
+            }
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "type": "string",
+              "example": "Gopay"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "payment": {
+                      "$ref": "#/components/schemas/Payment"
                     }
                   }
                 }
@@ -1724,8 +1772,8 @@
               }
             }
           },
-          "404": {
-            "description": "Filter is not found.",
+          "400": {
+            "description": "Invalid data",
             "content": {
               "application/json": {
                 "schema": {
@@ -1737,7 +1785,129 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Filter is not found"
+                      "example": "Invalid data"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/send/email-otp": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Send OTP",
+        "description": "Send OTP to email",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "xhudan@google.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "SendOTP": {
+                      "$ref": "#/components/schemas/SendOTP"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Email not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Email not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/verify-otp": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Verify OTP",
+        "description": "Verifying email OTP",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "xhudan@google.com"
+                  },
+                  "otp": {
+                    "type": "string",
+                    "example": "123abc"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Verify": {
+                      "$ref": "#/components/schemas/Verify"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or expired OTP",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid OTP"
                     }
                   }
                 }
