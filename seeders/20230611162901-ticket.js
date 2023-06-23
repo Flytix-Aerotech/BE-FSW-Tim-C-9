@@ -120,6 +120,30 @@ module.exports = {
           airport_id: 3,
           flight_id: 16,
         },
+        {
+          price: 15345000,
+          type_of_class: "Business",
+          airport_id: 1,
+          flight_id: 14,
+        },
+        {
+          price: 15345000,
+          type_of_class: "Business",
+          airport_id: 1,
+          flight_id: 17,
+        },
+        {
+          price: 15345000,
+          type_of_class: "Business",
+          airport_id: 1,
+          flight_id: 18,
+        },
+        {
+          price: 15345000,
+          type_of_class: "Business",
+          airport_id: 1,
+          flight_id: 19,
+        },
       ],
       {}
     );
