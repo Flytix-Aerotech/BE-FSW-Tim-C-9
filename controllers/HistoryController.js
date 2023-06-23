@@ -4,11 +4,11 @@ const moment = require("moment");
 
 const getBooking = async (req, res) => {
   try {
-    const booking = await book.findAll({ include: [{ model: ticket }, { model: passenger }] });
+    const data = await book.findAll({ include: [{ model: ticket }, { model: passenger }] });
 
-    if (booking.length > 0) {
+    if (data.length > 0) {
       res.status(200).json({
-        booking,
+        data,
       });
     } else {
       res.status(200).json({
@@ -51,16 +51,16 @@ const filterBooking = async (req, res) => {
 const searchBookingCode = async (req, res) => {
   try {
     const { code } = req.query;
-    const booking = await book.findAll({
+    const data = await book.findAll({
       where: {
         booking_code: code,
       },
       include: [{ model: ticket }, { model: passenger }],
     });
 
-    if (booking.length > 0) {
+    if (data.length > 0) {
       res.status(200).json({
-        booking,
+        data,
       });
     } else {
       res.status(200).json({
