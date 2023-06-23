@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.ticket, { foreignKey: "ticket_id" });
       this.belongsTo(models.seat, { foreignKey: "seat_id" });
       this.hasOne(models.history, { foreignKey: "booking_id" });
-      this.hasMany(models.transaction, { foreignKey: "booking_id" });
+      this.hasOne(models.payment, { foreignKey: "booking_id" });
     }
   }
 
@@ -28,6 +28,8 @@ module.exports = (sequelize, DataTypes) => {
       phone_number: DataTypes.STRING,
       total_booking: DataTypes.INTEGER,
       total_price: DataTypes.DOUBLE,
+      booking_code: DataTypes.STRING,
+      payment_status: DataTypes.BOOLEAN,
     },
     {
       sequelize,

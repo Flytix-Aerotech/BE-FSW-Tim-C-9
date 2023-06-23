@@ -1432,6 +1432,82 @@
             "example": "dewasa"
           }
         }
+      },
+      "Book": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": "integer",
+            "example": 3
+          },
+          "seat_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "passenger_id": {
+            "type": "integer",
+            "example": 4
+          },
+          "full_name": {
+            "type": "string",
+            "example": "Helmy"
+          },
+          "clan_name": {
+            "type": "string",
+            "example": "Fadlail"
+          },
+          "email": {
+            "type": "string",
+            "example": "helmy@gmail.com"
+          },
+          "phone_number": {
+            "type": "string",
+            "example": "0812353452"
+          },
+          "total_booking": {
+            "type": "integer",
+            "example": 1
+          },
+          "total_price": {
+            "type": "number",
+            "format": "1231000"
+          },
+          "booking_code": {
+            "type": "string",
+            "example": "se1v12asfd2"
+          }
+        }
+      },
+      "History": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "example": 4
+          },
+          "booking_id": {
+            "type": "integer",
+            "example": 1
+          }
+        }
+      },
+      "Payment": {
+        "type": "object",
+        "properties": {
+          "booking_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "type_of_payment": {
+            "type": "string",
+            "enum": ["OneWay", "RoundTrip"],
+            "example": "OneWay"
+          },
+          "price": {
+            "type": "number",
+            "example": "12300000"
+          }
+        }
       }
     },
     "securitySchemes": {

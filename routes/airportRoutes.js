@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { getAirport, getAirplaneById, addAirport, updateAirport, deleteAirport } = require("../controllers/airportController");
+const { getAirport, getAirplaneById, addAirport, updateAirport, deleteAirport } = require("../controllers/AirportController");
 
 router.get("/", getAirport);
 router.get("/:id", getAirplaneById);

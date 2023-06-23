@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const Auth = require("../middleware/Auth");
 const { getTicket, getTicketById, filterTicket, searchTicket, addTicket } = require("../controllers/TicketController");
 
 router.get("", getTicket);

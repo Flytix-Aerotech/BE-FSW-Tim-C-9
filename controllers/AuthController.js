@@ -3,6 +3,8 @@ const bcrypt = require("bcrypt");
 const { uploadToImagekit } = require("../lib/imagekit");
 const { user } = require("../models");
 const catchAsync = require("../utils/catchAsync");
+const otpGenerator = require("otp-generator");
+const nodemailer = require("nodemailer");
 
 // user login
 const login = catchAsync(async (req, res) => {
@@ -119,12 +121,78 @@ const resetPassword = catchAsync(async (req, res) => {
     .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
 });
 
+let otpCache = {};
+
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Generate OTP
+    const otp = otpGenerator.generate(6, { digits: true, alphabets: false, upperCase: false, specialChars: false });
+
+    // Simpan OTP ke cache
+    otpCache[email] = otp;
+
+    // Konfigurasi transporter Nodemailer
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASS,
+      },
+    });
+
+    // Konfigurasi email
+    const mailOptions = {
+      from: "Flytix",
+      to: email,
+      subject: "Verification Code",
+      text: `Your OTP: ${otp}`,
+    };
+
+    // Kirim email
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: "OTP sent to email" });
+  } catch (error) {
+    console.error("Error sending OTP:", error);
+    res.status(500).json({ message: "Error sending OTP" });
+  }
+};
+
+const verifyOTP = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    // Ambil OTP dari cache berdasarkan email
+    const cachedOTP = otpCache[email];
+
+    if (!cachedOTP) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    if (otp === cachedOTP) {
+      // OTP valid
+      delete otpCache[email]; // Hapus OTP dari cache setelah diverifikasi
+      return res.status(200).json({ message: "OTP verified successfully" });
+    } else {
+      // OTP tidak valid
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+  } catch (error) {
+    console.error("Error verifying OTP:", error);
+    res.status(500).json({ message: "Error verifying OTP" });
+  }
+};
+
 module.exports = {
   login,
   register,
   getUsers,
   updateProfile,
   getProfile,
+  forgotPassword,
+  verifyOTP,
   getUserByEmail,
   resetPassword,
 };

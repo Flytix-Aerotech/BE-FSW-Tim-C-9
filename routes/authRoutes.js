@@ -1,5 +1,15 @@
 const router = require("express").Router();
-const { login, register, getUsers, getProfile, updateProfile, getUserByEmail, resetPassword } = require("../controllers/AuthController.js");
+const {
+  login,
+  register,
+  getUsers,
+  getProfile,
+  updateProfile,
+  getUserByEmail,
+  resetPassword,
+  forgotPassword,
+  verifyOTP,
+} = require("../controllers/AuthController.js");
 
 // middleware
 const Auth = require("../middleware/Auth.js");
@@ -15,5 +25,7 @@ router.post("/user", getUserByEmail);
 router.put("/reset-password/:username", resetPassword);
 router.get("/profile", Auth.verifyUser, Auth.isUser, getProfile);
 router.put("/profile", Auth.verifyUser, Auth.isUser, upload, updateProfile);
+router.post("/send/email-otp", forgotPassword);
+router.post("/verify-otp", verifyOTP);
 
 module.exports = router;

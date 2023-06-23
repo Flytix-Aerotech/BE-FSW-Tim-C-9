@@ -8,11 +8,12 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.hasOne(models.transaction, { foreignKey: "payment_id" });
+      this.belongsTo(models.book, { foreignKey: "booking_id" });
     }
   }
   payment.init(
     {
+      booking_id: DataTypes.INTEGER,
       type_of_payment: {
         type: DataTypes.ENUM("Gopay", "Dana", "Akulaku"),
       },

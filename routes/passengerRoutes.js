@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { getPassenger, getPassengerById, addPassenger, updatePassenger, deletePassenger } = require("../controllers/passengerController");
+const { getPassenger, getPassengerById, addPassenger, updatePassenger, deletePassenger } = require("../controllers/PassengerController");
 
 router.get("/", getPassenger);
 router.get("/:id", getPassengerById);
