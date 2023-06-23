@@ -33,13 +33,15 @@ let getBooking = async (req, res) => {
 
 const filterBooking = async (req, res) => {
     try {
-        const { date } = req.query;
+        const { start, end } = req.query;
+        const starting = moment(start).format('YYYYMMDD');
+        const ending = moment(end).format('YYYYMMDD');
         const data = await book.findAll({
             where: {
                 createdAt: {
                     [Op.between]: [ // ?start=YYYY-MM-DD&end=YYYY-MM-DD
-                        moment(date).startOf('day').toISOString(),
-                        moment(date).endOf('day').toISOString()
+                        starting,
+                        ending
                     ]
                 },
             },
