@@ -34,9 +34,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       payment_status: {
-        allowNull: false,
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
+        type: Sequelize.ENUM("Pending", "Issued", "Cancelled"),
       },
       createdAt: {
         allowNull: false,

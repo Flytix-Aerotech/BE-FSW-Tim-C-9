@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       booking_id: DataTypes.INTEGER,
       type_of_payment: {
-        type: DataTypes.ENUM(["Gopay", "Dana", "Akulaku"]),
+        type: DataTypes.ENUM("Gopay", "Dana", "Akulaku"),
       },
     },
     {

@@ -207,69 +207,6 @@
                 }
             }
         },
-        "/booking/{id}": {
-            "delete": {
-                "tags": [
-                    "Booking"
-                ],
-                "summary": "Delete Booking",
-                "description": "Remove existing booking by id.",
-                "security": [
-                    {
-                        "bearerToken": []
-                    }
-                ],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "id",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Booking deleted successfully"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "The booking is not found.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "failed"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Booking not found."
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/booking/pay/{code}": {
             "get": {
                 "summary": "Pay Booking by code",

@@ -1,4 +1,6 @@
 const { book, passenger, ticket, seat } = require('../models/');
+const { getTransactionStatus } = require('../middleware/midtrans');
+const cron = require('node-cron');
 
 const addBooking = async (req, res) => {
     function generateCode(length) {
@@ -17,19 +19,6 @@ const addBooking = async (req, res) => {
         const { books, passengers, seats } = req.body;
         const { adult, baby } = req.query;
 
-        // const passengerData = await passenger.bulkCreate(
-        //     passengers.map((passenger, index) => ({
-        //         full_name: passenger.full_name,
-        //         clan_name: passenger.clan_name,
-        //         birth_date: passenger.birth_date,
-        //         nik_number: passenger.nik_number,
-        //         nationality: passenger.nationality,
-        //         passenger_role: index < adult ? 'Dewasa' : 'Bayi'
-        //     })),
-        //     {
-        //         fields: ['full_name', 'clan_name', 'birth_date', 'nik_number', 'nationality', 'passenger_role']
-        //     }
-        // )
         const newBooking = await book.create({
             full_name: books.full_name,
             clan_name: books.clan_name,
@@ -39,9 +28,9 @@ const addBooking = async (req, res) => {
             total_booking: adult,
             total_price: (total_booking * req.ticket.price) + (0.1 * total_booking * req.ticket.price),
             booking_code: generateCode(8),
-            payment_status: false,
+            payment_status: "Pending",
         });
-        
+
         const totalAdults = parseInt(adult);
         const totalBabies = parseInt(baby) || 0;
         const totalPassengers = totalAdults + totalBabies;
@@ -73,6 +62,33 @@ const addBooking = async (req, res) => {
             })),
             { fields: ['flight_id', 'seat_number', 'booking_id'] }
         );
+
+        cron.schedule('* * * * *', async () => { // every minute
+            const statusResponse = await getTransactionStatus(newBooking.booking_code);
+
+            let paymentStatus;
+            if (statusResponse.transaction_status === 'settlement') {
+                paymentStatus = 'Issued';
+            } else if (statusResponse.transaction_status === 'failure') {
+                paymentStatus = 'Cancelled';
+            } else {
+                paymentStatus = 'Pending';
+            }
+
+            await newBooking.update({ payment_status: paymentStatus });
+        });
+
+        cron.schedule('59 59 23 * * *', async () => { // 59 second 59 minutes 23 hours
+            if (newBooking.payment_status === 'Issued') {
+                await seat.destroy({
+                    where: { booking_id: newBooking.id }
+                });
+                await book.update(
+                    { payment_status: 'Cancelled' },
+                    { where: { id: newBooking.id } }
+                );
+            }
+        });
 
         res.status(200).json({
             message: 'Data Anda berhasil disimpan!',

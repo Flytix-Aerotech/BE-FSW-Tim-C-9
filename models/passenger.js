@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       nik_number: DataTypes.STRING,
       nationality: DataTypes.STRING,
       passenger_role: {
-        type: DataTypes.ENUM(["Dewasa", "Bayi"]),
+        type: DataTypes.ENUM("Dewasa", "Bayi"),
       },
       booking_id: DataTypes.INTEGER,
     },

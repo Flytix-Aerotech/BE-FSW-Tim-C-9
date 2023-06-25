@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       type_of_payment: {
-        type: Sequelize.ENUM(["Gopay", "Dana", "Akulaku"]),
+        type: Sequelize.ENUM("Gopay", "Dana", "Akulaku"),
       },
       createdAt: {
         allowNull: false,
