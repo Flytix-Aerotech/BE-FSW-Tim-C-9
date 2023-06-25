@@ -20,7 +20,7 @@ router.get("/users", getUsers);
 // API
 router.post("/login", login);
 router.post("/register", upload, register);
-router.put("/reset-password/:username", resetPassword);
+router.put("/reset-password/:email", resetPassword);
 router.get("/profile", Auth.verifyUser, Auth.isUser, getProfile);
 router.put("/profile", Auth.verifyUser, Auth.isUser, upload, updateProfile);
 router.post("/send/email-otp", forgotPassword);
