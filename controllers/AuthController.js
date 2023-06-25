@@ -95,7 +95,7 @@ const updateProfile = catchAsync(async (req, res) => {
 
 // reset password
 const resetPassword = catchAsync(async (req, res) => {
-  const { username } = req.params;
+  const { email } = req.params;
   const { password, confirmPassword } = req.body;
 
   if (password !== confirmPassword) {
@@ -104,7 +104,7 @@ const resetPassword = catchAsync(async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
   await user
-    .update({ password: hashedPassword }, { where: { username } })
+    .update({ password: hashedPassword }, { where: { email } })
     .then(() => res.status(201).json({ msg: "Password reset successfully" }))
     .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
 });
@@ -172,16 +172,7 @@ const forgotPassword = catchAsync(async (req, res) => {
 
       await transporter.sendMail(mailOptions);
 
-      const censorWord = function (str) {
-        return str[0] + "*".repeat(str.length - 2) + str.slice(-1);
-      };
-
-      const censorEmail = function (email) {
-        const arr = email.split("@");
-        return censorWord(arr[0]) + "@" + arr[1];
-      };
-
-      res.status(200).json({ msg: "OTP sent to email", email: censorEmail(user.email) });
+      res.status(200).json({ msg: "OTP sent to email", user });
     })
     .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
 });
