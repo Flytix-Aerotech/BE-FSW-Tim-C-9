@@ -15,6 +15,9 @@ module.exports = {
       seat_number: {
         type: Sequelize.INTEGER,
       },
+      booking_id: {
+        type: Sequelize.INTEGER,
+      },
       createdAt: {
         allowNull: true,
         type: Sequelize.DATE,

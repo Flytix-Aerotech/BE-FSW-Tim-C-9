@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.hasOne(models.book, { foreignKey: "passenger_id" });
+      this.belongsTo(models.book, { foreignKey: 'booking_id' });
     }
   }
   passenger.init(
@@ -19,8 +19,9 @@ module.exports = (sequelize, DataTypes) => {
       nik_number: DataTypes.STRING,
       nationality: DataTypes.STRING,
       passenger_role: {
-        type: DataTypes.ENUM(["Dewasa", "Bayi"]),
+        type: DataTypes.ENUM("Dewasa", "Bayi"),
       },
+      booking_id: DataTypes.INTEGER,
     },
     {
       sequelize,

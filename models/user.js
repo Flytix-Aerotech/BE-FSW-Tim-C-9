@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM("admin", "user", "guest"),
         defaultValue: "user",
       },
+      active: DataTypes.BOOLEAN,
     },
     {
       sequelize,

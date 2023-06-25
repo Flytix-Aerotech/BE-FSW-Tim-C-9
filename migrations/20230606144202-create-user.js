@@ -30,6 +30,9 @@ module.exports = {
       role: {
         type: Sequelize.ENUM("admin", "user", "guest"),
       },
+      active: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
