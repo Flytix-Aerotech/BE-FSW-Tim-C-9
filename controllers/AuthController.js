@@ -65,8 +65,9 @@ const getUsers = catchAsync(async (req, res) => {
 
 // Get Profile
 const getProfile = catchAsync(async (req, res) => {
+  const { id } = req.user;
   await user
-    .findOne({ where: { id: req.user.id } })
+    .findOne({ where: { id } })
     .then((user) => res.status(200).json({ user }))
     .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
 });
@@ -75,10 +76,11 @@ const getProfile = catchAsync(async (req, res) => {
 const updateProfile = catchAsync(async (req, res) => {
   const { id } = req.user;
   const { full_name, email, username, phone_number } = req.body;
+  const findUser = await user.findByPk(id);
 
   let updateImage = "";
   if (req.file === undefined) {
-    updateImage = photo;
+    updateImage = findUser.photo;
   } else if (req.file) {
     if (req.file.size > 3000000) {
       res.status(400).json({ msg: "Image should be no more than 3MB" });
