@@ -103,32 +103,6 @@ const addBooking = async (req, res) => {
     }
 };
 
-const deleteBooking = async (req, res) => {
-    try {
-        const books = await book.findOne({
-            where: {
-                id: req.params.id
-            },
-        });
-        if (!books) {
-            throw new Error('Booking not found');
-        }
-        await seat.destroy({
-            where: {
-                id: books.seat_id
-            }
-        });
-        await books.update({ seat_id: null });
-        res.status(200).json({
-            message: 'Booking deleted successfully'
-        });
-    } catch (error) {
-        res.status(error.statusCode || 500).json({
-            message: error.message,
-        });
-    }
-};
-
 const payBooking = async (req, res) => {
     try {
         const { code } = req.params;
@@ -153,6 +127,5 @@ const payBooking = async (req, res) => {
 
 module.exports = {
     addBooking,
-    deleteBooking,
     payBooking,
 };
