@@ -28,7 +28,10 @@ module.exports = {
         type: Sequelize.TEXT,
       },
       role: {
-        type: Sequelize.ENUM(["admin", "user", "guest"]),
+        type: Sequelize.ENUM("admin", "user", "guest"),
+      },
+      active: {
+        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,

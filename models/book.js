@@ -8,10 +8,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      this.belongsTo(models.passenger, { foreignKey: "passenger_id" });
+      this.hasMany(models.passenger, { foreignKey: 'booking_id' });
+      this.hasMany(models.seat, { foreignKey: 'booking_id' });
       this.belongsTo(models.ticket, { foreignKey: "ticket_id" });
-      this.belongsTo(models.seat, { foreignKey: "seat_id" }); // this.hasOne(models.seat, { foreignKey: "booking_id" });
       this.hasMany(models.history, { foreignKey: "booking_id" }); // this.hasOne(models.history, { foreignKey: "booking_id" });
       this.hasOne(models.payment, { foreignKey: "booking_id" }); // this.hasMany(models.transaction, { foreignKey: "booking_id" });
     }
@@ -23,8 +22,6 @@ module.exports = (sequelize, DataTypes) => {
       email: DataTypes.STRING,
       phone_number: DataTypes.STRING,
       ticket_id: DataTypes.INTEGER,
-      passenger_id: DataTypes.INTEGER,
-      seat_id: DataTypes.INTEGER,
       total_booking: DataTypes.INTEGER,
       total_price: DataTypes.DOUBLE,
       booking_code: DataTypes.STRING,

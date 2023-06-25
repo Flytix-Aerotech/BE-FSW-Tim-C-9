@@ -6,8 +6,12 @@
   },
   "servers": [
     {
-      "url": "https://flytix-c9.up.railway.app/",
+      "url": "https://flytix-aerotech.up.railway.app/api/v1",
       "description": "public"
+    },
+    {
+      "url": "https://flytix-c9.up.railway.app/api/v1",
+      "description": "public production"
     },
     {
       "url": "http://localhost:8000/api/v1",
@@ -16,233 +20,537 @@
   ],
   "tags": [
     {
-      "name": "Airport",
-      "description": "Airport API Collection"
+      "name": "Auth",
+      "description": "Auth API Collection"
+    },
+    {
+      "name": "Ticket",
+      "description": "This is API for managing CRUD PRODUCTS"
     }
   ],
   "paths": {
-    "/airports": {
+    "/auth/register": {
       "post": {
-          "summary": "Create Airport",
-          "tags": ["Airport"],
-          "description": "Add new airport on the database",
-          "security": [
-            {
-              "bearerToken": []
+        "summary": "Register",
+        "tags": ["Auth"],
+        "description": "Create new user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Users"
+              }
             }
-          ],
-          "requestBody": {
-            "required": true,
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Registration success",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Airport"
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string",
+                      "example": "User created successfully"
+                    },
+                    "user": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Users"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "format": "date"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }
           },
-          "responses": {
-            "200": {
-              "description": "A successful response.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "status": {
-                        "type": "string",
-                        "example": "success"
-                      },
-                      "message": {
-                        "type": "string",
-                        "example": "Berhasil menambahkan data bandara."
-                      },
-                      "data": {
-                        "$ref": "#/components/schemas/airportResponse"
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "401": {
-              "description": "Invalid token. Unauthorized.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "status": {
-                        "type": "string",
-                        "example": "failed"
-                      },
-                      "message": {
-                        "type": "string",
-                        "example": "Unauthorized"
-                      }
+          "400": {
+            "description": "Email already registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string",
+                      "example": "User already exists."
                     }
                   }
                 }
               }
             }
           }
-      },
-      "get": {
-          "summary": "List Airports",
-          "tags": ["Airport"],
-          "description": "Retrieve list of airport",
-          "responses": {
-            "200": {
-              "description": "A successful response.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "data": {
-                        "$ref": "#/components/schemas/Airport"
-                      },
-                      "count": {
-                        "type": "integer",
-                        "example": 1
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
+        }
       }
     },
-    "/airports/{id}": {
-      "get": {
-          "tags": ["Airport"],
-          "summary": "Get An Airport",
-          "description": "Retrieve airport detail",
-          "parameters": [
-            {
-              "in": "path",
-              "name": "id",
-              "required": true
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "A successful response.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/Airport"
-                  }
-                }
-              }
-            },
-            "404": {
-              "description": "The airport id is not found.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "status": {
-                        "type": "string",
-                        "example": "failed"
-                      },
-                      "message": {
-                        "type": "string",
-                        "example": "The airport id is not found"
-                      }
-                    }
+    "/auth/login": {
+      "post": {
+        "summary": "Login",
+        "tags": ["Auth"],
+        "description": "Retrieve access tokens",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "habbin@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "habbin123"
                   }
                 }
               }
             }
           }
-      },
-      "put": {
-          "tags": ["Airport"],
-          "summary": "Update Airport",
-          "description": "Change airport information",
-          "security": [
-            {
-              "bearerToken": []
-            }
-          ],
-          "parameters": [
-            {
-              "in": "path",
-              "name": "id",
-              "required": true
-            }
-          ],
-          "requestBody": {
-            "required": true,
+        },
+        "responses": {
+          "200": {
+            "description": "Login success",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Airports"
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string",
+                      "example": "Login successful"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNjg2NDA3MTI1fQ.AAGnkjiWm0qQYKqFYyTWGPq3MtzBQ2ZNh7idomC-q0w"
+                    }
+                  }
                 }
               }
             }
           },
-          "responses": {
-            "200": {
-              "description": "A successful response.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "status": {
-                        "type": "string",
-                        "example": "success"
-                      },
-                      "message": {
-                        "type": "string",
-                        "example": "Data bandara berhasil diubah."
-                      },
-                      "data": {
-                        "$ref": "#/components/schemas/Airport"
-                      }
+          "400": {
+            "description": "wrong password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "Passwords don't match"
+                    },
+                    "user": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Users"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "format": "date"
+                            }
+                          }
+                        }
+                      ]
                     }
                   }
                 }
               }
-            },
-            "401": {
-              "description": "Invalid token. Unauthorized.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "status": {
-                        "type": "string",
-                        "example": "failed"
-                      },
-                      "message": {
-                        "type": "string",
-                        "example": "Unauthorized."
-                      }
+            }
+          }
+        }
+      }
+    },
+    "/auth/users": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Get User",
+        "description": "Get All Users information",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Users"
                     }
                   }
                 }
               }
-            },
-            "404": {
-              "description": "The airport id is not found.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "status": {
-                        "type": "string",
-                        "example": "failed"
-                      },
-                      "message": {
-                        "type": "string",
-                        "example": "The airport id is not found."
+            }
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/user": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Search Email",
+        "description": "Get information email user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "emailbaru@gmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "user": {
+                      "$ref": "#/components/schemas/Users"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "Email not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/reset-password/{username}": {
+      "put": {
+        "tags": ["Auth"],
+        "summary": "Reset Password",
+        "description": "Reset password using email by query",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string",
+                    "example": "rahasia"
+                  },
+                  "consfirmPassword": {
+                    "type": "string",
+                    "example": "rahasia"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "Password reset successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "Email not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/profile": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Get User",
+        "description": "Get user information",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "user": {
+                      "$ref": "#/components/schemas/Users"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Auth"],
+        "summary": "Update User",
+        "description": "Change user information",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "full_Name": {
+                    "type": "string",
+                    "example": "Dza"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "emailbaru@gmail.com"
+                  },
+                  "username": {
+                    "type": "string",
+                    "example": "dzaaa"
+                  },
+                  "phone_number": {
+                    "type": "string",
+                    "example": "081384753928"
+                  },
+                  "photo": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "profile updated successfully"
+                    },
+                    "user": {
+                      "$ref": "#/components/schemas/Users"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tickets": {
+      "get": {
+        "tags": ["Ticket"],
+        "summary": "Returns a list of ticket",
+        "description": "This is API for get all ticket data",
+        "responses": {
+          "200": {
+            "description": "Success get all products data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "price": {
+                          "type": "number",
+                          "format": "double",
+                          "example": "2000000"
+                        },
+                        "type_of_class": {
+                          "type": "string",
+                          "enum": ["Economy", "Business", "First", "Quiet"],
+                          "example": "Economy"
+                        },
+                        "flight_id": {
+                          "$ref": "#/components/schemas/Flights"
+                        },
+                        "airport_id": {
+                          "$ref": "#/components/schemas/Airports"
+                        }
                       }
                     }
                   }
@@ -250,11 +558,472 @@
               }
             }
           }
+        }
       },
-      "delete": {
-        "tags": ["Airport"],
-        "summary": "Delete Airport",
-        "description": "Remove existing airport by id.",
+      "post": {
+        "summary": "Create Tickets",
+        "tags": ["Ticket"],
+        "description": "Add new ticket on the database",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tickets"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Tickets"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token. Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Hanya bisa diakses oleh admin."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tickets/{id}": {
+      "get": {
+        "tags": ["Ticket"],
+        "summary": "Returns a list of ticket by id",
+        "description": "This is API for get ticket data by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Input ID of the products to get",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get products data by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "price": {
+                          "type": "number",
+                          "format": "double",
+                          "example": "2000000"
+                        },
+                        "type_of_class": {
+                          "type": "string",
+                          "enum": ["Economy", "Business", "First", "Quiet"],
+                          "example": "Economy"
+                        },
+                        "flight_id": {
+                          "$ref": "#/components/schemas/Flights"
+                        },
+                        "airport_id": {
+                          "$ref": "#/components/schemas/Airports"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tickets/filter": {
+      "post": {
+        "summary": "Create Tickets",
+        "tags": ["Ticket"],
+        "description": "Add new ticket on the database",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type_of_class": {
+                    "type": "string",
+                    "enum": ["Economy", "Business", "First", "Premium"],
+                    "example": "Economy"
+                  },
+                  "departure_date": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2023-06-22"
+                  },
+                  "arrival_date": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2023-06-22"
+                  },
+                  "departure_location": {
+                    "type": "string",
+                    "example": "Jakarta"
+                  },
+                  "arrival_location": {
+                    "type": "string",
+                    "example": "Surabaya"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "price": {
+                          "type": "number",
+                          "format": "double",
+                          "example": "2000000"
+                        },
+                        "type_of_class": {
+                          "type": "string",
+                          "enum": ["Economy", "Business", "First", "Quiet"],
+                          "example": "Economy"
+                        },
+                        "flight_id": {
+                          "$ref": "#/components/schemas/Flights"
+                        },
+                        "airport_id": {
+                          "$ref": "#/components/schemas/Airports"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token. Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Hanya bisa diakses oleh admin."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tickets/search": {
+      "get": {
+        "tags": ["Ticket"],
+        "summary": "Search ticket",
+        "description": "Retrieve ticket detail",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "dl",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bali"
+            }
+          },
+          {
+            "in": "query",
+            "name": "al",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Surabaya"
+            }
+          },
+          {
+            "in": "query",
+            "name": "dd",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2022-12-26"
+            }
+          },
+          {
+            "in": "query",
+            "name": "ad",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2022-12-26"
+            }
+          },
+          {
+            "in": "query",
+            "name": "toc",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Economy"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "price": {
+                          "type": "number",
+                          "format": "double",
+                          "example": "2000000"
+                        },
+                        "type_of_class": {
+                          "type": "string",
+                          "enum": ["Economy", "Business", "First", "Quiet"],
+                          "example": "Economy"
+                        },
+                        "flight_id": {
+                          "$ref": "#/components/schemas/Flights"
+                        },
+                        "airport_id": {
+                          "$ref": "#/components/schemas/Airports"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The ticket id is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "departure_date": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "arrival_date": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "departure_location": {
+                      "type": "string"
+                    },
+                    "arrival_location": {
+                      "type": "string"
+                    },
+                    "type_of_class": {
+                      "type": "string",
+                      "enum": ["Economy", "Business", "First", "Quiet"]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/passengers": {
+      "post": {
+        "summary": "Create Passenger",
+        "tags": ["Passenger"],
+        "description": "Add new passenger on the database",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Passengers"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "Passenger created successfully"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Passengers"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token. Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "Access denied"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Passengers",
+        "tags": ["Passenger"],
+        "description": "Retrieve list of passenger",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Passengers"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token. Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "Access denied"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/passengers/{id}": {
+      "get": {
+        "tags": ["Passenger"],
+        "summary": "Get An Passenger",
+        "description": "Retrieve passenger detail",
         "security": [
           {
             "bearerToken": []
@@ -264,7 +1033,1128 @@
           {
             "in": "path",
             "name": "id",
-            "required": true
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Passengers"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The passenger id is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "ID passenger not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Passenger"],
+        "summary": "Update Passenger",
+        "description": "Change passenger information",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Passengers"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "Passenger update successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token. Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "Access denied"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The airport id is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "ID passenger not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Passenger"],
+        "summary": "Delete Passenger",
+        "description": "Remove existing passenger by id.",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "Passenger has been deleted successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token. Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "Access denied"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The Passenger id is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "ID Passenger not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/booking": {
+      "post": {
+        "summary": "Create Booking",
+        "tags": ["Book"],
+        "description": "Add new Booking on the database",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "adult",
+            "schema": {
+              "type": "string",
+              "example": "1"
+            }
+          },
+          {
+            "in": "query",
+            "name": "baby",
+            "schema": {
+              "type": "string",
+              "example": ""
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/Books"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data Anda berhasil disimpan!"
+                    },
+                    "data": {
+                      "allOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer",
+                              "example": 1
+                            }
+                          }
+                        },
+                        {
+                          "$ref": "#/components/schemas/Books"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token. Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/booking/{id}": {
+      "delete": {
+        "tags": ["Book"],
+        "summary": "Delete Booking",
+        "description": "Remove existing booking by id.",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Booking deleted successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The booking is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Booking not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/booking/pay/{code}": {
+      "get": {
+        "summary": "Pay Booking by code",
+        "tags": ["Book"],
+        "description": "Retrieve the paid booking by code ",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Booking"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token. Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid data"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/histories": {
+      "get": {
+        "tags": ["Histories"],
+        "summary": "Get Histories",
+        "description": "Get All Booking Histories",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Booking"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Token tidak valid."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/histories/search": {
+      "get": {
+        "tags": ["Histories"],
+        "summary": "Search history booking",
+        "description": "Search history booking by code",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "code",
+            "schema": {
+              "type": "string",
+              "example": "123jad"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "booking hasil pencarian"
+                    },
+                    "booking": {
+                      "$ref": "#/components/schemas/Booking"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Token tidak valid."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Booking is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Anda belum melakukan pemesanan penerbangan"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/histories/filter": {
+      "get": {
+        "tags": ["Histories"],
+        "summary": "Filter history booking",
+        "description": "Filter history booking by date",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2000-12-22"
+            }
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2000-12-22"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "hasil filter booking"
+                    },
+                    "booking": {
+                      "$ref": "#/components/schemas/Booking"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Token tidak valid."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payment": {
+      "get": {
+        "tags": ["Payment"],
+        "summary": "Make Payment",
+        "description": "Make payment with Midtrans",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "code",
+            "schema": {
+              "type": "string",
+              "example": "000jad"
+            }
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "type": "string",
+              "example": "Gopay"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "payment": {
+                      "$ref": "#/components/schemas/Payment"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Token tidak valid."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid data"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/send/email-otp": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Send OTP",
+        "description": "Send OTP to email",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "xhudan@google.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "SendOTP": {
+                      "$ref": "#/components/schemas/SendOTP"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Email not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Email not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/verify-otp": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Verify OTP",
+        "description": "Verifying email OTP",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "xhudan@google.com"
+                  },
+                  "otp": {
+                    "type": "string",
+                    "example": "123abc"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Verify": {
+                      "$ref": "#/components/schemas/Verify"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or expired OTP",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid OTP"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/airports": {
+      "post": {
+        "summary": "Create Airport",
+        "tags": ["Airport"],
+        "description": "Add new airport on the database",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Airports"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Berhasil menambahkan data bandara."
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Airports"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token. Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Airports",
+        "tags": ["Airport"],
+        "description": "Retrieve list of airport",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Airports"
+                    },
+                    "count": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/airports/{id}": {
+      "get": {
+        "tags": ["Airport"],
+        "summary": "Get An Airport",
+        "description": "Retrieve airport detail",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Airports"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The airport id is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "The airport id is not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Airport"],
+        "summary": "Update Airport",
+        "description": "Change airport information",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Airports"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data bandara berhasil diubah."
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Airports"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token. Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The airport id is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "The airport id is not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Airport"],
+        "summary": "Delete Airport",
+        "description": "Remove existing airport by id.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -332,32 +2222,265 @@
       }
     }
   },
-"components": {
+  "components": {
     "schemas": {
-      "Airport": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string",
-              "example": "Juanda"
-            },
-            "location": {
-              "type": "string",
-              "example": "Surabaya"
-            },
-            "code" :{
-              "type": "string",
-              "example" : "123"
-            }
+      "Users": {
+        "type": "object",
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "example": "habbin"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "habbin@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "habbin123"
+          },
+          "username": {
+            "type": "string",
+            "example": "habbin"
+          },
+          "phone_number": {
+            "type": "string",
+            "example": "08123456789"
+          },
+          "photo": {
+            "type": "string",
+            "format": "binary",
+            "example": "url photo"
           }
+        }
+      },
+      "Tickets": {
+        "type": "object",
+        "properties": {
+          "premium_price": {
+            "type": "integer",
+            "format": "double",
+            "example": "3500000"
+          },
+          "first_price": {
+            "type": "integer",
+            "format": "double",
+            "example": "9500000"
+          },
+          "economy_price": {
+            "type": "integer",
+            "format": "double",
+            "example": "1500000"
+          },
+          "bussines_price": {
+            "type": "integer",
+            "format": "double",
+            "example": "5100000"
+          },
+          "type_of_class": {
+            "type": "string",
+            "enum": ["Economy", "Business", "First", "Premium"],
+            "example": "Economy"
+          },
+          "airport_id": {
+            "type": "integer",
+            "example": "3"
+          },
+          "flight_id": {
+            "type": "integer",
+            "example": "1"
+          }
+        }
+      },
+      "Flights": {
+        "type": "object",
+        "properties": {
+          "flight_number": {
+            "type": "number",
+            "format": "integer",
+            "example": "3"
+          },
+          "departure_time": {
+            "type": "string",
+            "format": "date",
+            "example": "09:00"
+          },
+          "arrival_time": {
+            "type": "string",
+            "format": "date",
+            "example": "10:00"
+          },
+          "departure_date": {
+            "type": "string",
+            "format": "date",
+            "example": "2023-06-22"
+          },
+          "arrival_date": {
+            "type": "string",
+            "format": "date",
+            "example": "2023-06-22"
+          },
+          "departure_location": {
+            "type": "string",
+            "example": "Jakarta"
+          },
+          "arrival_location": {
+            "type": "string",
+            "example": "Surabaya"
+          },
+          "from_id": {
+            "type": "string",
+            "format": "char",
+            "example": "JKT"
+          },
+          "to_id": {
+            "type": "string",
+            "format": "char",
+            "example": "SBY"
+          },
+          "airline": {
+            "type": "string",
+            "example": "LION AIR"
+          },
+          "type_of_flight": {
+            "type": "string",
+            "enum": ["OneWay", "RoundTrip"],
+            "example": "OneWay"
+          }
+        }
+      },
+      "Airports": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Abdulrachman Saleh"
+          },
+          "location": {
+            "type": "string",
+            "example": "Malang"
+          },
+          "code": {
+            "type": "string",
+            "example": "ABS"
+          }
+        }
+      },
+      "Passengers": {
+        "type": "object",
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "example": "habbin"
+          },
+          "clan_name": {
+            "type": "string",
+            "example": "Nofaylah"
+          },
+          "birth_date": {
+            "type": "string",
+            "format": "YYYY-MM-DD",
+            "example": "2003-05-22"
+          },
+          "nik_number": {
+            "type": "string",
+            "example": "8080808080808081"
+          },
+          "nationality": {
+            "type": "string",
+            "example": "Indonesia"
+          },
+          "passenger_role": {
+            "type": "string",
+            "example": "dewasa"
+          }
+        }
+      },
+      "Books": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": "integer",
+            "example": 3
+          },
+          "seat_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "passenger_id": {
+            "type": "integer",
+            "example": 4
+          },
+          "full_name": {
+            "type": "string",
+            "example": "Helmy"
+          },
+          "clan_name": {
+            "type": "string",
+            "example": "Fadlail"
+          },
+          "email": {
+            "type": "string",
+            "example": "helmy@gmail.com"
+          },
+          "phone_number": {
+            "type": "string",
+            "example": "0812353452"
+          },
+          "total_booking": {
+            "type": "integer",
+            "example": 1
+          },
+          "total_price": {
+            "type": "number",
+            "format": "1231000"
+          },
+          "booking_code": {
+            "type": "string",
+            "example": "se1v12asfd2"
+          }
+        }
+      },
+      "Histories": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "example": 4
+          },
+          "booking_id": {
+            "type": "integer",
+            "example": 1
+          }
+        }
+      },
+      "Payments": {
+        "type": "object",
+        "properties": {
+          "booking_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "type_of_payment": {
+            "type": "string",
+            "enum": ["OneWay", "RoundTrip"],
+            "example": "OneWay"
+          },
+          "price": {
+            "type": "number",
+            "example": "12300000"
+          }
+        }
       }
     },
     "securitySchemes": {
       "bearerToken": {
-          "description": "Insert Token, You can get it after login",
-          "type": "http",
-          "scheme": "bearer",
-          "bearerFormat": "JWT"
+        "description": "Insert Token, You can get it after login",
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }

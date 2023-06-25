@@ -24,12 +24,6 @@ module.exports = {
       ticket_id: {
         type: Sequelize.INTEGER,
       },
-      passenger_id: {
-        type: Sequelize.INTEGER,
-      },
-      seat_id: {
-        type: Sequelize.INTEGER,
-      },
       total_booking: {
         type: Sequelize.INTEGER,
       },

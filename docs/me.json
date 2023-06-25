@@ -554,7 +554,7 @@
             }
         },
         "/payment": {
-            "get": {
+            "post": {
                 "tags": [
                     "Payment"
                 ],
