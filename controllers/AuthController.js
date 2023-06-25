@@ -73,7 +73,7 @@ const getProfile = catchAsync(async (req, res) => {
 
 // Update Profile
 const updateProfile = catchAsync(async (req, res) => {
-  const { id, photo } = req.user;
+  const { id } = req.user;
   const { full_name, email, username, phone_number } = req.body;
 
   let updateImage = "";
@@ -89,19 +89,7 @@ const updateProfile = catchAsync(async (req, res) => {
 
   await user
     .update({ full_name, email, username, phone_number, photo: updateImage }, { where: { id } })
-    .then((user) => res.status(201).json({ msg: "Profile updated successfully", user }))
-    .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
-});
-
-const getUserByEmail = catchAsync(async (req, res) => {
-  const { email } = req.body;
-
-  await user
-    .findOne({ where: { email } })
-    .then((user) => {
-      if (!user) return res.status(400).json({ msg: "Sorry, your email account doesn't exist." });
-      res.status(200).json({ user });
-    })
+    .then(() => res.status(201).json({ msg: "Profile updated successfully" }))
     .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
 });
 
@@ -123,67 +111,88 @@ const resetPassword = catchAsync(async (req, res) => {
 
 let otpCache = {};
 
-const forgotPassword = async (req, res) => {
-  try {
-    const { email } = req.body;
+const forgotPassword = catchAsync(async (req, res) => {
+  const { email } = req.body;
 
-    // Generate OTP
-    const otp = otpGenerator.generate(6, { digits: true, alphabets: false, upperCase: false, specialChars: false });
+  await user
+    .findOne({ where: { email } })
+    .then(async (user) => {
+      if (!user) return res.status(400).json({ msg: "Sorry, your email account doesn't exist." });
+      const otp = otpGenerator.generate(6, { digits: true, alphabets: true, upperCaseAlphabets: true, specialChars: false });
 
-    // Simpan OTP ke cache
-    otpCache[email] = otp;
+      otpCache[email] = otp;
 
-    // Konfigurasi transporter Nodemailer
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL,
-        pass: process.env.PASS,
-      },
-    });
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: { user: process.env.EMAIL, pass: process.env.PASS },
+      });
 
-    // Konfigurasi email
-    const mailOptions = {
-      from: "Flytix",
-      to: email,
-      subject: "Verification Code",
-      text: `Your OTP: ${otp}`,
-    };
+      const mailOptions = {
+        from: "Flytix",
+        to: email,
+        subject: "Verification Code",
+        html: `
+        <table
+          role="presentation"
+          style="width: 100%; border-collapse: collapse; border: 0px; border-spacing: 0px; font-family: Arial, Helvetica, sans-serif; background-color: rgb(239, 239, 239);"
+        >
+          <tbody>
+            <tr>
+              <td align="center" style="padding: 1rem 2rem; vertical-align: top; width: 100%;">
+                <table role="presentation" style="max-width: 600px; border-collapse: collapse; border: 0px; border-spacing: 0px; text-align: left;">
+                  <tbody>
+                    <tr>
+                      <td style="padding: 40px 0px 0px;">
+                        <div style="padding: 20px; background-color: rgb(255, 255, 255);">
+                          <div style="color: rgb(0, 0, 0); text-align: left;">
+                            <h1 style="margin: 1rem 0">Verification code</h1>
+                            <p style="padding-bottom: 16px">Please use the verification code below to sign in.</p>
+                            <h2 style="padding-bottom: 16px">
+                              <strong style="font-size: 130%">${otp}</strong>
+                            </h2>
+                            <p style="padding-bottom: 16px">If you didn’t request this, you can ignore this email.</p>
+                            <p style="padding-bottom: 16px">
+                              Thanks,<br>From flytix</br>
+                            </p>
+                          </div>
+                        </div>
+                        <div style="padding-top: 20px; color: rgb(153, 153, 153); text-align: center;">
+                          <p style="padding-bottom: 16px">Made with ♥ in Indonesia</p>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        `,
+      };
 
-    // Kirim email
-    await transporter.sendMail(mailOptions);
+      await transporter.sendMail(mailOptions);
+      res.status(200).json({ msg: "OTP sent to email", user });
+    })
+    .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
+});
 
-    res.status(200).json({ message: "OTP sent to email" });
-  } catch (error) {
-    console.error("Error sending OTP:", error);
-    res.status(500).json({ message: "Error sending OTP" });
+const verifyOTP = catchAsync(async (req, res) => {
+  const { otp } = req.body;
+  const { email } = req.params;
+
+  const cachedOTP = otpCache[email];
+
+  if (!cachedOTP) {
+    return res.status(400).json({ msg: "Invalid or expired OTP" });
   }
-};
 
-const verifyOTP = async (req, res) => {
-  try {
-    const { email, otp } = req.body;
-
-    // Ambil OTP dari cache berdasarkan email
-    const cachedOTP = otpCache[email];
-
-    if (!cachedOTP) {
-      return res.status(400).json({ message: "Invalid or expired OTP" });
-    }
-
-    if (otp === cachedOTP) {
-      // OTP valid
-      delete otpCache[email]; // Hapus OTP dari cache setelah diverifikasi
-      return res.status(200).json({ message: "OTP verified successfully" });
-    } else {
-      // OTP tidak valid
-      return res.status(400).json({ message: "Invalid OTP" });
-    }
-  } catch (error) {
-    console.error("Error verifying OTP:", error);
-    res.status(500).json({ message: "Error verifying OTP" });
+  if (otp === cachedOTP) {
+    delete otpCache[email];
+    res.status(201).json({ msg: "OTP verified successfully" });
+  } else {
+    return res.status(400).json({ msg: "Invalid OTP" });
   }
-};
+});
 
 module.exports = {
   login,
@@ -193,6 +202,5 @@ module.exports = {
   getProfile,
   forgotPassword,
   verifyOTP,
-  getUserByEmail,
   resetPassword,
 };

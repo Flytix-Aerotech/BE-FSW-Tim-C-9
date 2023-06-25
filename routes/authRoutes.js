@@ -5,7 +5,6 @@ const {
   getUsers,
   getProfile,
   updateProfile,
-  getUserByEmail,
   resetPassword,
   forgotPassword,
   verifyOTP,
@@ -21,11 +20,10 @@ router.get("/users", getUsers);
 // API
 router.post("/login", login);
 router.post("/register", upload, register);
-router.post("/user", getUserByEmail);
 router.put("/reset-password/:username", resetPassword);
 router.get("/profile", Auth.verifyUser, Auth.isUser, getProfile);
 router.put("/profile", Auth.verifyUser, Auth.isUser, upload, updateProfile);
 router.post("/send/email-otp", forgotPassword);
-router.post("/verify-otp", verifyOTP);
+router.post("/verify-otp/:email", verifyOTP);
 
 module.exports = router;

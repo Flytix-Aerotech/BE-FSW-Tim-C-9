@@ -27,6 +27,9 @@ module.exports = {
       photo: {
         type: Sequelize.TEXT,
       },
+      verify: {
+        type: Sequelize.BOOLEAN,
+      },
       role: {
         type: Sequelize.ENUM("admin", "user", "guest"),
       },
