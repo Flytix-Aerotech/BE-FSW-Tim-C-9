@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   ticket.init(
     {
       price: DataTypes.DOUBLE,
-      type_of: {
+      type_of_class: {
         type: DataTypes.ENUM("Economy", "Business", "First", "Premium"),
       },
       airport_id: DataTypes.INTEGER,
