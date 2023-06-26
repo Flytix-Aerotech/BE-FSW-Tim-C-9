@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasOne(models.book, { foreignKey: "passenger_id" });
+      this.belongsTo(models.book, { foreignKey: "booking_id" });
+      this.hasMany(models.history, { foreignKey: "passenger_id" });
     }
   }
   passenger.init(
@@ -20,9 +21,9 @@ module.exports = (sequelize, DataTypes) => {
       nik_number: DataTypes.STRING,
       nationality: DataTypes.STRING,
       passenger_role: {
-        type: DataTypes.ENUM("dewasa", "bayi"),
-        defaultValue: "dewasa",
+        type: DataTypes.ENUM("Dewasa", "Bayi"),
       },
+      booking_id: DataTypes.INTEGER,
     },
     {
       sequelize,

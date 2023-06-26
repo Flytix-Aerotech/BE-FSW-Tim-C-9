@@ -12,8 +12,17 @@ module.exports = {
       user_id: {
         type: Sequelize.INTEGER,
       },
+      ticket_id: {
+        type: Sequelize.INTEGER,
+      },
+      passenger_id: {
+        type: Sequelize.INTEGER,
+      },
       booking_id: {
         type: Sequelize.INTEGER,
+      },
+      history_date: {
+        type: Sequelize.DATE,
       },
       createdAt: {
         allowNull: false,

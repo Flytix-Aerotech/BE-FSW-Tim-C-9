@@ -25,7 +25,10 @@ module.exports = {
         type: Sequelize.STRING,
       },
       passenger_role: {
-        type: Sequelize.ENUM("dewasa", "bayi"),
+        type: Sequelize.ENUM("Dewasa", "Bayi"),
+      },
+      booking_id: {
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,

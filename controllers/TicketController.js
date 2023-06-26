@@ -18,10 +18,10 @@ const getTicketById = catchAsync(async (req, res) => {
 });
 
 const addTicket = catchAsync(async (req, res) => {
-  const { price, type_of_class, airport_id, flight_id, passenger_id } = req.body;
+  const { price, type_of_class, airport_id, flight_id } = req.body;
 
   await ticket
-    .create({ price, type_of_class, airport_id, flight_id, passenger_id })
+    .create({ price, type_of_class, airport_id, flight_id })
     .then((data) => res.status(201).json({ data }))
     .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
 });

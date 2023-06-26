@@ -12,6 +12,9 @@ module.exports = {
       flight_id: {
         type: Sequelize.INTEGER,
       },
+      booking_id: {
+        type: Sequelize.INTEGER,
+      },
       seat_number: {
         type: Sequelize.INTEGER,
       },

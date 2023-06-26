@@ -35,8 +35,8 @@ const register = catchAsync(async (req, res) => {
     if (User) return res.status(400).json({ msg: "User already exists" });
 
     let photo = "";
-    if (req.file) photo = (await uploadToImagekit(req)).url;
-    else photo = null;
+    if (req.file === undefined) photo = null;
+    else photo = (await uploadToImagekit(req)).url;
 
     const hashedPassword = await bcrypt.hash(password, 10);
 

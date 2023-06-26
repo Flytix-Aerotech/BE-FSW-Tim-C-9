@@ -10,12 +10,17 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.belongsTo(models.user, { foreignKey: "user_id" });
       this.belongsTo(models.book, { foreignKey: "booking_id" });
+      this.belongsTo(models.ticket, { foreignKey: "ticket_id" });
+      this.belongsTo(models.passenger, { foreignKey: "passenger_id" });
     }
   }
   history.init(
     {
       user_id: DataTypes.INTEGER,
       booking_id: DataTypes.INTEGER,
+      ticket_id: DataTypes.INTEGER,
+      passenger_id: DataTypes.INTEGER,
+      history_date: DataTypes.DATE,
     },
     {
       sequelize,

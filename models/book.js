@@ -9,10 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.passenger, { foreignKey: "passenger_id" });
       this.belongsTo(models.ticket, { foreignKey: "ticket_id" });
-      this.belongsTo(models.seat, { foreignKey: "seat_id" });
-      this.hasOne(models.history, { foreignKey: "booking_id" });
+      this.hasMany(models.passenger, { foreignKey: "booking_id" });
+      this.hasMany(models.seat, { foreignKey: "booking_id" });
+      this.hasMany(models.history, { foreignKey: "booking_id" });
       this.hasOne(models.payment, { foreignKey: "booking_id" });
     }
   }
@@ -20,8 +20,6 @@ module.exports = (sequelize, DataTypes) => {
   book.init(
     {
       ticket_id: DataTypes.INTEGER,
-      passenger_id: DataTypes.INTEGER,
-      seat_id: DataTypes.INTEGER,
       full_name: DataTypes.STRING,
       clan_name: DataTypes.STRING,
       email: DataTypes.STRING,
@@ -29,7 +27,9 @@ module.exports = (sequelize, DataTypes) => {
       total_booking: DataTypes.INTEGER,
       total_price: DataTypes.DOUBLE,
       booking_code: DataTypes.STRING,
-      payment_status: DataTypes.BOOLEAN,
+      payment_status: {
+        type: DataTypes.ENUM("Pending", "Issued", "Cancelled"),
+      },
     },
     {
       sequelize,
