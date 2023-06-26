@@ -57,42 +57,6 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "passengers": [{
-                                        "full_name": {
-                                            "type": "string",
-                                            "example": "M Huda"
-                                        },
-                                        "clan_name": {
-                                            "type": "string",
-                                            "example": "Huda"
-                                        },
-                                        "birth_date": {
-                                            "type": "date",
-                                            "example": "2001-12-30"
-                                        },
-                                        "nik_number": {
-                                            "type": "string",
-                                            "example": "00123"
-                                        },
-                                        "nationality": {
-                                            "type": "string",
-                                            "example": "Indonesia"
-                                        },
-                                        "passenger_role": {
-                                            "type": "enum",
-                                            "example": "Dewasa"
-                                        }
-                                    }],
-                                    "seats": [{
-                                        "flight_id": {
-                                            "type": "integer",
-                                            "example": 9
-                                        },
-                                        "seat_number": {
-                                            "type": "integer",
-                                            "example": 32
-                                        }
-                                    }],
                                     "full_name": {
                                         "type": "string",
                                         "example": "saya Huda"
@@ -128,7 +92,55 @@
                                     "payment_status": {
                                         "type": "boolean",
                                         "example": false
-                                    }
+                                    },
+                                    "passengers": [
+                                        {
+                                            "full_name": {
+                                                "type": "string",
+                                                "example": "M Huda"
+                                            },
+                                            "clan_name": {
+                                                "type": "string",
+                                                "example": "Huda"
+                                            },
+                                            "birth_date": {
+                                                "type": "date",
+                                                "example": "2001-12-30"
+                                            },
+                                            "nik_number": {
+                                                "type": "string",
+                                                "example": "00123"
+                                            },
+                                            "nationality": {
+                                                "type": "string",
+                                                "example": "Indonesia"
+                                            },
+                                            "passenger_role": {
+                                                "type": "enum",
+                                                "example": "Dewasa"
+                                            },
+                                            "booking_id": {
+                                                "type": "integer",
+                                                "example": 32
+                                            }
+                                        }
+                                    ],
+                                    "seats": [
+                                        {
+                                            "flight_id": {
+                                                "type": "integer",
+                                                "example": 9
+                                            },
+                                            "seat_number": {
+                                                "type": "integer",
+                                                "example": 32
+                                            },
+                                            "booking_id": {
+                                                "type": "integer",
+                                                "example": 32
+                                            }
+                                        }
+                                    ]
                                 }
                             }
                         }
@@ -891,12 +903,6 @@
                     "ticket": {
                         "type": "integer",
                         "example": 14
-                    },
-                    "passenger": {
-                        "$ref": "#/components/schemas/newPassenger"
-                    },
-                    "seat_id": {
-                        "$ref": "#/components/schemas/newSeat"
                     }
                 }
             },
@@ -926,6 +932,10 @@
                     "passenger_role": {
                         "type": "enum",
                         "example": "Dewasa"
+                    },
+                    "booking_id": {
+                        "type": "integer",
+                        "example": 32
                     }
                 }
             },
@@ -937,6 +947,10 @@
                         "example": 9
                     },
                     "seat_number": {
+                        "type": "integer",
+                        "example": 32
+                    },
+                    "booking_id": {
                         "type": "integer",
                         "example": 32
                     }
