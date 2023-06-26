@@ -63,23 +63,27 @@ const addBooking = async (req, res) => {
             { fields: ['flight_id', 'seat_number', 'booking_id'] }
         );
 
-        cron.schedule('* * * * *', async () => { // every minute
-            const statusResponse = await getTransactionStatus(newBooking.booking_code);
+        cron.schedule('* * * * *', async () => {
+            try {
+                const statusResponse = await getTransactionStatus(newBooking.booking_code);
+                let paymentStatus;
 
-            let paymentStatus;
-            if (statusResponse.transaction_status === 'settlement') {
-                paymentStatus = 'Issued';
-            } else if (statusResponse.transaction_status === 'failure') {
-                paymentStatus = 'Cancelled';
-            } else {
-                paymentStatus = 'Pending';
+                if (statusResponse.transaction_status === 'settlement') {
+                    paymentStatus = 'Issued';
+                } else if (statusResponse.transaction_status === 'failure' || statusResponse.transaction_status === 'cancel') {
+                    paymentStatus = 'Cancelled';
+                } else {
+                    paymentStatus = 'Pending';
+                }
+
+                await newBooking.update({ payment_status: paymentStatus });
+            } catch (error) {
+                console.error(error);
             }
-
-            await newBooking.update({ payment_status: paymentStatus });
         });
 
         cron.schedule('59 59 23 * * *', async () => { // 59 second 59 minutes 23 hours
-            if (newBooking.payment_status === 'Issued') {
+            if (newBooking.payment_status !== 'Issued') {
                 await seat.destroy({
                     where: { booking_id: newBooking.id }
                 });

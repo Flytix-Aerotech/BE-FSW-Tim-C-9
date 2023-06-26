@@ -3,7 +3,7 @@ const { book } = require('../models/');
 
 // Inisialisasi objek CoreApi Midtrans
 const coreApi = new midtransClient.CoreApi({
-    isProduction: false, // Ubah menjadi true jika di lingkungan produksi
+    isProduction: false,
     serverKey: 'SB-Mid-server-Dqiwi6G1WevBKBDPJsp6eFGq',
     clientKey: 'SB-Mid-client-z146Ib-VBrCtq9u7'
 });
@@ -49,15 +49,19 @@ const chargeMidtrans = async (req, res) => {
         });
 };
 
-const getTransactionStatus = async (booking_code) => {
+const getTransactionStatus = async (bookingCode) => {
     try {
-        // Melakukan pengecekan status transaksi menggunakan Midtrans
-        const statusResponse = await coreApi.status(booking_code);
-        console.log('statusResponse:', JSON.stringify(statusResponse));
+        const foundBook = await book.findOne({
+            where: { booking_code: bookingCode },
+        });
+        if (!foundBook) {
+            throw new Error('Invalid booking code');
+        }
+
+        const statusResponse = await coreApi.transaction.status(foundBook.booking_code);
         return statusResponse;
     } catch (error) {
-        console.log('Error occurred:', error.message);
-        throw new Error('Failed to retrieve transaction status');
+        throw new Error(`Failed to get transaction status: ${error.message}`);
     }
 };
 
