@@ -90,8 +90,8 @@
                                         "example": "123code"
                                     },
                                     "payment_status": {
-                                        "type": "boolean",
-                                        "example": false
+                                        "type": "enum",
+                                        "example": "Pending"
                                     },
                                     "passengers": [
                                         {
@@ -734,10 +734,6 @@
                         "type": "string",
                         "example": "08123456789"
                     },
-                    "seat_id": {
-                        "type": "integer",
-                        "example": 14
-                    },
                     "total_booking": {
                         "type": "integer",
                         "example": 1
@@ -751,8 +747,8 @@
                         "example": "123code"
                     },
                     "payment_status": {
-                        "type": "boolean",
-                        "example": false
+                        "type": "enum",
+                        "example": "Pending"
                     },
                     "ticket": {
                         "$ref": "#/components/schemas/Ticket"
@@ -788,6 +784,10 @@
                     "passenger_role": {
                         "type": "enum",
                         "example": "Dewasa"
+                    },
+                    "booking_id": {
+                        "type": "integer",
+                        "example": 1
                     }
                 }
             },
@@ -897,8 +897,8 @@
                         "example": "123code"
                     },
                     "payment_status": {
-                        "type": "boolean",
-                        "example": false
+                        "type": "enum",
+                        "example": "Pending"
                     },
                     "ticket": {
                         "type": "integer",

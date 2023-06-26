@@ -63,23 +63,27 @@ const addBooking = async (req, res) => {
             { fields: ['flight_id', 'seat_number', 'booking_id'] }
         );
 
-        cron.schedule('* * * * *', async () => { // every minute
-            const statusResponse = await getTransactionStatus(newBooking.booking_code);
+        cron.schedule('* * * * *', async () => {
+            try {
+                const statusResponse = await getTransactionStatus(newBooking.booking_code);
+                let paymentStatus;
 
-            let paymentStatus;
-            if (statusResponse.transaction_status === 'settlement') {
-                paymentStatus = 'Issued';
-            } else if (statusResponse.transaction_status === 'failure') {
-                paymentStatus = 'Cancelled';
-            } else {
-                paymentStatus = 'Pending';
+                if (statusResponse.transaction_status === 'settlement') {
+                    paymentStatus = 'Issued';
+                } else if (statusResponse.transaction_status === 'failure' || statusResponse.transaction_status === 'cancel') {
+                    paymentStatus = 'Cancelled';
+                } else {
+                    paymentStatus = 'Pending';
+                }
+
+                await newBooking.update({ payment_status: paymentStatus });
+            } catch (error) {
+                console.error(error);
             }
-
-            await newBooking.update({ payment_status: paymentStatus });
         });
 
         cron.schedule('59 59 23 * * *', async () => { // 59 second 59 minutes 23 hours
-            if (newBooking.payment_status === 'Issued') {
+            if (newBooking.payment_status !== 'Issued') {
                 await seat.destroy({
                     where: { booking_id: newBooking.id }
                 });
@@ -95,32 +99,6 @@ const addBooking = async (req, res) => {
             passengerData,
             seatPick,
             newBooking,
-        });
-    } catch (error) {
-        res.status(error.statusCode || 500).json({
-            message: error.message,
-        });
-    }
-};
-
-const deleteBooking = async (req, res) => {
-    try {
-        const books = await book.findOne({
-            where: {
-                id: req.params.id
-            },
-        });
-        if (!books) {
-            throw new Error('Booking not found');
-        }
-        await seat.destroy({
-            where: {
-                id: books.seat_id
-            }
-        });
-        await books.update({ seat_id: null });
-        res.status(200).json({
-            message: 'Booking deleted successfully'
         });
     } catch (error) {
         res.status(error.statusCode || 500).json({
@@ -153,6 +131,5 @@ const payBooking = async (req, res) => {
 
 module.exports = {
     addBooking,
-    deleteBooking,
     payBooking,
 };
