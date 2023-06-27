@@ -13,13 +13,13 @@ const makePayment = async (req, res) => {
 
     req.book = foundBook;
 
-    const data = await payment.create({
+    const paymentData = await payment.create({
       booking_id: foundBook.id,
       type_of_payment: type,
     });
 
     res.status(200).json({
-      data,
+      paymentData,
       paymentStatus,
     });
   } catch (error) {

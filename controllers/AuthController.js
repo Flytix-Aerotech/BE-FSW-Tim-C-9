@@ -5,6 +5,7 @@ const { user } = require("../models");
 const catchAsync = require("../utils/catchAsync");
 const otpGenerator = require("otp-generator");
 const nodemailer = require("nodemailer");
+let otpCache = {};
 
 // user login
 const login = catchAsync(async (req, res) => {
@@ -26,7 +27,7 @@ const login = catchAsync(async (req, res) => {
 
 // user register
 const register = catchAsync(async (req, res) => {
-  const { full_name, username, email, phone_number, password, role } = req.body;
+  const { full_name, username, email, phone_number, password } = req.body;
 
   if (full_name === "" || username === "" || email === "" || phone_number === "" || password === "") {
     return res.status(400).json({ msg: "Please input a relevant data" });
@@ -34,24 +35,94 @@ const register = catchAsync(async (req, res) => {
     const User = await user.findOne({ where: { email } });
     if (User) return res.status(400).json({ msg: "User already exists" });
 
-    let photo = "";
-    if (req.file === undefined) photo = null;
-    else photo = (await uploadToImagekit(req)).url;
+    let newPhoto = "";
+    if (req.file === undefined) {
+      newPhoto = null;
+    } else {
+      if (req.file.size > 3000000) {
+        res.status(400).json({ msg: "Image should be no more than 3MB" });
+      }
+      const img = await uploadToImagekit(req);
+      newPhoto = img.url;
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await user
+    const newUser = await user
       .create({
         full_name,
         email,
         password: hashedPassword,
         username,
         phone_number,
-        photo: photo,
-        role,
+        photo: newPhoto,
+        verify: false,
       })
-      .then((user) => res.status(201).json({ msg: "User created successfully", user }))
       .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
+
+    const otp = otpGenerator.generate(6, { digits: true, alphabets: true, upperCaseAlphabets: true, specialChars: false });
+
+    otpCache[email] = otp;
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: "Flytix",
+      to: email,
+      subject: "Verification account",
+      html: `
+      <table
+        role="presentation"
+        style="width: 100%; border-collapse: collapse; border: 0px; border-spacing: 0px; font-family: Arial, Helvetica, sans-serif; background-color: rgb(239, 239, 239);"
+      >
+        <tbody>
+          <tr>
+            <td align="center" style="padding: 1rem 2rem; vertical-align: top; width: 100%;">
+              <table role="presentation" style="max-width: 600px; border-collapse: collapse; border: 0px; border-spacing: 0px; text-align: left;">
+                <tbody>
+                  <tr>
+                    <td style="padding: 40px 0px 0px;">
+                      <div style="padding: 20px; background-color: rgb(255, 255, 255);">
+                        <div style="color: rgb(0, 0, 0); text-align: left;">
+                          <h1 style="margin: 1rem 0">Verification code</h1>
+                          <p style="padding-bottom: 16px">Please use the verification code below to sign in.</p>
+                          <h2 style="padding-bottom: 16px">
+                            <strong style="font-size: 130%">${otp}</strong>
+                          </h2>
+                          <p style="padding-bottom: 16px">If you didn’t request this, you can ignore this email.</p>
+                          <p style="padding-bottom: 16px">
+                            Thanks,<br>From flytix</br>
+                          </p>
+                        </div>
+                      </div>
+                      <div style="padding-top: 20px; color: rgb(153, 153, 153); text-align: center;">
+                        <p style="padding-bottom: 16px">Made with ♥ in Indonesia</p>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      `,
+    };
+
+    transporter.sendMail(mailOptions, (error) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).json({ msg: "Error sending verification email" });
+      } else {
+        res.status(201).json({ msg: "Verification link has been sent!", user: newUser });
+      }
+    });
   }
 });
 
@@ -95,24 +166,7 @@ const updateProfile = catchAsync(async (req, res) => {
     .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
 });
 
-// reset password
-const resetPassword = catchAsync(async (req, res) => {
-  const { email } = req.params;
-  const { password, confirmPassword } = req.body;
-
-  if (password !== confirmPassword) {
-    return res.status(400).json({ msg: "Password and confirm password do not match" });
-  }
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  await user
-    .update({ password: hashedPassword }, { where: { email } })
-    .then(() => res.status(201).json({ msg: "Password reset successfully" }))
-    .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
-});
-
-let otpCache = {};
-
+// send otp
 const forgotPassword = catchAsync(async (req, res) => {
   const { email } = req.body;
 
@@ -179,6 +233,23 @@ const forgotPassword = catchAsync(async (req, res) => {
     .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
 });
 
+// reset password
+const resetPassword = catchAsync(async (req, res) => {
+  const { email } = req.params;
+  const { password, confirmPassword } = req.body;
+
+  if (password !== confirmPassword) {
+    return res.status(400).json({ msg: "Password and confirm password do not match" });
+  }
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  await user
+    .update({ password: hashedPassword }, { where: { email } })
+    .then(() => res.status(201).json({ msg: "Password reset successfully" }))
+    .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
+});
+
+// verify otp reset password
 const verifyOTP = catchAsync(async (req, res) => {
   const { otp } = req.body;
   const { email } = req.params;
@@ -197,6 +268,28 @@ const verifyOTP = catchAsync(async (req, res) => {
   }
 });
 
+// verify account register
+const verifyAccount = catchAsync(async (req, res) => {
+  const { otp } = req.body;
+  const { email } = req.params;
+
+  const cachedOTP = otpCache[email];
+
+  if (!cachedOTP) return res.status(400).json({ msg: "Invalid or expired OTP" });
+
+  if (otp === cachedOTP) {
+    await user
+      .update({ verify: true }, { where: { email } })
+      .then(() => {
+        res.status(201).json({ message: "Account verified successfully" });
+        delete otpCache[email];
+      })
+      .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
+  } else {
+    return res.status(400).json({ msg: "Invalid OTP" });
+  }
+});
+
 module.exports = {
   login,
   register,
@@ -206,4 +299,5 @@ module.exports = {
   forgotPassword,
   verifyOTP,
   resetPassword,
+  verifyAccount,
 };

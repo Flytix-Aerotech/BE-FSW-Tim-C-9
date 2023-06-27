@@ -6,10 +6,6 @@
   },
   "servers": [
     {
-      "url": "https://flytix-aerotech.up.railway.app/api/v1",
-      "description": "public"
-    },
-    {
       "url": "https://flytix-c9.up.railway.app/api/v1",
       "description": "public production"
     },
@@ -242,75 +238,23 @@
         }
       }
     },
-    "/auth/user": {
-      "post": {
-        "tags": ["Auth"],
-        "summary": "Search Email",
-        "description": "Get information email user",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "example": "emailbaru@gmail.com"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "user": {
-                      "$ref": "#/components/schemas/Users"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "failed"
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "Email not found"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/reset-password/{username}": {
+    "/auth/reset-password/{email}": {
       "put": {
         "tags": ["Auth"],
         "summary": "Reset Password",
         "description": "Reset password using email by query",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "description": "Input email for reset password",
+            "schema": {
+              "type": "string",
+              "example": "xhudan@google.com"
+            },
+            "required": true
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -515,6 +459,210 @@
         }
       }
     },
+    "/auth/send/email-otp": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Send OTP",
+        "description": "Send OTP to email",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "xhudan@google.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "OTP sent to email"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Email not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Email not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/verify-otp/{email}": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Verify OTP",
+        "description": "Verifying email OTP",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "description": "Input email for verify otp",
+            "schema": {
+              "type": "string",
+              "example": "xhudan@google.com"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "otp": {
+                    "type": "string",
+                    "example": "123abc"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "OTP verified successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or expired OTP",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid OTP"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/verify-account/{email}": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Verify Account",
+        "description": "Verifying email for verify user account",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "description": "Input email for verify account",
+            "schema": {
+              "type": "string",
+              "example": "xhudan@google.com"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "otp": {
+                    "type": "string",
+                    "example": "123abc"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Account verified successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or expired OTP",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid OTP"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/tickets": {
       "get": {
         "tags": ["Ticket"],
@@ -697,11 +845,6 @@
                     "format": "date",
                     "example": "2023-06-22"
                   },
-                  "arrival_date": {
-                    "type": "string",
-                    "format": "date",
-                    "example": "2023-06-22"
-                  },
                   "departure_location": {
                     "type": "string",
                     "example": "Jakarta"
@@ -803,16 +946,6 @@
           {
             "in": "query",
             "name": "dd",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date",
-              "example": "2022-12-26"
-            }
-          },
-          {
-            "in": "query",
-            "name": "ad",
             "required": true,
             "schema": {
               "type": "string",
@@ -1290,8 +1423,32 @@
             "application/json": {
               "schema": {
                 "properties": {
-                  "data": {
-                    "$ref": "#/components/schemas/Books"
+                  "books": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Books"
+                      }
+                    ]
+                  },
+                  "passengers": {
+                    "type": "array",
+                    "items": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Passengers"
+                        }
+                      ]
+                    }
+                  },
+                  "seats": {
+                    "type": "array",
+                    "items": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Seats"
+                        }
+                      ]
+                    }
                   }
                 }
               }
@@ -1464,7 +1621,7 @@
                   "type": "object",
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/Booking"
+                      "$ref": "#/components/schemas/Books"
                     }
                   }
                 }
@@ -1537,7 +1694,7 @@
                       "example": "success"
                     },
                     "data": {
-                      "$ref": "#/components/schemas/Booking"
+                      "$ref": "#/components/schemas/Histories"
                     }
                   }
                 }
@@ -1570,8 +1727,8 @@
     "/histories/search": {
       "get": {
         "tags": ["Histories"],
-        "summary": "Search history booking",
-        "description": "Search history booking by code",
+        "summary": "Search history",
+        "description": "Search history by booking code",
         "parameters": [
           {
             "in": "query",
@@ -1590,12 +1747,8 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "booking hasil pencarian"
-                    },
                     "booking": {
-                      "$ref": "#/components/schemas/Booking"
+                      "$ref": "#/components/schemas/Histories"
                     }
                   }
                 }
@@ -1648,8 +1801,8 @@
     "/histories/filter": {
       "get": {
         "tags": ["Histories"],
-        "summary": "Filter history booking",
-        "description": "Filter history booking by date",
+        "summary": "Filter history",
+        "description": "Filter history by history date",
         "parameters": [
           {
             "in": "query",
@@ -1678,12 +1831,8 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "hasil filter booking"
-                    },
                     "booking": {
-                      "$ref": "#/components/schemas/Booking"
+                      "$ref": "#/components/schemas/Histories"
                     }
                   }
                 }
@@ -1714,7 +1863,7 @@
       }
     },
     "/payment": {
-      "get": {
+      "post": {
         "tags": ["Payment"],
         "summary": "Make Payment",
         "description": "Make payment with Midtrans",
@@ -1745,7 +1894,7 @@
                   "type": "object",
                   "properties": {
                     "payment": {
-                      "$ref": "#/components/schemas/Payment"
+                      "$ref": "#/components/schemas/Payments"
                     }
                   }
                 }
@@ -1786,128 +1935,6 @@
                     "message": {
                       "type": "string",
                       "example": "Invalid data"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/send/email-otp": {
-      "post": {
-        "tags": ["Auth"],
-        "summary": "Send OTP",
-        "description": "Send OTP to email",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "example": "xhudan@google.com"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "SendOTP": {
-                      "$ref": "#/components/schemas/SendOTP"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Email not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "failed"
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Email not found"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/verify-otp": {
-      "post": {
-        "tags": ["Auth"],
-        "summary": "Verify OTP",
-        "description": "Verifying email OTP",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "example": "xhudan@google.com"
-                  },
-                  "otp": {
-                    "type": "string",
-                    "example": "123abc"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "Verify": {
-                      "$ref": "#/components/schemas/Verify"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid or expired OTP",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "failed"
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Invalid OTP"
                     }
                   }
                 }
@@ -2253,6 +2280,15 @@
             "type": "string",
             "format": "binary",
             "example": "url photo"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["guest", "user", "admin"],
+            "example": "user"
+          },
+          "verify": {
+            "type": "boolean",
+            "example": true
           }
         }
       },
@@ -2394,7 +2430,12 @@
           },
           "passenger_role": {
             "type": "string",
-            "example": "dewasa"
+            "enum": ["Dewasa", "Bayi"],
+            "example": "Dewasa"
+          },
+          "booking_id": {
+            "type": "integer",
+            "example": 3
           }
         }
       },
@@ -2404,14 +2445,6 @@
           "ticket_id": {
             "type": "integer",
             "example": 3
-          },
-          "seat_id": {
-            "type": "integer",
-            "example": 1
-          },
-          "passenger_id": {
-            "type": "integer",
-            "example": 4
           },
           "full_name": {
             "type": "string",
@@ -2431,15 +2464,20 @@
           },
           "total_booking": {
             "type": "integer",
-            "example": 1
+            "example": 3
           },
           "total_price": {
             "type": "number",
-            "format": "1231000"
+            "example": "1231000"
           },
           "booking_code": {
             "type": "string",
             "example": "se1v12asfd2"
+          },
+          "payment_status": {
+            "type": "string",
+            "enum": ["Pending", "Issued", "Cancelled"],
+            "example": "Issued"
           }
         }
       },
@@ -2453,6 +2491,19 @@
           "booking_id": {
             "type": "integer",
             "example": 1
+          },
+          "passenger_id": {
+            "type": "integer",
+            "example": 2
+          },
+          "ticket_id": {
+            "type": "integer",
+            "example": 3
+          },
+          "history_date": {
+            "type": "string",
+            "format": "date",
+            "example": "2023-06-28"
           }
         }
       },
@@ -2465,12 +2516,29 @@
           },
           "type_of_payment": {
             "type": "string",
-            "enum": ["OneWay", "RoundTrip"],
+            "enum": ["Gopay", "Dana", "Akulaku"],
             "example": "OneWay"
           },
           "price": {
             "type": "number",
             "example": "12300000"
+          }
+        }
+      },
+      "Seats": {
+        "type": "object",
+        "properties": {
+          "flight_id": {
+            "type": "integer",
+            "example": 9
+          },
+          "seat_number": {
+            "type": "integer",
+            "example": 456
+          },
+          "booking_id": {
+            "type": "integer",
+            "example": 3
           }
         }
       }

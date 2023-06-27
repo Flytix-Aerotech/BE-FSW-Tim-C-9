@@ -8,6 +8,7 @@ const {
   resetPassword,
   forgotPassword,
   verifyOTP,
+  verifyAccount,
 } = require("../controllers/AuthController.js");
 
 // middleware
@@ -25,5 +26,6 @@ router.get("/profile", Auth.verifyUser, Auth.isUser, getProfile);
 router.put("/profile", Auth.verifyUser, Auth.isUser, upload, updateProfile);
 router.post("/send/email-otp", forgotPassword);
 router.post("/verify-otp/:email", verifyOTP);
+router.post("/verify-account/:email", verifyAccount);
 
 module.exports = router;

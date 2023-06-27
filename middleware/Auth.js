@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const catchAsync = require("../utils/catchAsync");
 const secret = process.env.SECRET_KEY;
+const { user } = require("../models");
 
 const verifyUser = catchAsync(async (req, res, next) => {
   const token = req.headers.authorization;
@@ -37,4 +38,19 @@ const isGuest = catchAsync(async (req, res, next) => {
   }
 });
 
-module.exports = { verifyUser, isAdmin, isUser, isGuest };
+const isVerifyAccount = catchAsync(async (req, res, next) => {
+  const { id } = req.query;
+  const userAccount = await user.findByPk(id);
+
+  if (!userAccount) {
+    return res.status(404).json({ message: "Account not found" });
+  }
+
+  if (userAccount.verify === false) {
+    next();
+  } else {
+    return res.status(400).json({ msg: err.message });
+  }
+});
+
+module.exports = { verifyUser, isAdmin, isUser, isGuest, isVerifyAccount };
