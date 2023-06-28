@@ -86,7 +86,16 @@ let searchBookingCode = async (req, res) => {
                 booking_code: code
             },
             include: [
-                { model: ticket },
+                { model: ticket,
+                    include: [
+                        {
+                            model: airport
+                        },
+                        {
+                            model: flight
+                        }
+                    ]
+                },
                 { model: passenger },
             ],
         });
