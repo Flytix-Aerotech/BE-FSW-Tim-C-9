@@ -1,123 +1,53 @@
 const { book, ticket, passenger, flight, airport } = require("../models/");
 const { Op } = require("sequelize");
 const moment = require("moment");
+const catchAsync = require("../utils/catchAsync");
 
-let getBooking = async (req, res) => {
-  try {
-    let booking = await book.findAll({
-      include: [
-        {
-          model: ticket,
-          include: [
-            {
-              model: airport,
-            },
-            {
-              model: flight,
-            },
-          ],
-        },
-        {
-          model: passenger,
-        },
-      ],
-    });
+const getBooking = catchAsync(async (req, res) => {
+  await book
+    .findAll({
+      include: [{ model: ticket, include: [{ model: airport }, { model: flight }] }, { model: passenger }],
+    })
+    .then((data) => {
+      if (data.length > 0) {
+        res.status(200).json({ data });
+      } else {
+        res.status(400).json({ msg: "Anda belum melakukan pemesanan penerbangan" });
+      }
+    })
+    .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
+});
 
-    if (booking.length > 0) {
-      res.status(200).json({
-        booking,
-      });
-    } else {
-      res.status(200).json({
-        message: "Anda belum melakukan pemesanan penerbangan",
-      });
-    }
-  } catch (error) {
-    res.status(error.statusCode || 500).json({
-      message: error.message,
-    });
-  }
-};
+const filterBooking = catchAsync(async (req, res) => {
+  const { start, end } = req.query;
+  const starting = moment(start).format("YYYYMMDD");
+  const ending = moment(end).format("YYYYMMDD");
+  await book
+    .findAll({
+      where: { createdAt: { [Op.between]: [starting, ending] } },
+      include: [{ model: ticket, include: [{ model: airport }, { model: flight }] }, { model: passenger }],
+    })
+    .then((data) => {
+      res.status(200).json({ data });
+    })
+    .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
+});
 
-const filterBooking = async (req, res) => {
-  try {
-    const { start, end } = req.query;
-    const starting = moment(start).format("YYYYMMDD");
-    const ending = moment(end).format("YYYYMMDD");
-    const data = await book.findAll({
-      where: {
-        createdAt: {
-          [Op.between]: [
-            // ?start=YYYY-MM-DD&end=YYYY-MM-DD
-            starting,
-            ending,
-          ],
-        },
-      },
-      include: [
-        {
-          model: ticket,
-          include: [
-            {
-              model: airport,
-            },
-            {
-              model: flight,
-            },
-          ],
-        },
-        { model: passenger },
-      ],
+const searchBookingCode = catchAsync(async (req, res) => {
+  const { code } = req.query;
+  await book
+    .findAll({
+      where: { booking_code: code },
+      include: [{ model: ticket, include: [{ model: airport }, { model: flight }] }, { model: passenger }],
+    })
+    .then((data) => {
+      if (data.length > 0) {
+        res.status(200).json({ data });
+      } else {
+        res.status(400).json({ msg: "Anda belum melakukan pemesanan penerbangan" });
+      }
     });
-
-    res.status(200).json({
-      data,
-    });
-  } catch (error) {
-    res.status(error.statusCode || 404).json({
-      message: error.message,
-    });
-  }
-};
-
-let searchBookingCode = async (req, res) => {
-  try {
-    const { code } = req.query;
-    let booking = await book.findAll({
-      where: {
-        booking_code: code,
-      },
-      include: [
-        {
-          model: ticket,
-          include: [
-            {
-              model: airport,
-            },
-            {
-              model: flight,
-            },
-          ],
-        },
-        { model: passenger },
-      ],
-    });
-
-    if (booking.length > 0) {
-      res.status(200).json({
-        booking,
-      });
-    } else {
-      res.status(200).json({
-        message: "Anda belum melakukan pemesanan penerbangan",
-      });
-    }
-  } catch (error) {
-    res.status(error.statusCode || 500).json({
-      message: error.message,
-    });
-  }
-};
+});
 
 module.exports = {
   getBooking,

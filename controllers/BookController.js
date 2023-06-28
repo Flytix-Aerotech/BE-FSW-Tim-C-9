@@ -1,6 +1,7 @@
-const { book, passenger, ticket, seat } = require("../models/");
+const { book, passenger, ticket, seat, airport, flight } = require("../models/");
 const { getTransactionStatus } = require("../middleware/midtrans");
 const cron = require("node-cron");
+const catchAsync = require("../utils/catchAsync");
 
 const addBooking = async (req, res) => {
   function generateCode(length) {
@@ -97,49 +98,28 @@ const addBooking = async (req, res) => {
     });
 
     res.status(200).json({
-      message: "Data Anda berhasil disimpan!",
-      passengerData,
-      seatPick,
-      newBooking,
+      msg: "Data Anda berhasil disimpan!",
+      data: { passengerData, seatPick, newBooking },
     });
   } catch (error) {
     res.status(error.statusCode || 500).json({
-      message: error.message,
+      msg: error.message,
     });
   }
 };
 
-const payBooking = async (req, res) => {
-  try {
-    const { code } = req.params;
-    const data = await book.findOne({
-      where: {
-        booking_code: code,
-      },
-      include: [
-        {
-          model: ticket,
-          include: [
-            {
-              model: airport,
-            },
-            {
-              model: flight,
-            },
-          ],
-        },
-        { model: passenger },
-      ],
-    });
-    res.status(200).json({
-      data,
-    });
-  } catch (error) {
-    res.status(error.statusCode || 404).json({
-      message: error.message,
-    });
-  }
-};
+const payBooking = catchAsync(async (req, res) => {
+  const { code } = req.params;
+  await book
+    .findOne({
+      where: { booking_code: code },
+      include: [{ model: ticket, include: [{ model: airport }, { model: flight }] }, { model: passenger }],
+    })
+    .then((data) => {
+      res.status(200).json({ data });
+    })
+    .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
+});
 
 module.exports = {
   addBooking,
