@@ -106,76 +106,76 @@ const filterTicket = catchAsync(async (req, res) => {
     .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
 });
 
-const searchTicket = async (req, res) => {
-  try {
-      const { departure_date, arrival_date, departure_location, arrival_location, type_of_class } = req.query;
-      const Tickets = await ticket.findAll({
-          where: {
-              [Op.or]: [
-                  {
-                      '$flight.departure_location$': { [Op.iLike]: `%${departure_location}%` },
-                  },
-                  {
-                      '$flight.arrival_location$': { [Op.iLike]: `%${arrival_location}%` },
-                  },
-                  // {
-                  //     departure_date: departure_date,
-                  // },
-                  // {
-                  //     arrival_date: arrival_date,
-                  // },
-                  {
-                    type_of_class,
-                  },
-              ]
-          },
-          include: [{
-              model: flight,
-              as: 'flight',
-              required: true
-          },
-        //   {
-        //     model: airport,
-        //     as: 'airport',
-        //     required: true
-        // }
-      ]
-      });
-      res.status(200).json({
-          Tickets
-      });
-  } catch (error) {
-      res.status(error.statusCode || 500).json({
-          message: error.message,
-      });
-  }
-};
-
-// const searchTicket = catchAsync(async (req, res) => {
-//   const { dd, ad, dl, al, toc } = req.query;
-//   await ticket
-//     .findAll({
-//       where: { type_of_class: toc },
-//       include: [
-//         {
-//           model: flight,
-//           as: "flight",
+// const searchTicket = async (req, res) => {
+//   try {
+//       const { departure_date, arrival_date, departure_location, arrival_location, type_of_class } = req.query;
+//       const Tickets = await ticket.findAll({
 //           where: {
-//             departure_date: dd,
-//             arrival_date: ad === undefined ? dd : ad,
-//             departure_location: { [Op.iLike]: `${dl}` },
-//             arrival_location: { [Op.iLike]: `${al}` },
+//               [Op.or]: [
+//                   {
+//                       '$flight.departure_location$': { [Op.iLike]: `%${departure_location}%` },
+//                   },
+//                   {
+//                       '$flight.arrival_location$': { [Op.iLike]: `%${arrival_location}%` },
+//                   },
+//                   // {
+//                   //     departure_date: departure_date,
+//                   // },
+//                   // {
+//                   //     arrival_date: arrival_date,
+//                   // },
+//                   {
+//                     type_of_class,
+//                   },
+//               ]
 //           },
-//         },
-//         {
-//           model: airport,
-//           as: "airport",
-//         },
-//       ],
-//     })
-//     .then((data) => res.status(200).json({ data }))
-//     .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
-// });
+//           include: [{
+//               model: flight,
+//               as: 'flight',
+//               required: true
+//           },
+//         //   {
+//         //     model: airport,
+//         //     as: 'airport',
+//         //     required: true
+//         // }
+//       ]
+//       });
+//       res.status(200).json({
+//           Tickets
+//       });
+//   } catch (error) {
+//       res.status(error.statusCode || 500).json({
+//           message: error.message,
+//       });
+//   }
+// };
+
+const searchTicket = catchAsync(async (req, res) => {
+  const { dd, ad, dl, al, toc } = req.query;
+  await ticket
+    .findAll({
+      where: { type_of_class: toc },
+      include: [
+        {
+          model: flight,
+          as: "flight",
+          where: {
+            departure_date: dd,
+            arrival_date: ad === undefined ? dd : ad,
+            departure_location: { [Op.iLike]: `${dl}` },
+            arrival_location: { [Op.iLike]: `${al}` },
+          },
+        },
+        {
+          model: airport,
+          as: "airport",
+        },
+      ],
+    })
+    .then((data) => res.status(200).json({ data }))
+    .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
+});
 
 
 const deleteTicket = async (req, res) => {

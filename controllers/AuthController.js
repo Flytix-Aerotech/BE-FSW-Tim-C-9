@@ -4,6 +4,7 @@ const { uploadToImagekit } = require("../lib/imagekit");
 const User = require("../models").user;
 const otpGenerator = require('otp-generator');
 const nodemailer = require('nodemailer');
+const catchAsync = require("../utils/catchAsync");
 
 // user login
 const login = catchAsync(async (req, res) => {
