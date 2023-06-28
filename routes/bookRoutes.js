@@ -4,7 +4,7 @@ const { isAvailable } = require('../middleware/ticket');
 const { continuePayment } = require('../middleware/continuePayment');
 const { payBooking, addBooking } = require('../controllers/BookController');
 
-router.post('', isAvailable, addBooking);
+router.post('/:id', isAvailable, addBooking);
 router.get('/pay/:code', continuePayment, payBooking);
 
 module.exports = router;
