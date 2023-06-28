@@ -1,4 +1,4 @@
-const { book, ticket, passenger } = require('../models/');
+const { book, ticket, passenger, flight, airport } = require('../models/');
 const { Op } = require('sequelize');
 const moment = require('moment');
 
@@ -7,7 +7,15 @@ let getBooking = async (req, res) => {
         let booking = await book.findAll({
             include: [
                 {
-                    model: ticket
+                    model: ticket,
+                    include: [
+                        {
+                            model: airport
+                        },
+                        {
+                            model: flight
+                        }
+                    ]
                 },
                 {
                     model: passenger
@@ -46,7 +54,16 @@ const filterBooking = async (req, res) => {
                 },
             },
             include: [
-                { model: ticket },
+                { model: ticket,
+                    include: [
+                        {
+                            model: airport
+                        },
+                        {
+                            model: flight
+                        }
+                    ]
+                },
                 { model: passenger },
             ],
         });
