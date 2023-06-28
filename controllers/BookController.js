@@ -18,15 +18,18 @@ const addBooking = async (req, res) => {
     try {
         const { books, passengers, seats } = req.body;
         const { adult, baby } = req.query;
+        const { id } = req.params;
+
+        const tickets = await ticket.findByPk(id);
 
         const newBooking = await book.create({
             full_name: books.full_name,
             clan_name: books.clan_name,
             email: books.email,
             phone_number: books.phone_number,
-            ticket_id: req.ticket.id,
+            ticket_id: tickets.id,
             total_booking: adult,
-            total_price: (total_booking * req.ticket.price) + (0.1 * total_booking * req.ticket.price),
+            total_price: (total_booking * tickets.price) + (0.1 * total_booking * tickets.price),
             booking_code: generateCode(8),
             payment_status: "Pending",
         });
@@ -56,7 +59,6 @@ const addBooking = async (req, res) => {
 
         const seatPick = await seat.bulkCreate(
             seats.map(seat => ({
-                flight_id: req.flight.id,
                 seat_number: seat.seat_number,
                 booking_id: newBooking.id,
             })),
