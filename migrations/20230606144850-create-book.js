@@ -24,15 +24,6 @@ module.exports = {
       ticket_id: {
         type: Sequelize.INTEGER,
       },
-      seat_id: {
-        type: Sequelize.INTEGER,
-      },
-      passenger_id: {
-        type: Sequelize.INTEGER,
-      },
-      seat_id: {
-        type: Sequelize.INTEGER,
-      },
       total_booking: {
         type: Sequelize.INTEGER,
       },
@@ -43,9 +34,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       payment_status: {
-        allowNull: false,
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
+        type: Sequelize.ENUM("Pending", "Issued", "Cancelled"),
       },
       createdAt: {
         allowNull: false,

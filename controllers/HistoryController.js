@@ -1,4 +1,4 @@
-const { book, ticket, passenger } = require('../models/');
+const { book, ticket, passenger, flight, airport } = require('../models/');
 const { Op } = require('sequelize');
 const moment = require('moment');
 
@@ -7,7 +7,15 @@ let getBooking = async (req, res) => {
         let booking = await book.findAll({
             include: [
                 {
-                    model: ticket
+                    model: ticket,
+                    include: [
+                        {
+                            model: airport
+                        },
+                        {
+                            model: flight
+                        }
+                    ]
                 },
                 {
                     model: passenger
@@ -33,18 +41,29 @@ let getBooking = async (req, res) => {
 
 const filterBooking = async (req, res) => {
     try {
-        const { date } = req.query;
+        const { start, end } = req.query;
+        const starting = moment(start).format('YYYYMMDD');
+        const ending = moment(end).format('YYYYMMDD');
         const data = await book.findAll({
             where: {
                 createdAt: {
                     [Op.between]: [ // ?start=YYYY-MM-DD&end=YYYY-MM-DD
-                        moment(date).startOf('day').toISOString(),
-                        moment(date).endOf('day').toISOString()
+                        starting,
+                        ending
                     ]
                 },
             },
             include: [
-                { model: ticket },
+                { model: ticket,
+                    include: [
+                        {
+                            model: airport
+                        },
+                        {
+                            model: flight
+                        }
+                    ]
+                },
                 { model: passenger },
             ],
         });
@@ -67,7 +86,16 @@ let searchBookingCode = async (req, res) => {
                 booking_code: code
             },
             include: [
-                { model: ticket },
+                { model: ticket,
+                    include: [
+                        {
+                            model: airport
+                        },
+                        {
+                            model: flight
+                        }
+                    ]
+                },
                 { model: passenger },
             ],
         });
