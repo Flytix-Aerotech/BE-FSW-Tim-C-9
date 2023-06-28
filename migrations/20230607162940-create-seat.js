@@ -9,21 +9,21 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      flight_id: {
+      ticket_id: {
         type: Sequelize.INTEGER,
       },
       booking_id: {
         type: Sequelize.INTEGER,
       },
       seat_number: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       createdAt: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.DATE,
       },
       updatedAt: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.DATE,
       },
     });

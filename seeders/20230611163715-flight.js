@@ -212,7 +212,7 @@ module.exports = {
           arrival_location: "Bandung",
           from_id: "SBY",
           to_id: "BDO",
-          airline: "Super Air jet",
+          airline: "Airbus A330",
           type_of_flight: "OneWay",
         },
 
@@ -248,7 +248,7 @@ module.exports = {
 
         {
           id: 17,
-          flight_number: "BDO-0201",
+          flight_number: "BDO-0531",
           departure_time: "06:50",
           arrival_time: "10:35",
           departure_date: "2023-06-24",
@@ -263,7 +263,7 @@ module.exports = {
 
         {
           id: 18,
-          flight_number: "BDO-0201",
+          flight_number: "BDO-2301",
           departure_time: "07:00",
           arrival_time: "10:50",
           departure_date: "2023-06-24",
@@ -278,7 +278,7 @@ module.exports = {
 
         {
           id: 19,
-          flight_number: "BDO-0201",
+          flight_number: "BDO-0243",
           departure_time: "06:20",
           arrival_time: "10:40",
           departure_date: "2023-06-24",

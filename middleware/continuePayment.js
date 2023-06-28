@@ -1,4 +1,4 @@
-const { book, ticket } = require("../models");
+const { book } = require("../models");
 
 const continuePayment = (req, res, next) => {
   const { code } = req.params; // Retrieve code from URL parameters

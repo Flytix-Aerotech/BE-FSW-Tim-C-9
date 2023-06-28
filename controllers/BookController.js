@@ -18,22 +18,25 @@ const addBooking = async (req, res) => {
   try {
     const { books, passengers, seats } = req.body;
     const { adult, baby } = req.query;
+    const { id } = req.params;
+
+    const tickets = await ticket.findByPk(id);
+
+    const totalAdults = parseInt(adult);
+    const totalBabies = parseInt(baby) || 0;
+    const totalPassengers = totalAdults + totalBabies;
 
     const newBooking = await book.create({
       full_name: books.full_name,
       clan_name: books.clan_name,
       email: books.email,
       phone_number: books.phone_number,
-      ticket_id: req.ticket.id,
-      total_booking: adult,
-      total_price: total_booking * req.ticket.price + 0.1 * total_booking * req.ticket.price,
+      ticket_id: tickets.id,
+      total_booking: totalAdults,
+      total_price: totalAdults * tickets.price + 0.1 * totalAdults * tickets.price,
       booking_code: generateCode(8),
       payment_status: "Pending",
     });
-
-    const totalAdults = parseInt(adult);
-    const totalBabies = parseInt(baby) || 0;
-    const totalPassengers = totalAdults + totalBabies;
 
     const passengerData = await passenger.bulkCreate(
       Array(totalPassengers)
@@ -41,14 +44,14 @@ const addBooking = async (req, res) => {
         .map((_, index) => {
           const isAdult = index < totalAdults;
           const passengerRole = isAdult ? "Dewasa" : "Bayi";
-          const passenger = passengers[index] || {}; // Retrieve passenger data if available
+          const passengerIndex = passengers[index] || {}; // Retrieve passenger data if available
 
           return {
-            full_name: passenger.full_name || null,
-            clan_name: passenger.clan_name || null,
-            birth_date: passenger.birth_date || null,
-            nik_number: passenger.nik_number || null,
-            nationality: passenger.nationality || null,
+            full_name: passengerIndex.full_name || null,
+            clan_name: passengerIndex.clan_name || null,
+            birth_date: passengerIndex.birth_date || null,
+            nik_number: passengerIndex.nik_number || null,
+            nationality: passengerIndex.nationality || null,
             passenger_role: passengerRole,
             booking_id: newBooking.id,
           };
@@ -57,12 +60,11 @@ const addBooking = async (req, res) => {
     );
 
     const seatPick = await seat.bulkCreate(
-      seats.map((seat) => ({
-        flight_id: req.flight.id,
-        seat_number: seat.seat_number,
+      seats.map((seatIndex) => ({
+        seat_number: seatIndex.seat_number,
         booking_id: newBooking.id,
       })),
-      { fields: ["flight_id", "seat_number", "booking_id"] }
+      { fields: ["seat_number", "booking_id"] }
     );
 
     cron.schedule("* * * * *", async () => {
@@ -114,7 +116,20 @@ const payBooking = async (req, res) => {
       where: {
         booking_code: code,
       },
-      include: [{ model: ticket }, { model: passenger }],
+      include: [
+        {
+          model: ticket,
+          include: [
+            {
+              model: airport,
+            },
+            {
+              model: flight,
+            },
+          ],
+        },
+        { model: passenger },
+      ],
     });
     res.status(200).json({
       data,

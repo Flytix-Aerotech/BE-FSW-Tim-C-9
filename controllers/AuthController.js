@@ -281,7 +281,7 @@ const verifyAccount = catchAsync(async (req, res) => {
     await user
       .update({ verify: true }, { where: { email } })
       .then(() => {
-        res.status(201).json({ message: "Account verified successfully" });
+        res.status(201).json({ msg: "Account verified successfully" });
         delete otpCache[email];
       })
       .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));

@@ -1,15 +1,32 @@
-const { history, user, book, ticket, passenger } = require("../models/");
+const { book, ticket, passenger, flight, airport } = require("../models/");
 const { Op } = require("sequelize");
 const moment = require("moment");
 
-const getBooking = async (req, res) => {
+let getBooking = async (req, res) => {
   try {
-    const data = await history.findAll({
-      include: [{ model: ticket }, { model: passenger }, { model: book }, { model: user }],
+    let booking = await book.findAll({
+      include: [
+        {
+          model: ticket,
+          include: [
+            {
+              model: airport,
+            },
+            {
+              model: flight,
+            },
+          ],
+        },
+        {
+          model: passenger,
+        },
+      ],
     });
 
-    if (data.length > 0) {
-      res.status(200).json({ data });
+    if (booking.length > 0) {
+      res.status(200).json({
+        booking,
+      });
     } else {
       res.status(200).json({
         message: "Anda belum melakukan pemesanan penerbangan",
@@ -24,21 +41,38 @@ const getBooking = async (req, res) => {
 
 const filterBooking = async (req, res) => {
   try {
-    const { date } = req.query;
-    const data = await history.findAll({
+    const { start, end } = req.query;
+    const starting = moment(start).format("YYYYMMDD");
+    const ending = moment(end).format("YYYYMMDD");
+    const data = await book.findAll({
       where: {
-        history_date: {
+        createdAt: {
           [Op.between]: [
             // ?start=YYYY-MM-DD&end=YYYY-MM-DD
-            moment(date).startOf("day").toISOString(),
-            moment(date).endOf("day").toISOString(),
+            starting,
+            ending,
           ],
         },
       },
-      include: [{ model: ticket }, { model: passenger }, { model: book }, { model: user }],
+      include: [
+        {
+          model: ticket,
+          include: [
+            {
+              model: airport,
+            },
+            {
+              model: flight,
+            },
+          ],
+        },
+        { model: passenger },
+      ],
     });
 
-    res.status(200).json({ data });
+    res.status(200).json({
+      data,
+    });
   } catch (error) {
     res.status(error.statusCode || 404).json({
       message: error.message,
@@ -46,19 +80,32 @@ const filterBooking = async (req, res) => {
   }
 };
 
-const searchBookingCode = async (req, res) => {
+let searchBookingCode = async (req, res) => {
   try {
     const { code } = req.query;
-    const data = await book.findAll({
+    let booking = await book.findAll({
       where: {
         booking_code: code,
       },
-      include: [{ model: ticket }, { model: passenger }, { model: book }, { model: user }],
+      include: [
+        {
+          model: ticket,
+          include: [
+            {
+              model: airport,
+            },
+            {
+              model: flight,
+            },
+          ],
+        },
+        { model: passenger },
+      ],
     });
 
-    if (data.length > 0) {
+    if (booking.length > 0) {
       res.status(200).json({
-        data,
+        booking,
       });
     } else {
       res.status(200).json({
