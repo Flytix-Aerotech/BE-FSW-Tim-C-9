@@ -1,4 +1,4 @@
-const { book, passenger, ticket, seat, airport, flight } = require("../models/");
+const { book, passenger, ticket, seat } = require("../models/");
 const { getTransactionStatus } = require("../middleware/midtrans");
 const cron = require("node-cron");
 const catchAsync = require("../utils/catchAsync");
@@ -62,10 +62,11 @@ const addBooking = async (req, res) => {
 
     const seatPick = await seat.bulkCreate(
       seats.map((seatIndex) => ({
+        ticket_id: tickets.id,
         seat_number: seatIndex.seat_number,
         booking_id: newBooking.id,
       })),
-      { fields: ["seat_number", "booking_id"] }
+      { fields: ["ticket_id", "seat_number", "booking_id"] }
     );
 
     cron.schedule("* * * * *", async () => {
@@ -113,7 +114,7 @@ const payBooking = catchAsync(async (req, res) => {
   await book
     .findOne({
       where: { booking_code: code },
-      include: [{ model: ticket, include: [{ model: airport }, { model: flight }] }, { model: passenger }],
+      include: [{ model: ticket, include: [{ model: seat }] }, { model: passenger }],
     })
     .then((data) => {
       res.status(200).json({ data });

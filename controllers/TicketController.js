@@ -1,4 +1,4 @@
-const { ticket, airport, flight } = require("../models");
+const { ticket, airport, flight, seat } = require("../models");
 const { Op } = require("sequelize");
 const catchAsync = require("../utils/catchAsync");
 
@@ -12,7 +12,7 @@ const getTicket = catchAsync(async (req, res) => {
 const getTicketById = catchAsync(async (req, res) => {
   const { id } = req.params;
   await ticket
-    .findOne({ where: { id }, include: [{ model: airport }, { model: flight }] })
+    .findOne({ where: { id }, include: [{ model: airport }, { model: flight }, { model: seat }] })
     .then((data) => res.status(200).json({ data }))
     .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
 });
