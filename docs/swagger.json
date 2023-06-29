@@ -1862,7 +1862,7 @@
         }
       }
     },
-    "/payment": {
+    "/payments": {
       "post": {
         "tags": ["Payment"],
         "summary": "Make Payment",

@@ -77,15 +77,12 @@ const searchTicket = catchAsync(async (req, res) => {
     })
     .then((data) => res.status(200).json({ data }))
     .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
-  // }
 });
 
 module.exports = {
   getTicket,
   getTicketById,
   addTicket,
-  //   updateTicket,
-  //   deleteTicket,
   filterTicket,
   searchTicket,
 };

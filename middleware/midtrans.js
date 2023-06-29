@@ -8,7 +8,7 @@ const coreApi = new midtransClient.CoreApi({
   clientKey: "SB-Mid-client-z146Ib-VBrCtq9u7",
 });
 
-const chargeMidtrans = async (req, res) => {
+const chargeMidtrans = async (req, res, next) => {
   const { code, type } = req.query;
   const foundBook = await book.findOne({
     where: { booking_code: code },
@@ -42,11 +42,11 @@ const chargeMidtrans = async (req, res) => {
     .charge(parameter)
     .then((chargeResponse) => {
       console.log("chargeResponse:", JSON.stringify(chargeResponse));
-      res.status(200).json({ message: "Charge successful", chargeResponse });
+      res.status(200).json({ msg: "Charge successfully", chargeResponse });
+      next();
     })
-    .catch((e) => {
-      console.log("Error occurred:", e.message);
-      res.status(500).json({ message: "Charge failed", error: e.message });
+    .catch((err) => {
+      res.status(err.statusCode || 500).json({ msg: err.message });
     });
 };
 
@@ -56,13 +56,13 @@ const getTransactionStatus = async (bookingCode) => {
       where: { booking_code: bookingCode },
     });
     if (!foundBook) {
-      throw new Error("Invalid booking code");
+      res.status(404).json({ msg: "Invalid booking code" });
     }
 
     const statusResponse = await coreApi.transaction.status(foundBook.booking_code);
     return statusResponse;
-  } catch (error) {
-    throw new Error(`Failed to get transaction status: ${error.message}`);
+  } catch (err) {
+    res.status(err.statusCode || 500).json({ msg: err.message });
   }
 };
 

@@ -19,6 +19,6 @@ router.use("/api/v1/passengers", passengerRoutes);
 router.use("/api/v1/airports", airportRoutes);
 router.use("/api/v1/booking", bookRoutes);
 router.use("/api/v1/histories", historyRoutes);
-router.use("/api/v1/payment", paymentRoutes);
+router.use("/api/v1/payments", paymentRoutes);
 
 module.exports = router;
