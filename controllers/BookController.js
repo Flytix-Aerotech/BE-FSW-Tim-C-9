@@ -3,30 +3,30 @@ const { getTransactionStatus } = require("../middleware/midtrans");
 const cron = require("node-cron");
 const catchAsync = require("../utils/catchAsync");
 
-const generateCode = (length) => {
-  let code = "";
-  while (code.length < length) {
-    let char = Math.random().toString(36).substring(2, 1);
-    if (Math.random() < 0.5) {
-      char = char.toUpperCase();
-    }
-    code += char;
-  }
-  return code;
-};
-
 const addBooking = async (req, res) => {
+  const generateCode = (length) => {
+    let code = "";
+    while (code.length < length) {
+      let char = Math.random().toString(36).substr(2, 1);
+      if (Math.random() < 0.5) {
+        char = char.toUpperCase();
+      }
+      code += char;
+    }
+    return code;
+  };
+
+  const { books, passengers, seats } = req.body;
+  const { adult, baby } = req.query;
+  const { id } = req.params;
+
+  const tickets = await ticket.findByPk(id);
+
+  const totalAdults = parseInt(adult);
+  const totalBabies = parseInt(baby) || 0;
+  const totalPassengers = totalAdults + totalBabies;
+
   try {
-    const { books, passengers, seats } = req.body;
-    const { adult, baby } = req.query;
-    const { id } = req.params;
-
-    const tickets = await ticket.findByPk(id);
-
-    const totalAdults = parseInt(adult);
-    const totalBabies = parseInt(baby) || 0;
-    const totalPassengers = totalAdults + totalBabies;
-
     const newBooking = await book.create({
       full_name: books.full_name,
       clan_name: books.clan_name,

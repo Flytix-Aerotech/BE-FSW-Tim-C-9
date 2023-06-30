@@ -1,7 +1,6 @@
 const { book } = require("../models");
-const catchAsync = require("../utils/catchAsync");
 
-const continuePayment = catchAsync((req, res, next) => {
+const continuePayment = (req, res, next) => {
   const { code } = req.params;
   const { code: queryCode } = req.query;
 
@@ -23,7 +22,7 @@ const continuePayment = catchAsync((req, res, next) => {
     .catch((error) => {
       return res.status(500).json({ msg: "Error occurred while fetching book data", error });
     });
-});
+};
 
 module.exports = {
   continuePayment,

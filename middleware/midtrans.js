@@ -42,11 +42,12 @@ const chargeMidtrans = async (req, res, next) => {
     .charge(parameter)
     .then((chargeResponse) => {
       console.log("chargeResponse:", JSON.stringify(chargeResponse));
-      res.status(200).json({ msg: "Charge successfully", chargeResponse });
+      res.status(200).json({ message: "Charge successful", chargeResponse });
       next();
     })
-    .catch((err) => {
-      res.status(err.statusCode || 500).json({ msg: err.message });
+    .catch((e) => {
+      console.log("Error occurred:", e.message);
+      res.status(500).json({ message: "Charge failed", error: e.message });
     });
 };
 
@@ -61,8 +62,8 @@ const getTransactionStatus = async (bookingCode) => {
 
     const statusResponse = await coreApi.transaction.status(foundBook.booking_code);
     return statusResponse;
-  } catch (err) {
-    throw new Error(`Failed to get transaction status: ${err.message}`);
+  } catch (error) {
+    throw new Error(`Failed to get transaction status: ${error.message}`);
   }
 };
 
