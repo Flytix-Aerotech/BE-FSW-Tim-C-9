@@ -56,13 +56,13 @@ const getTransactionStatus = async (bookingCode) => {
       where: { booking_code: bookingCode },
     });
     if (!foundBook) {
-      res.status(404).json({ msg: "Invalid booking code" });
+      throw new Error("Invalid booking code");
     }
 
     const statusResponse = await coreApi.transaction.status(foundBook.booking_code);
     return statusResponse;
   } catch (err) {
-    res.status(err.statusCode || 500).json({ msg: err.message });
+    throw new Error(`Failed to get transaction status: ${err.message}`);
   }
 };
 
