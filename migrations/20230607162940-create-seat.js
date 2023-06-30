@@ -9,10 +9,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      flight_id: {
+      seat_number: {
+        type: Sequelize.STRING,
+      },
+      booking_id: {
         type: Sequelize.INTEGER,
       },
-      seat_number: {
+      ticket_id: {
         type: Sequelize.INTEGER,
       },
       createdAt: {

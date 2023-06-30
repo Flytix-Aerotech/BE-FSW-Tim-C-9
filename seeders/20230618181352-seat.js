@@ -8,15 +8,17 @@ module.exports = {
       [
         {
           id: 999,
-          flight_id: 3,
-          seat_number: 33,
+          ticket_id: 3,
+          seat_number: "C3",
+          booking_id: 11,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           id: 888,
-          flight_id: 3,
-          seat_number: 23,
+          ticket_id: 3,
+          seat_number: "B2",
+          booking_id: 12,
           createdAt: new Date(),
           updatedAt: new Date(),
         },

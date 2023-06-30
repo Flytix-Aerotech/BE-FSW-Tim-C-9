@@ -17,10 +17,7 @@ const makePayment = async (req, res) => {
             booking_id: foundBook.id,
             type_of_payment: type,
         });
-        // const paymentStatus = await book.update(
-        //     { payment_status: true },
-        //     { where: { id: foundBook.id } }
-        // )
+        
         res.status(200).json({
             paymentData,
             paymentStatus

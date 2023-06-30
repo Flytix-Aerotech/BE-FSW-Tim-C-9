@@ -1,10 +1,11 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { uploadToImagekit } = require("../lib/imagekit");
+const catchAsync = require("../utils/catchAsync");
 const User = require("../models").user;
 const otpGenerator = require('otp-generator');
 const nodemailer = require('nodemailer');
-const catchAsync = require("../utils/catchAsync");
+
 
 // user login
 const login = catchAsync(async (req, res) => {
@@ -40,18 +41,40 @@ const register = catchAsync(async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await user
-      .create({
-        full_name,
-        email,
-        password: hashedPassword,
-        username,
-        phone_number,
-        photo: photo,
-        role,
-      })
-      .then((user) => res.status(201).json({ msg: "User created successfully", user }))
-      .catch((err) => res.status(err.statusCode || 500).json({ msg: err.message }));
+    const newUser = await user.create({
+      full_name,
+      email,
+      password: hashedPassword,
+      username,
+      phone_number,
+      photo: photo,
+      role,
+      active: false,
+    });
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASS,
+      }
+    });
+
+    const mailOptions = {
+      from: 'Flytix',
+      to: email,
+      subject: 'Verifikasi Akun',
+      text: `Klik link berikut untuk verifikasi email Anda: http://flytix.com/verify/account?id=${newUser.id}`
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).json({ msg: 'Error sending verification email' });
+      } else {
+        res.status(201).json({ msg: 'User created successfully', user: newUser });
+      }
+    });
   }
 });
 
@@ -185,6 +208,44 @@ const verifyOTP = async (req, res) => {
   }
 };
 
+const activateAccout = async (req, res) => {
+  try {
+    const { id } = req.query;
+    const user = await User.findByPk(id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'Akun tidak ditemukan' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const sendActivation = async (req, res) => {
+  try {
+    const { id } = req.query;
+    const { password } = req.body;
+    const user = await User.findByPk(id);
+
+    // Validasi password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Password tidak valid' });
+    }
+
+    // Mengupdate kolom active menjadi true
+    user.active = true;
+    await user.save();
+
+    res.status(200).json({ message: 'Akun berhasil diverifikasi' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Terjadi kesalahan saat memverifikasi akun' });
+  }
+};
+
 module.exports = {
   login,
   register,
@@ -195,4 +256,6 @@ module.exports = {
   resetPassword,
   forgotPassword,
   verifyOTP,
+  activateAccout,
+  sendActivation
 };
