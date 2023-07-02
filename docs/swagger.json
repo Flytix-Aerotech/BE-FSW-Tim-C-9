@@ -242,7 +242,7 @@
       "put": {
         "tags": ["Auth"],
         "summary": "Reset Password",
-        "description": "Reset password using email by query",
+        "description": "Reset password using email by params",
         "parameters": [
           {
             "name": "email",
@@ -266,7 +266,7 @@
                     "type": "string",
                     "example": "rahasia"
                   },
-                  "consfirmPassword": {
+                  "confirmPassword": {
                     "type": "string",
                     "example": "rahasia"
                   }
@@ -1389,7 +1389,7 @@
         }
       }
     },
-    "/booking": {
+    "/booking/{id}": {
       "post": {
         "summary": "Create Booking",
         "tags": ["Book"],
@@ -1401,11 +1401,20 @@
         ],
         "parameters": [
           {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "example": "1"
+            },
+            "required": true
+          },
+          {
             "in": "query",
             "name": "adult",
             "schema": {
               "type": "string",
-              "example": "1"
+              "example": "2"
             }
           },
           {
@@ -1413,7 +1422,7 @@
             "name": "baby",
             "schema": {
               "type": "string",
-              "example": ""
+              "example": "1"
             }
           }
         ],
@@ -1519,70 +1528,6 @@
                     "message": {
                       "type": "string",
                       "example": "Unauthorized"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/booking/{id}": {
-      "delete": {
-        "tags": ["Book"],
-        "summary": "Delete Booking",
-        "description": "Remove existing booking by id.",
-        "security": [
-          {
-            "bearerToken": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Booking deleted successfully"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "The booking is not found.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "failed"
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Booking not found."
                     }
                   }
                 }

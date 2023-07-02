@@ -70,21 +70,32 @@ const addBooking = async (req, res) => {
     );
 
     cron.schedule("* * * * *", async () => {
-      try {
-        const statusResponse = await getTransactionStatus(newBooking.booking_code);
-        let paymentStatus;
+      // every minute
+      const paymentData = await payment.findOne({
+        where: { booking_id: newBooking.id },
+      });
 
-        if (statusResponse.transaction_status === "settlement") {
-          paymentStatus = "Issued";
-        } else if (statusResponse.transaction_status === "failure" || statusResponse.transaction_status === "cancel") {
-          paymentStatus = "Cancelled";
-        } else {
-          paymentStatus = "Pending";
+      if (!paymentData) {
+        return res.status(400).json({ msg: "Pembayaran belum dibuat" });
+      } else {
+        try {
+          const statusResponse = await getTransactionStatus(newBooking.booking_code);
+          let paymentStatus;
+
+          if (statusResponse.transaction_status === "settlement") {
+            paymentStatus = "Issued";
+          } else if (statusResponse.transaction_status === "failure" || statusResponse.transaction_status === "cancel") {
+            paymentStatus = "Cancelled";
+          } else {
+            paymentStatus = "Pending";
+          }
+
+          await newBooking.update({ payment_status: paymentStatus });
+        } catch (error) {
+          res.status(error.statusCode || 500).json({
+            msg: error.message,
+          });
         }
-
-        await newBooking.update({ payment_status: paymentStatus });
-      } catch (error) {
-        console.error(error);
       }
     });
 
