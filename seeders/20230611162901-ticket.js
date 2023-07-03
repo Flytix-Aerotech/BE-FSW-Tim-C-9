@@ -4,19 +4,19 @@
 
 const economy = () => {
   const randomValue = Math.random() * (916980 - 729980) + 729980;
-  return randomValue;
+  return parseInt(randomValue);
 };
 const premium = () => {
   const randomValue = Math.random() * (1089980 - 889980) + 889980;
-  return randomValue;
+  return parseInt(randomValue);
 };
 const business = () => {
   const randomValue = Math.random() * (1489980 - 1019980) + 1019980;
-  return randomValue;
+  return parseInt(randomValue);
 };
 const first = () => {
   const randomValue = Math.random() * (1989980 - 1489980) + 1489980;
-  return randomValue;
+  return parseInt(randomValue);
 };
 module.exports = {
   async up(queryInterface, Sequelize) {
