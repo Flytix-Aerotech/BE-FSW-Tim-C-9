@@ -106,9 +106,7 @@ const addBooking = async (req, res) => {
       data: { passengerData, seatPick, newBooking },
     });
   } catch (error) {
-    res.status(error.statusCode || 500).json({
-      msg: error.message,
-    });
+    res.status(error.statusCode || 500).json({ msg: error.message });
   }
 };
 

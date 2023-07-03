@@ -6,6 +6,7 @@ const catchAsync = require("../utils/catchAsync");
 const getBooking = catchAsync(async (req, res) => {
   await book
     .findAll({
+      where: { user_id: req.user.id },
       include: [{ model: ticket, include: [{ model: airport }, { model: flight }] }, { model: passenger }],
     })
     .then((data) => {
