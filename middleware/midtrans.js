@@ -31,16 +31,10 @@ const chargeMidtrans = async (req, res, next) => {
     unit: "minute",
   };
 
-  const gopay = {
-    enable_callback: true,
-    callback_url: "https://flytix-c9.netlify.app/payment/success",
-  };
-
   const parameter = {
     payment_type: type,
     transaction_details,
     custom_expiry,
-    gopay,
   };
 
   // Melakukan pembayaran menggunakan Midtrans
