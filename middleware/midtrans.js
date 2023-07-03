@@ -23,7 +23,7 @@ const chargeMidtrans = async (req, res, next) => {
   // Data transaksi
   const transaction_details = {
     order_id: code,
-    gross_amount: foundBook.total_price,
+    gross_amount: parseInt(foundBook.total_price),
   };
 
   const custom_expiry = {

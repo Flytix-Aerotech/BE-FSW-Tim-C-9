@@ -35,7 +35,7 @@ const addBooking = async (req, res) => {
       ticket_id: tickets.id,
       user_id: req.user.id,
       total_booking: totalAdults,
-      total_price: totalAdults * tickets.price + 0.1 * totalAdults * tickets.price,
+      total_price: parseInt(totalAdults * tickets.price + 0.1 * totalAdults * tickets.price),
       booking_code: generateCode(8),
       payment_status: "Pending",
     });
