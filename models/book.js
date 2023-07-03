@@ -10,9 +10,9 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.ticket, { foreignKey: "ticket_id" });
+      this.belongsTo(models.user, { foreignKey: "user_id" });
       this.hasMany(models.passenger, { foreignKey: "booking_id" });
       this.hasMany(models.seat, { foreignKey: "booking_id" });
-      this.hasMany(models.history, { foreignKey: "booking_id" });
       this.hasOne(models.payment, { foreignKey: "booking_id" });
     }
   }
@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
   book.init(
     {
       ticket_id: DataTypes.INTEGER,
+      user_id: DataTypes.INTEGER,
       full_name: DataTypes.STRING,
       clan_name: DataTypes.STRING,
       email: DataTypes.STRING,

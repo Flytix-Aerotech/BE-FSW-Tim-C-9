@@ -1,40 +1,11 @@
 "use strict";
-/** @type {import('sequelize-cli').Migration} */
+
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("histories", {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
-      user_id: {
-        type: Sequelize.INTEGER,
-      },
-      ticket_id: {
-        type: Sequelize.INTEGER,
-      },
-      passenger_id: {
-        type: Sequelize.INTEGER,
-      },
-      booking_id: {
-        type: Sequelize.INTEGER,
-      },
-      history_date: {
-        type: Sequelize.DATE,
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-    });
+  up: function (queryInterface, Sequelize) {
+    return Promise.resolve();
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("histories");
+
+  down: function (queryInterface) {
+    return Promise.resolve();
   },
 };

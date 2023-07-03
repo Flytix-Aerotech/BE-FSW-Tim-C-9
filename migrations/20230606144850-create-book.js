@@ -12,6 +12,9 @@ module.exports = {
       ticket_id: {
         type: Sequelize.INTEGER,
       },
+      user_id: {
+        type: Sequelize.INTEGER,
+      },
       full_name: {
         type: Sequelize.STRING,
       },
